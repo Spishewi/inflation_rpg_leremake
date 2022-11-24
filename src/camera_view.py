@@ -38,7 +38,7 @@ class CameraView:
             # on récupère un bon facteur
             self.factor = round(factor*16)/16
 
-    def draw(self, draw_surface: pygame.Surface, entities: list = None) -> None:
+    def draw(self, draw_surface: pygame.Surface, player) -> None:
         """
         permet d'afficher / de dessiner la map
         """
@@ -78,9 +78,13 @@ class CameraView:
                         if tile_image.opaque:
                             break
         tiles.reverse()
-        for entity in entities:
-            tiles.append((entity.image, (entity.rect.x*self.factor* tile_size_factor + x_const_2, entity.rect.y*self.factor* tile_size_factor + y_const_2)))
+        #for entity in entities:
+            #tiles.append((entity.image, (entity.rect.x*self.factor* tile_size_factor + x_const_2, entity.rect.y*self.factor* tile_size_factor + y_const_2)))
         draw_surface.blits(tiles, doreturn=False)
+        player_rect = player.get_rect()
+        player_pos = pygame.Vector2(player_rect.x * self.factor + x_const_2, player_rect.y * self.factor + y_const_2)
+        print((player_pos.x, player_pos.y, player_rect.width * self.factor, player_rect.height * self.factor))
+        pygame.draw.rect(draw_surface, "red", (player_pos.x, player_pos.y, player_rect.width * self.factor, player_rect.height * self.factor))
         
 
 
