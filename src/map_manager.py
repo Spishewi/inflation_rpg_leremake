@@ -42,7 +42,9 @@ class MapManager:
             # ça fait la même chose
             # techiniquement je pourrais même utiliser les dictionnaires en comprehension, mais pour deux/3 tours de boucle,
             # on perdrais en lisibilité pour pas grand chose
-            tiles = [(x, y) for x in range(minx, maxx) for y in range(miny, maxy) if layer.data[x][y] != 0]
+            #print(layer.data)
+            tiles = [(x, y) for x in range(minx, maxx) for y in range(miny, maxy) if layer.data[y][x] != 0]
+            
             """
             for x in range(minx, maxx):
                 for y in range(miny, maxy):

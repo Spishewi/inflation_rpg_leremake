@@ -42,7 +42,7 @@ class CameraView:
         """
         permet d'afficher / de dessiner la map
         """
-        #draw_surface.fill((0, 0, 0))
+        
 
         map = self.map_manager.get_map(self.map_name)
 
@@ -69,23 +69,28 @@ class CameraView:
         for x in range(max(minx, 0), min(maxx, map.width)):
             for y in range(max(miny, 0), min(maxy, map.height)):
                 for layer_index in range(len(map.layers)-1, -1, -1):
-                    tile_image = map.get_tile_image(x, y, layer_index)
-                    if tile_image is not None:
-                        posx = x * tile_size_factor + x_const_2
-                        posy = y * tile_size_factor + y_const_2
-                        #draw_surface.blit(tile_image.get_image(self.factor), (posx, posy))
-                        tiles.append((tile_image.get_image(self.factor), (posx, posy)))
-                        if tile_image.opaque:
-                            break
+                    layer = map.layers[layer_index]
+                    if layer.visible or layer.properties["collide"] == True:
+                        tile_image = map.get_tile_image(x, y, layer_index)
+                        if tile_image is not None:
+                            posx = x * tile_size_factor + x_const_2
+                            posy = y * tile_size_factor + y_const_2
+                            #draw_surface.blit(tile_image.get_image(self.factor), (posx, posy))
+                            tiles.append((tile_image.get_image(self.factor), (posx, posy)))
+                            if tile_image.opaque:
+                                break
         tiles.reverse()
         #for entity in entities:
             #tiles.append((entity.image, (entity.rect.x*self.factor* tile_size_factor + x_const_2, entity.rect.y*self.factor* tile_size_factor + y_const_2)))
+        draw_surface.fill(map.background_color)
         draw_surface.blits(tiles, doreturn=False)
         player_rect = player.get_rect()
-        player_pos = pygame.Vector2(player_rect.x * self.factor + x_const_2, player_rect.y * self.factor + y_const_2)
-        print((player_pos.x, player_pos.y, player_rect.width * self.factor, player_rect.height * self.factor))
-        pygame.draw.rect(draw_surface, "red", (player_pos.x, player_pos.y, player_rect.width * self.factor, player_rect.height * self.factor))
+        player_pos = pygame.Vector2(player.pos.x * tile_size_factor + x_const_2, player.pos.y * tile_size_factor + y_const_2)
+        #print((player_pos.x, player_pos.y, player_rect.width * tile_size_factor, player_rect.height * tile_size_factor))
+        pygame.draw.rect(draw_surface, "red", (player_pos.x, player_pos.y, player_rect.width * tile_size_factor, player_rect.height * tile_size_factor))
         
+        
+    
 
 
         

@@ -15,7 +15,7 @@ class Game:
 
         self.camera_view = CameraView(self.map_manager, 3)
         self.camera_view.set_map("map")
-        self.camera_view.set_zoom(1)
+        self.camera_view.set_zoom(2.5)
         print("camera loaded and connected")
 
         self.player = Player()
