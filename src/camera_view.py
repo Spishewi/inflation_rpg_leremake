@@ -70,7 +70,7 @@ class CameraView:
             for y in range(max(miny, 0), min(maxy, map.height)):
                 for layer_index in range(len(map.layers)-1, -1, -1):
                     layer = map.layers[layer_index]
-                    if layer.visible or layer.properties["collide"] == True:
+                    if layer.visible :# or layer.properties["collide"] == True
                         tile_image = map.get_tile_image(x, y, layer_index)
                         if tile_image is not None:
                             posx = x * tile_size_factor + x_const_2
