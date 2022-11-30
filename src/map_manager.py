@@ -116,6 +116,12 @@ class DynamicImage:
             return DynamicImage(tile_surface, smooth=False)
         return extract_image
 
+
+class Animation:
+    def __init__(self, animation_settings_path):
+        self.settings_path = animation_settings_path
+        
+
 if __name__ == "__main__":
     map_manager = MapManager()
     map_manager.add_map("level_0", "../graphics/map.tmx")
