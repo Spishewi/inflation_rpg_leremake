@@ -88,7 +88,8 @@ class CameraView:
         player_pos = pygame.Vector2(player.pos.x * tile_size_factor + x_const_2, player.pos.y * tile_size_factor + y_const_2)
         #print((player_pos.x, player_pos.y, player_rect.width * tile_size_factor, player_rect.height * tile_size_factor))
 
-        draw_surface.blit(player.image.get_image(self.factor),(player_pos.x, player_pos.y))
+        #draw_surface.blit(player.image.get_image(self.factor),(player_pos.x, player_pos.y))
+        pygame.draw.rect(draw_surface,"red",pygame.Rect(player_pos.x, player_pos.y,1*tile_size_factor,1*tile_size_factor))
         
         
     

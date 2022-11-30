@@ -1,12 +1,13 @@
 import pygame
 import math
-from utils import Hitbox
+from utils import Hitbox,DynamicImage
 
 class Player:
     def __init__(self):
         self.pos = pygame.Vector2(0, 0)
         self.direction = pygame.Vector2(0, 0)
         self.speed = 10
+        self.image = DynamicImage(pygame.image.load("../graphics/player.png"))
 
     def get_rect(self):
         return pygame.Rect(self.pos.x, self.pos.y, 1, 1)
@@ -32,12 +33,14 @@ class Player:
         player_hitbox = self.get_hitbox()
         for tile_pos in collisions:
             tile_hitbox = Hitbox(tile_pos[0], tile_pos[1], 1, 1)
+            print("-"*10)
+            print(player_hitbox)
+            print(tile_hitbox)
             
-            if tile_hitbox.overlap(player_hitbox):
+            if tile_hitbox.overlap2(player_hitbox):
                 #print("collisions", tile_rect)
-                print("-"*10)
-                print(player_hitbox)
-                print(tile_hitbox)
+                
+                print(direction)
                 
                 if direction == "y":
                     if velocity.y > 0: # moving down
