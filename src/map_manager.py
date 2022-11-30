@@ -60,7 +60,7 @@ class DynamicImage:
     """
     Une classe qui permet à une image de s'occuper individuellement de sa propre taille / niveau de zoom.
     """
-    def __init__(self, id_tile: str, image: pygame.Surface, smooth: bool=False) -> None:
+    def __init__(self, image: pygame.Surface, smooth: bool=False) -> None:
         self._original_image = image
         self._resized_image = image
         self._current_factor = 1
@@ -69,7 +69,6 @@ class DynamicImage:
         self._original_image_height = self._original_image.get_height()
 
         self._smooth = smooth
-        self.id_tile = id_tile
 
         pixels_alpha_array = pygame.surfarray.pixels_alpha(self._original_image).flatten()
 
@@ -114,9 +113,9 @@ class DynamicImage:
             tile_surface = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
             tile_surface.blit(tileset_image, (0, 0), rect)
             #tile_surface = tile_surface.convert_alpha()
-            return DynamicImage(file_path + str(rect), tile_surface, smooth=False)
+            return DynamicImage(tile_surface, smooth=False)
         return extract_image
 
 if __name__ == "__main__":
     map_manager = MapManager()
-    map_manager.add_map("level_0", "../graphics/map/level_0/map3.tmx")
+    map_manager.add_map("level_0", "../graphics/map.tmx")

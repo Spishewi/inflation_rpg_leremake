@@ -1,23 +1,24 @@
 import pygame
 import math
+from map_manager import DynamicImage
 
 class Player:
     def __init__(self):
         self.pos = pygame.Vector2(0, 0)
         self.direction = pygame.Vector2(0, 0)
         self.speed = 10
+        image = pygame.image.load("../graphics/player.png").convert_alpha()
+        self.image = DynamicImage(image)
 
     def get_rect(self):
-        print(pygame.Rect(self.pos.x, self.pos.y, 1, 1))
         return pygame.Rect(self.pos.x, self.pos.y, 1, 1)
 
     def get_hitbox(self):
-        return pygame.Rect(self.pos.x, self.pos.y + 0.25, 1, 0.5)
+        return pygame.Rect(self.pos.x, self.pos.y, 1,1)
 
     def move(self, map_manager, dt: float):
         if self.direction.magnitude() != 0:
             collisions_tiles = map_manager.get_around_collisions("map",self.pos, 1, ["collisions"])["collisions"]
-            print(self.pos, collisions_tiles)
             velocity = self.direction.normalize() * self.speed * dt
             #self.pos += velocity
             
@@ -31,9 +32,9 @@ class Player:
                 
     def collisions(self, direction: str, velocity: float, collisions: list) -> pygame.Vector2:
         for tile_pos in collisions:
-            tile_rect = pygame.Rect(tile_pos[0], tile_pos[1], 1, 1)
+            tile_rect = pygame.Rect(tile_pos[0], tile_pos[1], 1,1)
             
-            if tile_rect.colliderect(self.get_rect()):
+            if tile_rect.colliderect(self.get_hitbox()):
                 #print("collisions", tile_rect)
                 if direction == "y":
                     if velocity.y > 0: # moving down
