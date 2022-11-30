@@ -13,7 +13,7 @@ class Player:
         return pygame.Rect(self.pos.x, self.pos.y, 1, 1)
 
     def get_hitbox(self):
-        return Hitbox(self.pos.x, self.pos.y, 1, 1)
+        return Hitbox(self.pos.x, self.pos.y+0.25, 1, 0.5)
 
     def move(self, map_manager, dt: float):
         if self.direction.magnitude() != 0:
@@ -41,14 +41,14 @@ class Player:
                     if velocity.y > 0: # moving down
                         self.pos.y = tile_hitbox.y - player_hitbox.height
                     elif velocity.y < 0: # moving up
-                        self.pos.y = tile_hitbox.y + tile_hitbox.height
+                        self.pos.y = tile_hitbox.y + player_hitbox.height
                         
                 elif direction == "x":   
                     if velocity.x > 0: # moving right
                         self.pos.x = tile_hitbox.x - player_hitbox.width
 
                     elif velocity.x < 0: # moving left
-                        self.pos.x = tile_hitbox.x + tile_hitbox.width
+                        self.pos.x = tile_hitbox.x + player_hitbox.width
 
                 player_hitbox = self.get_hitbox()
 
