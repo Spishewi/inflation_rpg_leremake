@@ -1,0 +1,2 @@
+image = pygame.image.load("../graphics/player.png").convert_alpha()
+        self.image = DynamicImage(image)
