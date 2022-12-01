@@ -43,9 +43,9 @@ class Hitbox:
         return True
 
     def overlap2(self, hitbox: Hitbox) -> bool:
-        if self.x + self.width <= hitbox.x or self.x >= hitbox.x + hitbox.width:
+        if self.x + self.width <= hitbox.x or hitbox.x + hitbox.width <= self.x :
             return False
-        if self.y +self.height <= hitbox.y or self.y >= hitbox.y + hitbox.height:
+        if self.y + self.height <= hitbox.y  or hitbox.y + hitbox.height <= self.y :
             return False
         return True
 
