@@ -1,6 +1,7 @@
 import pygame
 from map_manager import MapManager
 import math
+from animation import Animation
 
 class CameraView:
     """
@@ -14,6 +15,8 @@ class CameraView:
         self.coords = pygame.Vector2(0, 0)
         self.move_ease = move_ease
         self.factor = 1
+
+        self.player_animation = Animation("../graphics/player_keyframes")
 
     def set_map(self, map_name) -> None:
         """
@@ -88,8 +91,8 @@ class CameraView:
         player_pos = pygame.Vector2(player.pos.x * tile_size_factor + x_const_2, player.pos.y * tile_size_factor + y_const_2)
         #print((player_pos.x, player_pos.y, player_rect.width * tile_size_factor, player_rect.height * tile_size_factor))
 
-        #draw_surface.blit(player.image.get_image(self.factor),(player_pos.x, player_pos.y))
-        pygame.draw.rect(draw_surface,"red",pygame.Rect(player_pos.x, player_pos.y,1*tile_size_factor,1*tile_size_factor))
+        #pygame.draw.rect(draw_surface,"red",pygame.Rect(player_pos.x, player_pos.y,1*tile_size_factor,1*tile_size_factor))
+        draw_surface.blit(self.player_animation.get_curentAnimation(player.direction, self.factor),(player_pos.x, player_pos.y))
         
         
     

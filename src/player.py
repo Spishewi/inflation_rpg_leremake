@@ -7,7 +7,7 @@ class Player:
         self.pos = pygame.Vector2(0, 0)
         self.direction = pygame.Vector2(0, 0)
         self.speed = 10
-        self.image = DynamicImage(pygame.image.load("../graphics/player.png"))
+        #self.image = DynamicImage(pygame.image.load("../graphics/player.png"))
         self.hitbox_decalage = 0.4
 
     def get_rect(self):

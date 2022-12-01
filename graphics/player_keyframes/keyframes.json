@@ -1,0 +1,47 @@
+{
+    "sprite_width":16,
+    "sprite_height":16,
+    "keyframes":{
+        "up":{
+            "flip": false,
+            "frames": [[1, 2], [2, 2]],
+            "idle": [0, 2]
+        },
+        "down":{
+            "flip": false,
+            "frames": [[1, 0], [2, 0]],
+            "idle": [0, 0]
+        },
+        "left":{
+            "flip": false,
+            "frames": [[1, 1], [2, 1]],
+            "idle": [0, 1]
+        },
+        "right":{
+            "flip": true,
+            "frames": [[1, 1], [2, 1]],
+            "idle": [0, 1]
+        },
+        "up-left":{
+            "flip": true,
+            "frames": [[1, 4], [2, 4]],
+            "idle": [0, 4]
+        },
+        "up-right":{
+            "flip": false,
+            "frames": [[1, 4], [2, 4]],
+            "idle": [0, 4]
+        },
+        "down-left":{
+            "flip": true,
+            "frames": [[1, 3], [2, 3]],
+            "idle": [0, 3]
+        },
+        "down-right":{
+            "flip": false,
+            "frames": [[1, 3], [2, 3]],
+            "idle": [0, 3]
+        }
+    }
+
+}
