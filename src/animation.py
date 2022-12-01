@@ -39,7 +39,7 @@ class Animation:
     
     def get_curentAnimation(self, direction: pygame.Vector2, factor) -> DynamicImage:
         self.direction = direction
-        speed = 200
+        speed = 150
         ticks = int(pygame.time.get_ticks()/speed)%2
 
         if self.direction.x == 0 and self.direction.y == 0 : # immobile

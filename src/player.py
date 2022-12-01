@@ -8,13 +8,13 @@ class Player:
         self.direction = pygame.Vector2(0, 0)
         self.speed = 10
         #self.image = DynamicImage(pygame.image.load("../graphics/player.png"))
-        self.hitbox_decalage = 0.4
+        self.hitbox_decalage = 0.6
 
     def get_rect(self):
         return pygame.Rect(self.pos.x, self.pos.y, 1, 1)
 
     def get_hitbox(self):
-        return Hitbox(self.pos.x, self.pos.y+self.hitbox_decalage, 1, 0.2)
+        return Hitbox(self.pos.x, self.pos.y+self.hitbox_decalage, 1, 0.5)
 
     def move(self, map_manager, dt: float):
         if self.direction.magnitude() != 0:
