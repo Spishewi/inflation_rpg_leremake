@@ -83,8 +83,7 @@ class CameraView:
                             if tile_image.opaque:
                                 break
         tiles.reverse()
-        #for entity in entities:
-            #tiles.append((entity.image, (entity.rect.x*self.factor* tile_size_factor + x_const_2, entity.rect.y*self.factor* tile_size_factor + y_const_2)))
+        
         draw_surface.fill(map.background_color)
         draw_surface.blits(tiles, doreturn=False)
         player_rect = player.get_rect()
