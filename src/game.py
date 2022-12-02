@@ -19,7 +19,7 @@ class Game:
         print("camera loaded and connected")
 
         self.player = Player()
-        self.player.pos = pygame.Vector2(40, 40)
+        self.player.pos = pygame.Vector2(53, 48)
 
         self.clock = pygame.time.Clock()
         
@@ -38,6 +38,7 @@ class Game:
             self.player.move(self.map_manager, dt)
             self.camera_view.move(dt, self.player.pos, True)
             self.camera_view.draw(self.window, self.player)
+        
         
             dt = self.clock.tick(60) / 1000
             pygame.display.update()
