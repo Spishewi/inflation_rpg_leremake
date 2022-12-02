@@ -10,7 +10,7 @@ class Game:
         self.window = window
 
         self.map_manager = MapManager()
-        self.map_manager.add_map("map", "../graphics/map.tmx")
+        self.map_manager.add_map("map", "../graphics/map2.tmx")
         print("map added")
 
         self.camera_view = CameraView(self.map_manager, 3)

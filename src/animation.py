@@ -45,47 +45,47 @@ class Animation:
         if self.direction.x == 0 and self.direction.y == 0 : # immobile
             if self.previousDirection.x == 0 and self.previousDirection.y == 0:
                 direction_name = "down"
-            elif self.previousDirection.x == 1 and self.previousDirection.y == 0 : # droite
+            elif self.previousDirection.x >= 1 and self.previousDirection.y == 0 : # droite
                 direction_name = "right"
-            elif self.previousDirection.x == 1 and self.previousDirection.y == 1 : # diagonale bas droite
+            elif self.previousDirection.x >= 1 and self.previousDirection.y >= 1 : # diagonale bas droite
                 direction_name = "down-right"
-            elif self.previousDirection.x == 0 and self.previousDirection.y == 1 : # bas
+            elif self.previousDirection.x == 0 and self.previousDirection.y >= 1 : # bas
                 direction_name = "down"
-            elif self.previousDirection.x == -1 and self.previousDirection.y == 1 : # diagonale bas gauche
+            elif self.previousDirection.x <= -1 and self.previousDirection.y >= 1 : # diagonale bas gauche
                 direction_name = "down-left"
-            elif self.previousDirection.x == -1 and self.previousDirection.y == 0 : # gauche
+            elif self.previousDirection.x <= -1 and self.previousDirection.y == 0 : # gauche
                 direction_name = "left"
-            elif self.previousDirection.x == -1 and self.previousDirection.y == -1 : # diagonale haut gauche
+            elif self.previousDirection.x <= -1 and self.previousDirection.y <= -1 : # diagonale haut gauche
                 direction_name = "up-left"
-            elif self.previousDirection.x == 0 and self.previousDirection.y == -1 : # haut
+            elif self.previousDirection.x == 0 and self.previousDirection.y <= -1 : # haut
                 direction_name = "up"
-            elif self.previousDirection.x == 1 and self.previousDirection.y == -1 : # diagonale haut droit
+            elif self.previousDirection.x >= 1 and self.previousDirection.y <= -1 : # diagonale haut droit
                 direction_name = "up-right"
 
             self.previousDirection = pygame.Vector2(self.previousDirection.x,self.previousDirection.y)
             return self.sprites[direction_name]["idle"].get_image(factor)
 
-        elif self.direction.x == 1 and self.direction.y == 0 : # droite
+        elif self.direction.x >= 1 and self.direction.y == 0 : # droite
             self.previousDirection = pygame.Vector2(self.direction.x,self.direction.y)
             return self.sprites["right"]["frames"][ticks].get_image(factor)
-        elif self.direction.x == 1 and self.direction.y == 1 : # diagonale bas droite
+        elif self.direction.x >= 1 and self.direction.y >= 1 : # diagonale bas droite
             self.previousDirection = pygame.Vector2(self.direction.x,self.direction.y)
             return self.sprites["down-right"]["frames"][ticks].get_image(factor)
-        elif self.direction.x == 0 and self.direction.y == 1 : # bas
+        elif self.direction.x == 0 and self.direction.y >= 1 : # bas
             self.previousDirection = pygame.Vector2(self.direction.x,self.direction.y)
             return self.sprites["down"]["frames"][ticks].get_image(factor)
-        elif self.direction.x == -1 and self.direction.y == 1 : # diagonale bas gauche
+        elif self.direction.x <= -1 and self.direction.y >= 1 : # diagonale bas gauche
             self.previousDirection = pygame.Vector2(self.direction.x,self.direction.y)
             return self.sprites["down-left"]["frames"][ticks].get_image(factor)
-        elif self.direction.x == -1 and self.direction.y == 0 : # gauche
+        elif self.direction.x <= -1 and self.direction.y == 0 : # gauche
             self.previousDirection = pygame.Vector2(self.direction.x,self.direction.y)
             return self.sprites["left"]["frames"][ticks].get_image(factor)
-        elif self.direction.x == -1 and self.direction.y == -1 : # diagonale haut gauche
+        elif self.direction.x <= -1 and self.direction.y <= -1 : # diagonale haut gauche
             self.previousDirection = pygame.Vector2(self.direction.x,self.direction.y)
             return self.sprites["up-left"]["frames"][ticks].get_image(factor)
-        elif self.direction.x == 0 and self.direction.y == -1 : # haut
+        elif self.direction.x == 0 and self.direction.y <= -1 : # haut
             self.previousDirection = pygame.Vector2(self.direction.x,self.direction.y)
             return self.sprites["up"]["frames"][ticks].get_image(factor)
-        elif self.direction.x == 1 and self.direction.y == -1 : # diagonale haut droit
+        elif self.direction.x >= 1 and self.direction.y <= -1 : # diagonale haut droit
             self.previousDirection = pygame.Vector2(self.direction.x,self.direction.y)
             return self.sprites["up-right"]["frames"][ticks].get_image(factor)

@@ -15,6 +15,7 @@ class CameraView:
         self.coords = pygame.Vector2(0, 0)
         self.move_ease = move_ease
         self.factor = 1
+        self.set_zoom(1.5)
 
         self.player_animation = Animation("../graphics/player_keyframes")
 
