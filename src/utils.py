@@ -118,9 +118,3 @@ class DynamicImage:
             #tile_surface = tile_surface.convert_alpha()
             return DynamicImage(tile_surface, smooth=False)
         return extract_image
-
-
-class Animation:
-    def __init__(self, animation_settings_path):
-        self.settings_path = animation_settings_path
-        

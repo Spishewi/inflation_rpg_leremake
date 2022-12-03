@@ -46,7 +46,6 @@ class CameraView:
         """
         permet d'afficher / de dessiner la map
         """
-        
 
         map = self.map_manager.get_map(self.map_name)
 

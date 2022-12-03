@@ -40,5 +40,6 @@ class Game:
             self.camera_view.draw(self.window, self.player)
         
         
-            dt = self.clock.tick(60) / 1000
+            dt = self.clock.tick(0) / 1000
+            sys.stdout.write(str(1/dt)+"\n")
             pygame.display.update()
