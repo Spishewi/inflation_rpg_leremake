@@ -1,3 +1,4 @@
+from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
 import pygame
 import math
 from utils import Hitbox,DynamicImage
