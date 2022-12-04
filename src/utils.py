@@ -1,4 +1,4 @@
-from __future__ import annotations # psq sinon il aimait pas certains type hint
+from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
 from pathlib import Path
 import pygame
 import math

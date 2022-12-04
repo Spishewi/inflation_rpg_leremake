@@ -64,8 +64,8 @@ class CameraView:
         y_const = half_height / (tile_size_factor)
 
         # déplacement des tiles suivant la position de la caméra
-        offset_x = -self.coords.x * tile_size_factor + half_width
-        offset_y = -self.coords.y * tile_size_factor + half_height
+        offset_x = math.floor(-self.coords.x * tile_size_factor + half_width)
+        offset_y = math.floor(-self.coords.y * tile_size_factor + half_height)
         
         # calcul de la zone à afficher
         minx = math.floor(self.coords.x - x_const)
@@ -91,7 +91,7 @@ class CameraView:
                             tiles.append((tile_image.get_image(self.factor), (posx, posy)))
             # permet de mettre le joueur sur le bon layer
             if layer.name == "floor":
-                player_pos = pygame.Vector2(player.pos.x * tile_size_factor + offset_x, player.pos.y * tile_size_factor + offset_y)
+                player_pos = pygame.Vector2(math.floor(player.pos.x * tile_size_factor) + offset_x, math.floor(player.pos.y * tile_size_factor) + offset_y)
                 tiles.append((self.player_animation.get_curentAnimation(player.direction, self.factor),(player_pos.x, player_pos.y)))
         
         # On met la couleur de fond de la map
@@ -101,7 +101,7 @@ class CameraView:
         draw_surface.blits(tiles, doreturn=False)
         
         # du debug en plus
-        
+
         #player_rect = player.get_rect()
         #print((player_pos.x, player_pos.y, player_rect.width * tile_size_factor, player_rect.height * tile_size_factor))
         #pygame.draw.rect(draw_surface,"red",pygame.Rect(player_pos.x, player_pos.y,1*tile_size_factor,1*tile_size_factor))
