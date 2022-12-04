@@ -1,6 +1,6 @@
 import pygame
 
-from game import Game
+from engine.game import Game
 
 pygame.init()
 

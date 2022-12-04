@@ -5,9 +5,9 @@ import math # calculs divers
 import sys # actions spéciales du système (sys.stdout.write() et sys.exit())
 
 # Imports des autres fichiers customs
-from map_manager import MapManager # La gestion de la map
-from camera_view import CameraView # la gestion de la caméra
-from player import Player # la gestion du joueur
+from engine.map_manager import MapManager # La gestion de la map
+from display.camera_view import CameraView # la gestion de la caméra
+from engine.player import Player # la gestion du joueur
 
 
 
@@ -34,7 +34,7 @@ class Game:
         self.player = Player()
         self.player.pos = pygame.Vector2(53, 48)
 
-        # on teleporte la caméra au joueur pour pas avoir un effet de slide au démarrage
+        # on teleporte la caméra au joueur pour ne pas avoir un effet de slide au démarrage
         self.camera_view.move(1, self.player.pos, False)
 
 

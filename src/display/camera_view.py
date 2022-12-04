@@ -4,8 +4,8 @@ import pygame # affichage
 import math # calculs divers
 
 # Imports des autres fichiers customs
-from map_manager import MapManager # La gestion de la map
-from animation import Animation # La gestion des animations
+from engine.map_manager import MapManager # La gestion de la map
+from display.animation import Animation # La gestion des animations
 
 class CameraView:
     """
