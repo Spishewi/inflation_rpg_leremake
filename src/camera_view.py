@@ -90,7 +90,7 @@ class CameraView:
                             # ajout de la tile à la liste des tiles à afficher
                             tiles.append((tile_image.get_image(self.factor), (posx, posy)))
             # permet de mettre le joueur sur le bon layer
-            if layer.name == "floor":
+            if layer.name == "zones_outline":
                 player_pos = pygame.Vector2(player.pos.x * tile_size_factor + offset_x, player.pos.y * tile_size_factor + offset_y)
                 tiles.append((self.player_animation.get_curentAnimation(player.direction, self.factor),(player_pos.x, player_pos.y)))
         
