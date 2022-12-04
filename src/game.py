@@ -34,6 +34,10 @@ class Game:
         self.player = Player()
         self.player.pos = pygame.Vector2(53, 48)
 
+        # on teleporte la caméra au joueur pour pas avoir un effet de slide au démarrage
+        self.camera_view.move(1, self.player.pos, False)
+
+
         self.clock = pygame.time.Clock()
         
     def run(self) -> None:
