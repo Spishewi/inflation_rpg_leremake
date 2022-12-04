@@ -69,10 +69,9 @@ class CameraView:
         maxy = math.ceil(self.coords.y + y_const) + 1
 
         tiles = []
-        for x in range(max(minx, 0), min(maxx, map.width)):
-            for y in range(max(miny, 0), min(maxy, map.height)):
-                for layer_index in range(len(map.layers)-1, -1, -1):
-                    layer = map.layers[layer_index]
+        for layer_index, layer in enumerate(map.layers):
+            for x in range(max(minx, 0), min(maxx, map.width)):
+                for y in range(max(miny, 0), min(maxy, map.height)):
                     if layer.visible :# or layer.properties["collide"] == True
                         tile_image = map.get_tile_image(x, y, layer_index)
                         if tile_image is not None:
@@ -80,18 +79,19 @@ class CameraView:
                             posy = y * tile_size_factor + y_const_2
                             #draw_surface.blit(tile_image.get_image(self.factor), (posx, posy))
                             tiles.append((tile_image.get_image(self.factor), (posx, posy)))
-                            if tile_image.opaque:
-                                break
-        tiles.reverse()
+            if layer.name == "floor":
+                player_pos = pygame.Vector2(player.pos.x * tile_size_factor + x_const_2, player.pos.y * tile_size_factor + y_const_2)
+                tiles.append((self.player_animation.get_curentAnimation(player.direction, self.factor),(player_pos.x, player_pos.y)))
+        #tiles.reverse()
+        #tiles.sort(key=lambda x: -x[1][1]) # on trie suivant l'axe y pour pouvoir avoir de la profondeur dans l'affichage
         
         draw_surface.fill(map.background_color)
         draw_surface.blits(tiles, doreturn=False)
-        player_rect = player.get_rect()
-        player_pos = pygame.Vector2(player.pos.x * tile_size_factor + x_const_2, player.pos.y * tile_size_factor + y_const_2)
+        #player_rect = player.get_rect()
+        
         #print((player_pos.x, player_pos.y, player_rect.width * tile_size_factor, player_rect.height * tile_size_factor))
 
         #pygame.draw.rect(draw_surface,"red",pygame.Rect(player_pos.x, player_pos.y,1*tile_size_factor,1*tile_size_factor))
-        draw_surface.blit(self.player_animation.get_curentAnimation(player.direction, self.factor),(player_pos.x, player_pos.y))
         
         
     
