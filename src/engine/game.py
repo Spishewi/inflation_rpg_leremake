@@ -8,6 +8,7 @@ import sys # actions spéciales du système (sys.stdout.write() et sys.exit())
 from engine.map_manager import MapManager # La gestion de la map
 from display.camera_view import CameraView # la gestion de la caméra
 from engine.player import Player # la gestion du joueur
+from display.ingame_menu import Ingame_menu # la gestion du GUI
 
 
 
@@ -18,6 +19,7 @@ class Game:
     def __init__(self, window: pygame.Surface) -> None:
         # On enregistre la fenêtre où l'on va dessiner
         self.window = window
+        self.ui = Ingame_menu(self.window)
 
         # On initialise le map Manager
         self.map_manager = MapManager()
@@ -37,7 +39,6 @@ class Game:
         # on teleporte la caméra au joueur pour ne pas avoir un effet de slide au démarrage
         self.camera_view.move(1, self.player.pos, False)
 
-
         self.clock = pygame.time.Clock()
         
     def run(self) -> None:
@@ -53,6 +54,7 @@ class Game:
                     running = False
                 # On envoie les evenements au joueur.
                 self.player.event_handler(event)
+                self.ui.event_handler(event)
             
             # On met a jour la poisition du joueur (suivant les evenements effectués plus haut)
             self.player.move(self.map_manager, dt)
@@ -62,6 +64,9 @@ class Game:
 
             # On affiche la "vue" de la caméra
             self.camera_view.draw(self.window, self.player)
+
+            self.ui.update(self.clock.get_fps())
+            self.ui.draw()
         
             # On récupère le dt de la frame (temps entre deux frames)
             # Cet variable permet de calculer tout déplacement et evenement suivant le temps et non suivant la vitesse du jeu
