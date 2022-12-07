@@ -77,6 +77,7 @@ class CameraView:
 
         # on récupère toutes les tiles qui seront à afficher à cette frame
         tiles = []
+
         for layer_index, layer in enumerate(map.layers):
             for y in range(max(miny, 0), min(maxy, map.height)):
                 for x in range(max(minx, 0), min(maxx, map.width)):
