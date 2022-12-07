@@ -4,9 +4,16 @@ class Ingame_menu(UI):
     def __init__(self, draw_surface):
         super().__init__(draw_surface)
 
-        self.font = pygame.font.Font("../graphics/PublicPixel.ttf", 20)
-        self.firstlabel  = Label(pygame.Vector2(0, 0), "test", self.font, pygame.Color(255, 255, 255))
-        self.firstbutton = Button( pygame.Rect(50, 50, 150, 40), "Bouton", self.font, self.delete_button, pygame.Color(255, 255, 255), pygame.Color(127, 127, 127), hover_color= pygame.Color(50, 50, 50))
+        self.font_15 = pygame.font.Font("../graphics/PublicPixel.ttf", 15)
+        self.font_20 = pygame.font.Font("../graphics/PublicPixel.ttf", 20)
+        
+        self.firstlabel  = Label(pygame.Vector2(10, 10), "", self.font_15, pygame.Color(255, 255, 255))
+        
+        button_rect = pygame.Rect((0,20,100,40))
+        button_rect.x = draw_surface.get_width() - button_rect.width - 20
+        
+        self.firstbutton = Button(button_rect, "Menu", self.font_20, self.delete_button, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        
         progressbar_rect = pygame.Rect((0, 0, 0, 0))
         progressbar_rect.x = 10
         progressbar_rect.y = draw_surface.get_height() - 25
@@ -26,7 +33,7 @@ class Ingame_menu(UI):
         super().update()
         
         if fps != None:
-            self.firstlabel.update_text(f"{fps:.2f}")
+            self.firstlabel.update_text(f"fps: {fps:.2f}")
         
         if distance != None:
             self.fightprogressbar.update_value((self.fightprogressbar.value+distance)%100)
