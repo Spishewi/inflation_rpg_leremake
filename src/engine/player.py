@@ -2,6 +2,7 @@ from __future__ import annotations # permet d'ajouter certaines choses non dispo
 import pygame
 import math
 from utils import Hitbox, DynamicImage
+from display.animation import Animation
 
 class Player:
     def __init__(self):
@@ -10,6 +11,10 @@ class Player:
         self.speed = 10
         #self.image = DynamicImage(pygame.image.load("../graphics/player.png"))
         self.hitbox_decalage = 0.6
+        self.animation  = Animation("../graphics/player_keyframes")
+    
+    def get_animation(self, factor):
+        return self.animation.get_curentAnimation(self.direction, factor)
 
     def get_rect(self):
         return pygame.Rect(self.pos.x, self.pos.y, 1, 1)

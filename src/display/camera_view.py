@@ -20,7 +20,6 @@ class CameraView:
         self.move_ease = move_ease
         self.factor = 1
 
-        self.player_animation = Animation("../graphics/player_keyframes")
 
     def set_map(self, map_name) -> None:
         """
@@ -96,7 +95,7 @@ class CameraView:
 
                 if layer.name == "walls" and math.floor(player.pos.y) == y:
                     
-                    tiles.append((self.player_animation.get_curentAnimation(player.direction, self.factor),(player_pos.x, player_pos.y)))
+                    tiles.append((player.get_animation(self.factor),(player_pos)))
         
         # On met la couleur de fond de la map
         draw_surface.fill(map.background_color)
