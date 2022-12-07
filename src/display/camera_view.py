@@ -20,7 +20,6 @@ class CameraView:
         self.move_ease = move_ease
         self.factor = 1
 
-        self.player_animation = Animation("../graphics/player_keyframes")
 
     def set_map(self, map_name) -> None:
         """
@@ -74,12 +73,15 @@ class CameraView:
         miny = math.floor(self.coords.y - y_const)
         maxy = math.ceil(self.coords.y + y_const) + 1
 
+        # on récupère les coordonnées du joueur
+        player_pos = pygame.Vector2(math.floor(player.pos.x * tile_size_factor) + offset_x, math.floor(player.pos.y * tile_size_factor) + offset_y)
+
         # on récupère toutes les tiles qui seront à afficher à cette frame
         tiles = []
 
         for layer_index, layer in enumerate(map.layers):
-            for x in range(max(minx, 0), min(maxx, map.width)):
-                for y in range(max(miny, 0), min(maxy, map.height)):
+            for y in range(max(miny, 0), min(maxy, map.height)):
+                for x in range(max(minx, 0), min(maxx, map.width)):
                     if layer.visible :# or layer.properties["collide"] == True
                         # récupération de l'image de la tile
                         tile_image = map.get_tile_image(x, y, layer_index)
@@ -90,10 +92,11 @@ class CameraView:
 
                             # ajout de la tile à la liste des tiles à afficher
                             tiles.append((tile_image.get_image(self.factor), (posx, posy)))
-            # permet de mettre le joueur sur le bon layer
-            if layer.name == "zones_outline":
-                player_pos = pygame.Vector2(math.floor(player.pos.x * tile_size_factor) + offset_x, math.floor(player.pos.y * tile_size_factor) + offset_y)
-                tiles.append((self.player_animation.get_curentAnimation(player.direction, self.factor),(player_pos.x, player_pos.y)))
+                    # permet de mettre le joueur sur le bon layer
+
+                if layer.name == "walls" and math.floor(player.pos.y) == y:
+                    
+                    tiles.append((player.get_animation(self.factor),(player_pos)))
         
         # On met la couleur de fond de la map
         draw_surface.fill(map.background_color)
