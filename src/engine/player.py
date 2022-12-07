@@ -37,11 +37,15 @@ class Player:
                 self.collisions("y", velocity, collisions_tiles)
                 
     def collisions(self, direction: str, velocity: float, collisions: list) -> pygame.Vector2:
+        """
+            Change la position du joueur si il y a une colision
+            collision : liste des tiles susceptibles d'être en collision avec le joueur
+        """
         player_hitbox = self.get_hitbox()
         for tile_pos in collisions:
             tile_hitbox = Hitbox(tile_pos[0], tile_pos[1], 1, 1)
             
-            if tile_hitbox.overlap2(player_hitbox):
+            if tile_hitbox.overlap2(player_hitbox): # si il y a une collision
                 #print("collisions", tile_rect)
                 
                 if direction == "y":
@@ -59,7 +63,10 @@ class Player:
 
                 player_hitbox = self.get_hitbox()
 
-    def event_handler(self, event: pygame.event):
+    def event_handler(self, event: pygame.event): 
+        """
+            defini la direction du joueur en fonction des touches pressés
+        """        
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT or event.key == pygame.K_q:
                 self.direction.x -= 1

@@ -12,22 +12,11 @@ class Animation:
         with open(f"{path}/keyframes.json") as animation_settings:
             self.SETTINGS = json.load(animation_settings)
             
-        '''
-        self.animations = {
-            "00":"down",
-            "10":"right",
-            "11":"down-right",
-            "01":"down",
-            "-11":"down-left",
-            "-10":"left",
-            "-1-1":"up-left",
-            "0-1":"up",
-            "1-1":"up-right"
-        }'''
+        
 
         self.sprites = self.load_sprites(spritesheet)
         
-    def load_sprites(self, spritesheet):
+    def load_sprites(self, spritesheet): # charge les annimations dans un dict en fonction de 'keyframes.json'
         sprites = {}
         for k,v in self.SETTINGS["keyframes"].items():
             
@@ -51,12 +40,12 @@ class Animation:
             
         return sprites
     
-    def get_curentAnimation(self, direction: pygame.Vector2, factor) -> DynamicImage:
+    def get_curentAnimation(self, direction: pygame.Vector2, factor) -> DynamicImage:  # renvoie l'annimation en fonction de la direction
         direction = direction.xy
         speed = 150
-        ticks = int(pygame.time.get_ticks()/speed)%2
+        ticks = int(pygame.time.get_ticks()/speed)%2 # nombre entre 1 et 2 pour le numero de l'annimation à selectionner (ici il n'y en a que deux de possibles)
         
-        for i in range(2):
+        for i in range(2): # permet d'éviter que le x ou le y soit à 2 pour les conditions d'après
             if direction[i] > 1:
                 direction[i] = 1
             elif direction[i] < -1:
@@ -106,11 +95,3 @@ class Animation:
         elif direction == [1,-1] : # diagonale haut droit
             self.previousDirection = direction
             return self.sprites["up-right"]["frames"][ticks].get_image(factor)
-        
-        '''
-        if direction == [0,0] :
-            return self.sprites[self.animations[str(int(self.previousDirection[0]))+str(int(self.previousDirection[1]))]]["idle"].get_image(factor)
-        else:
-            self.previousDirection = direction
-            return self.sprites[self.animations[str(int(direction[0]))+str(int(direction[1]))]]["frames"][ticks].get_image(factor)
-        '''
