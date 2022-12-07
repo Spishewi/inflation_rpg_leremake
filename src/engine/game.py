@@ -65,7 +65,9 @@ class Game:
             # On affiche la "vue" de la caméra
             self.camera_view.draw(self.window, self.player)
 
-            self.ui.update(self.clock.get_fps())
+            self.ui.update(fps=self.clock.get_fps())
+            if self.player.direction.magnitude() != 0:
+                self.ui.update(distance=0.1)
             self.ui.draw()
         
             # On récupère le dt de la frame (temps entre deux frames)

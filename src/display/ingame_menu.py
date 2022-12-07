@@ -14,16 +14,20 @@ class Ingame_menu(UI):
         progressbar_rect.width = draw_surface.get_width()
         progressbar_rect.height = 15
 
-        self.firstprogressbar = Progressbar(progressbar_rect, 0, 100, pygame.Color(0, 0, 255), pygame.Color(255, 255, 255))
+        self.fightprogressbar = Progressbar(progressbar_rect, 0, 100, pygame.Color(85, 160, 39), pygame.Color(134, 221, 81))
 
         self.bind_widget(self.firstlabel)
         self.bind_widget(self.firstbutton)
-        self.bind_widget(self.firstprogressbar)
+        self.bind_widget(self.fightprogressbar)
 
     def delete_button(self):
         self.unbind_widget(self.firstbutton)
 
-    def update(self, fps):
+    def update(self, fps = None, distance = None):
         super().update()
-        self.firstlabel.update_text(f"{fps:.2f}")
-        self.firstprogressbar.update_value((pygame.time.get_ticks() / 1000)*20%100)
+        
+        if fps != None:
+            self.firstlabel.update_text(f"{fps:.2f}")
+        
+        if distance != None:
+            self.fightprogressbar.update_value((self.fightprogressbar.value+distance)%100)
