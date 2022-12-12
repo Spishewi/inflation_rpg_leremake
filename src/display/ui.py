@@ -156,3 +156,7 @@ class UI():
             self.widgets.remove(widget)
 
     
+    def clear(self):
+        for widget in self.widgets:
+            self._parent = None
+        self.widgets = []
