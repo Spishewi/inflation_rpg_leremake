@@ -9,12 +9,20 @@ class Ingame_menu(UI):
         self.font_15 = pygame.font.Font("../graphics/PublicPixel.ttf", 15)
         self.font_20 = pygame.font.Font("../graphics/PublicPixel.ttf", 20)
         
+        self.main_display(draw_surface)
+        
+        
+
+    def delete_button(self):
+        self.unbind_widget(self.firstbutton)
+        
+    def main_display(self,draw_surface):
         self.firstlabel  = Label(pygame.Vector2(10, 10), "", self.font_15, pygame.Color(255, 255, 255))
         
         button_rect = pygame.Rect((0,20,100,40))
         button_rect.x = draw_surface.get_width() - button_rect.width - 20
         
-        self.firstbutton = Button(button_rect, "Menu", self.font_20, self.delete_button, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        self.firstbutton = Button(button_rect, "Menu", self.font_20, self.clear, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
         
         progressbar_rect = pygame.Rect((0, 0, 0, 0))
         progressbar_rect.x = 10
@@ -28,9 +36,6 @@ class Ingame_menu(UI):
         self.bind_widget(self.firstbutton)
         self.bind_widget(self.fightprogressbar)
 
-    def delete_button(self):
-        self.unbind_widget(self.firstbutton)
-
     def update(self, fps:float | None = None, distance:int | None= None):
         super().update()
         
@@ -39,3 +44,4 @@ class Ingame_menu(UI):
         
         if distance != None:
             self.fightprogressbar.update_value((self.fightprogressbar.value+distance)%100)
+    
