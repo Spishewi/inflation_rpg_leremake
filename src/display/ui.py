@@ -140,8 +140,10 @@ class UI():
 
     def draw(self):
         if self.background != None:
-            background_rect = pygame.Rect((0, 0, self.draw_surface.get_width(), self.draw_surface.get_width()))
-            pygame.draw.rect(self.draw_surface, self.background, background_rect)
+            background_surface  = pygame.Surface(self.draw_surface.get_size())
+            background_surface.fill(self.background)
+            background_surface.set_alpha(self.background.a)
+            self.draw_surface.blit(background_surface, (0, 0))
             
         for widget in self.widgets:
             widget.draw(self.draw_surface)
