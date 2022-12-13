@@ -36,8 +36,6 @@ class Label():
         self.coords = coords
         self.text_color = text_color
         self.font = font
-
-        self._parent = None
         
         self.text = None
         self._rendered_text = None
@@ -81,8 +79,6 @@ class Button():
 
         self.hovered = False
         self.clicked = False
-
-        self._parent = None
     
     def update(self) -> None:
         if self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -132,6 +128,7 @@ class UI():
     def __init__(self, draw_surface: pygame.Surface) -> None:
         self.draw_surface = draw_surface
         self.widgets: list[Widget] = []
+        self.background = None
 
     def event_handler(self, event: pygame.event.Event):
         for widget in self.widgets:
@@ -142,21 +139,25 @@ class UI():
             widget.update()
 
     def draw(self):
+        if self.background != None:
+            background_rect = pygame.Rect((0, 0, self.draw_surface.get_width(), self.draw_surface.get_width()))
+            pygame.draw.rect(self.draw_surface, self.background, background_rect)
+            
         for widget in self.widgets:
             widget.draw(self.draw_surface)
 
     def bind_widget(self, widget: Widget):
         if widget not in self.widgets:
-            widget._parent = self
             self.widgets.append(widget)
 
     def unbind_widget(self, widget: Widget):
         if widget in self.widgets:
-            widget._parent = None
             self.widgets.remove(widget)
-
     
     def clear(self):
-        for widget in self.widgets:
-            self._parent = None
         self.widgets = []
+
+    def set_background_color(self, color: pygame.Color | None):
+        if not (isinstance(color, pygame.Color) or isinstance(color, None)):
+            raise ValueError
+        self.background = color
