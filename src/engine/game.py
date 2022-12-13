@@ -10,6 +10,8 @@ from display.camera_view import CameraView # la gestion de la caméra
 from engine.player import Player # la gestion du joueur
 from display.ingame_menu import Ingame_menu # la gestion du GUI
 
+from random import random
+
 
 
 class Game:
@@ -66,8 +68,9 @@ class Game:
             self.camera_view.draw(self.window, self.player)
 
             self.ui.update(fps=self.clock.get_fps())
+
             if self.player.direction.magnitude() != 0:
-                self.ui.update(distance=0.15)
+                self.ui.update(distance=(1/10)*100*dt)
             self.ui.draw()
         
             # On récupère le dt de la frame (temps entre deux frames)

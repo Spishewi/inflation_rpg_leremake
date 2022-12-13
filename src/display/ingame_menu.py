@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from display.ui import UI, Label, Button, Progressbar
 import pygame
 class Ingame_menu(UI):

@@ -81,7 +81,7 @@ class CameraView:
         for layer_index, layer in enumerate(map.layers):
             for y in range(max(miny, 0), min(maxy, map.height)):
                 for x in range(max(minx, 0), min(maxx, map.width)):
-                    if layer.visible :# or layer.properties["collide"] == True
+                    if layer.visible :# or layer.name == "collisions" | and layer.name == "zones_outline"
                         # récupération de l'image de la tile
                         tile_image = map.get_tile_image(x, y, layer_index)
                         if tile_image is not None:
