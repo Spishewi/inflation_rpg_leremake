@@ -85,3 +85,7 @@ class Player:
                 self.direction.y += 1
             elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 self.direction.y -= 1
+
+    def reset_events(self):
+        self.direction.x = 0
+        self.direction.y = 0

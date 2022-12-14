@@ -55,7 +55,10 @@ class Game:
                     # on met la condition d'arrêt à "vrai"
                     running = False
                 # On envoie les evenements au joueur.
-                self.player.event_handler(event)
+                if not self.ui.get_grab():
+                    self.player.event_handler(event)
+                else:
+                    self.player.reset_events()
                 self.ui.event_handler(event)
             
             # On met a jour la poisition du joueur (suivant les evenements effectués plus haut)
