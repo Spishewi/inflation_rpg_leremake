@@ -129,6 +129,7 @@ class UI():
         self.draw_surface = draw_surface
         self.widgets: list[Widget] = []
         self.background = None
+        self.need_grab = False
 
     def event_handler(self, event: pygame.event.Event):
         for widget in self.widgets:
@@ -170,3 +171,9 @@ class UI():
         if not (isinstance(color, pygame.Color) or isinstance(color, type(None))):
             raise ValueError
         self.background = color
+
+    def set_grab(self, value: bool):
+        self.need_grab = value
+
+    def get_grab(self) -> bool:
+        return self.need_grab
