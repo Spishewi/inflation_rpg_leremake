@@ -182,8 +182,8 @@ class Ingame_menu(UI):
             self.stats_labels[stat][0].update_text(str(self.value[stat] + self.to_add_value[stat]))
             self.point_value_label.update_text(str(self.points))
 
-    def get_stats_and_points(self): # renvoie un int et un dict {"stat":valeur,...}
-        return self._points,self._stats
+    def get_stats_and_points(self): # renvoie un int et un dict {"nom_stat":valeur,...}
+        return self._points,self._stats.copy()
 
     def set_stats_and_points(self,points:int,stats:list) -> None:
         self.main_menu()
