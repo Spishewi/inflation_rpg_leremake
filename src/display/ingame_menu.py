@@ -127,6 +127,8 @@ class Ingame_menu(UI):
             )
 
             y += 70
+        
+        print(self.stats_labels)
 
     def equipment_menu(self):
         self.clear_widget()
