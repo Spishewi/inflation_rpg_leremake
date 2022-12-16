@@ -80,13 +80,8 @@ class Ingame_menu(UI):
     def stats_menu(self):
         self.clear_widget()
 
-        stats = [
-            "Health",
-            "Attack",
-            "Defense",
-            "Agility",
-            "Luck"
-        ]
+
+        self.points, stats = self.get_stats_and_points()
         
         previous_button = Previous_button(self.draw_surface,self.main_menu)
         close_button = Close_button(self.draw_surface,self.main_display)
@@ -104,31 +99,32 @@ class Ingame_menu(UI):
         self.points = 100
         self.stats_labels = {}
         y = 140
-        for stat in stats:
-            self.value[stat] = 1000
-            self.to_add_value[stat] = 0
-
-            stats_label = Label(pygame.Vector2(70,y+10),stat,Font(20),pygame.Color(255,255,255))
-            
-            plus_button = Button(pygame.Rect(500,y,40,40),"+", Font(20), callback=lambda:self.add_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-            minus_button = Button(pygame.Rect(650,y,40,40),"-", Font(20),callback=lambda:self.remove_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-
-            stats_value_label = Label(pygame.Vector2(300,y+10),str(self.value[stat]),Font(20),pygame.Color(255,255,255))
-            to_add_value_label = Label(pygame.Vector2(565,y+10),str(self.to_add_value[stat]),Font(20),pygame.Color(255,255,255))
-
-            self.stats_labels[stat] = (stats_value_label,to_add_value_label)
-
-            self.bind_several_widget(
-                stats_label,
-                plus_button,
-                minus_button,
-                stats_value_label,
-                to_add_value_label
-            )
+        for stat in stats.keys():
+            self.show_stats(stat,y,stats[stat])
 
             y += 70
+
+    def show_stats(self,stat,y,value):
+        self.value[stat] = value
+        self.to_add_value[stat] = 0
+
+        stats_label = Label(pygame.Vector2(70,y+10),stat,Font(20),pygame.Color(255,255,255))
         
-        print(self.stats_labels)
+        plus_button = Button(pygame.Rect(500,y,40,40),"+", Font(20), callback=lambda:self.add_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        minus_button = Button(pygame.Rect(650,y,40,40),"-", Font(20),callback=lambda:self.remove_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+
+        stats_value_label = Label(pygame.Vector2(300,y+10),str(self.value[stat]),Font(20),pygame.Color(255,255,255))
+        to_add_value_label = Label(pygame.Vector2(565,y+10),str(self.to_add_value[stat]),Font(20),pygame.Color(255,255,255))
+
+        self.stats_labels[stat] = (stats_value_label,to_add_value_label)
+
+        self.bind_several_widget(
+            stats_label,
+            plus_button,
+            minus_button,
+            stats_value_label,
+            to_add_value_label
+        )
 
     def equipment_menu(self):
         self.clear_widget()
@@ -146,7 +142,6 @@ class Ingame_menu(UI):
         )
 
     def add_point(self,stat):
-        print(stat)
         if self.points != 0:
             self.to_add_value[stat] += 1
             self.points -= 1
@@ -161,6 +156,20 @@ class Ingame_menu(UI):
 
             self.stats_labels[stat][1].update_text(str(self.to_add_value[stat]))
             self.stats_labels[stat][0].update_text(str(self.value[stat] + self.to_add_value[stat]))
+
+    def get_stats_and_points(self):
+        points = 50
+        stats = {
+            "Health":500,
+            "Attack":200,
+            "Defense":1500,
+            "Agility":128,
+            "Luck":56
+        }
+        return points,stats
+
+    def set_stats_and_points(self,points:int,stats:list) -> None:
+        pass
 
 
     def do_nothing(self):
