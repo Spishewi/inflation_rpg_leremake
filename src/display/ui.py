@@ -19,6 +19,7 @@ class Widget():
         pass
     def event_handler(self, event: pygame.event.Event) -> None:
         pass
+    
 class Progressbar(Widget):
     def __init__(self, rect: pygame.Rect, value: int | float, max_value: int | float, color: pygame.Color, outline_color: pygame.Color) -> None:
 
@@ -125,20 +126,15 @@ class Button(Widget):
                 self.clicked = False
                 self.callback()
                 
-class Image(DynamicImage):
+class Image(Widget,DynamicImage):
     def __init__(self, path:str, zoom:int, pos:pygame.Vector2):
         image = pygame.image.load(path)
         self.pos = pos
         self.zoom = zoom
-        super().__init__(image,False)
+        super(DynamicImage).__init__(image,False)
     
     def draw(self, draw_surface : pygame.Surface):
         draw_surface.blit(self.get_image(self.zoom),self.pos)
-        
-    def event_handler(self, event) -> None:
-        return
-    def update(self) -> None:
-        return
         
 
 Widget = typing.Union[Button, Progressbar, Label]
