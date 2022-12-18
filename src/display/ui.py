@@ -5,7 +5,21 @@ import math
 import typing
 from utils import DynamicImage
 
-class Progressbar():
+class Default_font(pygame.font.Font):
+    def __init__(self,size):
+        super().__init__("../graphics/PublicPixel.ttf",size)
+
+
+class Widget():
+    def __init__(self) -> None:
+        pass
+    def draw(self, display_surface: pygame.Surface) -> None:
+        pass
+    def update(self) -> None:
+        pass
+    def event_handler(self, event: pygame.event.Event) -> None:
+        pass
+class Progressbar(Widget):
     def __init__(self, rect: pygame.Rect, value: int | float, max_value: int | float, color: pygame.Color, outline_color: pygame.Color) -> None:
 
         self.rect = rect
@@ -15,9 +29,6 @@ class Progressbar():
         self.value = value
         self.max_value = max_value
 
-    def update(self) -> None:
-        return
-
     def draw(self, draw_surface: pygame.Surface) -> None:
         progressbar_outline = self.rect
         progressbar_width = math.floor((self.value/self.max_value) * (progressbar_outline.width - 4))
@@ -26,13 +37,10 @@ class Progressbar():
         pygame.draw.rect(draw_surface, self.outline_color, progressbar_outline, 1)
         pygame.draw.rect(draw_surface, self.color, progressbar_innerbar)
 
-    def event_handler(self, event) -> None:
-        return
-
     def update_value(self, value: int | float) -> None:
         self.value = min(value, self.max_value)
 
-class Label():
+class Label(Widget):
     def __init__(self, coords: pygame.Vector2, text: str, font: pygame.font.Font, text_color: pygame.Color) -> None:
         self.coords = coords
         self.text_color = text_color
@@ -46,16 +54,10 @@ class Label():
         self.text = text
         self._rendered_text = self.font.render(self.text, False, self.text_color)
 
-    def update(self) -> None:
-        return
-
     def draw(self, draw_surface: pygame.Surface) -> None:
         draw_surface.blit(self._rendered_text, self.coords)
 
-    def event_handler(self, event) -> None:
-        return
-
-class Button():
+class Button(Widget):
     def __init__(self, rect: pygame.Rect, text: str, font: pygame.font.Font, callback: typing.Callable, text_color: pygame.Color, color: pygame.Color, hover_text_color: pygame.Color = None, hover_color: pygame.Color = None):
         self.text = text
         self.rect = rect
@@ -162,22 +164,26 @@ class UI():
             background_surface.fill(self.background)
             background_surface.set_alpha(self.background.a)
             self.draw_surface.blit(background_surface, (0, 0))
-            
+        
         for widget in self.widgets:
             widget.draw(self.draw_surface)
 
     def bind_widget(self, widget: Widget):
+        if not issubclass(type(widget), Widget):
+                raise ValueError
         if widget not in self.widgets:
             self.widgets.append(widget)
 
     def bind_several_widget(self, *args):
         for widget in args:
-            if not isinstance(widget, (Button,Label,Progressbar,Image)):
+            if not issubclass(type(widget), Widget):
                 raise ValueError
 
             self.bind_widget(widget)
 
     def unbind_widget(self, widget: Widget):
+        if not issubclass(type(widget), Widget):
+                raise ValueError
         if widget in self.widgets:
             self.widgets.remove(widget)
     

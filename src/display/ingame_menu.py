@@ -1,11 +1,7 @@
 from __future__ import annotations
 
-from display.ui import UI, Label, Button, Progressbar, Image
+from display.ui import UI, Label, Button, Progressbar, Default_font, Image
 import pygame
-
-class Font(pygame.font.Font):
-    def __init__(self,size):
-        super().__init__("../graphics/PublicPixel.ttf",size)
 
 class Ingame_menu(UI):
     def __init__(self, draw_surface):
@@ -13,6 +9,7 @@ class Ingame_menu(UI):
 
         self.draw_surface = draw_surface
 
+        # TODO
         # to remove -----------------
         self._points = 50
         self._stats = {
@@ -41,12 +38,12 @@ class Ingame_menu(UI):
         self.set_background_color(None)
         self.set_grab(False)
 
-        self.fps_label  = Label(pygame.Vector2(10, 10), "", Font(15), pygame.Color(255, 255, 255))
+        self.fps_label  = Label(pygame.Vector2(10, 10), "", Default_font(15), pygame.Color(255, 255, 255))
         
         button_rect = pygame.Rect((0,20,100,40))
         button_rect.x = self.draw_surface.get_width() - button_rect.width - 20
         
-        button_menu = Button(button_rect, "Menu", Font(20), callback=self.main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        button_menu = Button(button_rect, "Menu", Default_font(20), callback=self.main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
         
         progressbar_rect = pygame.Rect((0, 0, 0, 0))
         progressbar_rect.x = 10
@@ -72,13 +69,13 @@ class Ingame_menu(UI):
 
         stats_button_rect = pygame.Rect(0,200,130,40)
         stats_button_rect.x = self.draw_surface.get_width()/2 - stats_button_rect.width/2
-        stats_button = Button(stats_button_rect,"Stats",Font(20),callback=self.stats_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        stats_button = Button(stats_button_rect,"Stats",Default_font(20),callback=self.stats_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
 
         equipment_button_rect = pygame.Rect(0,300,200,40)
         equipment_button_rect.x = self.draw_surface.get_width()/2 - equipment_button_rect.width/2
-        equipment_button = Button(equipment_button_rect,"Equipment",Font(20),callback=self.equipment_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        equipment_button = Button(equipment_button_rect,"Equipment",Default_font(20),callback=self.equipment_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
 
-        menu_label = Label(pygame.Vector2(40,40),"MENU",Font(30),pygame.Color(255,255,255))
+        menu_label = Label(pygame.Vector2(40,40),"MENU",Default_font(30),pygame.Color(255,255,255))
        
         self.bind_several_widget(
             menu_label,
@@ -97,13 +94,13 @@ class Ingame_menu(UI):
         previous_button = Previous_button(self.draw_surface,self.main_menu)
         close_button = Close_button(self.draw_surface,self.main_display)
 
-        stats_title = Label(pygame.Vector2(40,40),"STATS",Font(30),pygame.Color(255,255,255))
+        stats_title = Label(pygame.Vector2(40,40),"STATS",Default_font(30),pygame.Color(255,255,255))
 
-        point_label = Label(pygame.Vector2(900,150),"Points :",Font(25),pygame.Color(255,255,255))
-        self.point_value_label = Label(pygame.Vector2(915,200),str(self.points),Font(40),pygame.Color(255,255,255))
+        point_label = Label(pygame.Vector2(900,150),"Points :",Default_font(25),pygame.Color(255,255,255))
+        self.point_value_label = Label(pygame.Vector2(915,200),str(self.points),Default_font(40),pygame.Color(255,255,255))
 
-        done_button = Button(pygame.Rect(925,350,100,40),"Done", Font(20),callback=lambda:self.set_stats_and_points(self.points,self.stats), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-        cancel_button = Button(pygame.Rect(900,400,150,40),"Cancel", Font(20),callback=self.main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        done_button = Button(pygame.Rect(925,350,100,40),"Done", Default_font(20), callback=lambda:self.set_stats_and_points(self.points,self.stats), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        cancel_button = Button(pygame.Rect(900,400,150,40),"Cancel", Default_font(20), callback=self.main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
 
         self.bind_several_widget(
             close_button,
@@ -128,13 +125,13 @@ class Ingame_menu(UI):
         self.value[stat] = value
         self.to_add_value[stat] = 0
 
-        stats_label = Label(pygame.Vector2(70,y+10),stat+" :",Font(20),pygame.Color(255,255,255))
+        stats_label = Label(pygame.Vector2(70,y+10),stat+" :",Default_font(20),pygame.Color(255,255,255))
         
-        plus_button = Button(pygame.Rect(500,y,40,40),"+", Font(20), callback=lambda:self.add_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-        minus_button = Button(pygame.Rect(650,y,40,40),"-", Font(20),callback=lambda:self.remove_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        plus_button = Button(pygame.Rect(500,y,40,40),"+", Default_font(20), callback=lambda:self.add_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        minus_button = Button(pygame.Rect(650,y,40,40),"-", Default_font(20),callback=lambda:self.remove_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
 
-        stats_value_label = Label(pygame.Vector2(300,y+10),str(self.value[stat]),Font(20),pygame.Color(255,255,255))
-        to_add_value_label = Label(pygame.Vector2(575,y+10),str(self.to_add_value[stat]),Font(20),pygame.Color(255,255,255))
+        stats_value_label = Label(pygame.Vector2(300,y+10),str(self.value[stat]),Default_font(20),pygame.Color(255,255,255))
+        to_add_value_label = Label(pygame.Vector2(575,y+10),str(self.to_add_value[stat]),Default_font(20),pygame.Color(255,255,255))
 
         self.stats_labels[stat] = (stats_value_label,to_add_value_label)
 
@@ -153,7 +150,7 @@ class Ingame_menu(UI):
         close_button = Close_button(self.draw_surface,self.main_display)
 
 
-        equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Font(30),pygame.Color(255,255,255))
+        equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
         
         self.bind_several_widget(
             equipment_label,
