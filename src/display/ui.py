@@ -153,15 +153,22 @@ class UI():
         if widget not in self.widgets:
             self.widgets.append(widget)
 
+    def bind_several_widget(self, *args):
+        for widget in args:
+            if not isinstance(widget, (Button,Label,Progressbar)):
+                raise ValueError
+
+            self.bind_widget(widget)
+
     def unbind_widget(self, widget: Widget):
         if widget in self.widgets:
             self.widgets.remove(widget)
     
-    def clear(self):
+    def clear_widget(self):
         self.widgets = []
 
     def set_background_color(self, color: pygame.Color | None):
-        if not (isinstance(color, pygame.Color) or isinstance(color, None)):
+        if not (isinstance(color, pygame.Color) or isinstance(color, type(None))):
             raise ValueError
         self.background = color
 
