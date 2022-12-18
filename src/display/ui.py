@@ -3,6 +3,7 @@ from __future__ import annotations
 import pygame
 import math
 import typing
+from utils import DynamicImage
 
 class Progressbar():
     def __init__(self, rect: pygame.Rect, value: int | float, max_value: int | float, color: pygame.Color, outline_color: pygame.Color) -> None:
@@ -121,6 +122,22 @@ class Button():
             if self.clicked:
                 self.clicked = False
                 self.callback()
+                
+class Image(DynamicImage):
+    def __init__(self, path:str, zoom:int, pos:pygame.Vector2):
+        image = pygame.image.load(path)
+        self.pos = pos
+        self.zoom = zoom
+        super().__init__(image,False)
+    
+    def draw(self, draw_surface : pygame.Surface):
+        draw_surface.blit(self.get_image(self.zoom),self.pos)
+        
+    def event_handler(self, event) -> None:
+        return
+    def update(self) -> None:
+        return
+        
 
 Widget = typing.Union[Button, Progressbar, Label]
 
@@ -155,7 +172,7 @@ class UI():
 
     def bind_several_widget(self, *args):
         for widget in args:
-            if not isinstance(widget, (Button,Label,Progressbar)):
+            if not isinstance(widget, (Button,Label,Progressbar,Image)):
                 raise ValueError
 
             self.bind_widget(widget)

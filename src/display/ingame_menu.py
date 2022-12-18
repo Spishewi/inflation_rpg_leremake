@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from display.ui import UI, Label, Button, Progressbar
+from display.ui import UI, Label, Button, Progressbar, Image
 import pygame
 
 class Font(pygame.font.Font):
