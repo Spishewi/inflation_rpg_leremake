@@ -199,7 +199,7 @@ class Close_button(Button):
         self.rect = pygame.Rect(0,20,40,40)
         self.rect.x = draw_surface.get_width() - self.rect.width - 20
 
-        super().__init__(self.rect,"X",pygame.font.Font("../graphics/PublicPixel.ttf", 20),callback=main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        super().__init__(self.rect,"X",Default_font(20),callback=main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
 
 
 class Previous_button(Button):
@@ -207,4 +207,4 @@ class Previous_button(Button):
         self.rect = pygame.Rect(0,20,40,40)
         self.rect.x = draw_surface.get_width() - self.rect.width - 80
 
-        super().__init__(self.rect,"<",pygame.font.Font("../graphics/PublicPixel.ttf", 20),callback=main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        super().__init__(self.rect,"<",Default_font(20),callback=main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))

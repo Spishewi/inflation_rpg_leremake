@@ -7,7 +7,7 @@ from utils import DynamicImage
 
 class Default_font(pygame.font.Font):
     def __init__(self,size):
-        super().__init__("../graphics/PublicPixel.ttf",size)
+        super().__init__("../graphics/Font/PublicPixel.ttf",size)
 
 
 class Widget():
