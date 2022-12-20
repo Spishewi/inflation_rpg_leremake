@@ -4,7 +4,6 @@ import pygame
 class Title_screen():
     def __init__(self, window: pygame.Surface) -> None:
         self.ui = Title_screen_menu(window)
-        self.must_start_game = False
 
         self.clock = pygame.time.Clock()
     
@@ -19,11 +18,15 @@ class Title_screen():
                     # on ferme sans lancer le jeu
                     return False
                 self.ui.event_handler(event)
+            
+            
 
-            if self.must_start_game:
+            if self.ui.must_start_game():
                 return True
-
+            
             self.ui.update()
             self.ui.draw()
 
             dt = self.clock.tick(0) / 1000
+            
+            pygame.display.update()
