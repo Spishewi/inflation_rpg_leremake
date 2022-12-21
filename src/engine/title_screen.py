@@ -14,14 +14,14 @@ class Title_screen():
         while True:
             for event in pygame.event.get():
                 # pour fermer avec la croix
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT or self.ui.must_quit:
                     # on ferme sans lancer le jeu
                     return False
                 self.ui.event_handler(event)
             
             
 
-            if self.ui.must_start_game():
+            if self.ui.must_start:
                 return True
             
             self.ui.update()
