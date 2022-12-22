@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from display.ui import UI, Label, Button, Progressbar, Default_font, Image
 import pygame
+from display.graphics import Objects_picture
 
 class Ingame_menu(UI):
     def __init__(self, draw_surface):
         super().__init__(draw_surface)
 
         self.draw_surface = draw_surface
+        self.objects_images = Objects_picture("../graphics/weapons_and_armors")
 
         # TODO
         # to remove -----------------
@@ -37,6 +39,7 @@ class Ingame_menu(UI):
         self.clear_widget()
         self.set_background_color(None)
         self.set_grab(False)
+
 
         self.fps_label  = Label(pygame.Vector2(10, 10), "", Default_font(15), pygame.Color(255, 255, 255))
         
@@ -149,13 +152,18 @@ class Ingame_menu(UI):
         previous_button = Previous_button(self.draw_surface,self.main_menu)
         close_button = Close_button(self.draw_surface,self.main_display)
 
-
         equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
+        
+        
+        sword_image  = Image(self.objects_images.get_object_picture("sword",1,7),pygame.Vector2(50,150))
+        armor_image = Image(self.objects_images.get_object_picture("armor",1,7), pygame.Vector2(50,350))
         
         self.bind_several_widget(
             equipment_label,
             close_button,
-            previous_button
+            previous_button,
+            sword_image,
+            armor_image
         )
 
     def add_point(self,stat)->int:

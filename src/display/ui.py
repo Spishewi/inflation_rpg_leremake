@@ -126,18 +126,17 @@ class Button(Widget):
                 self.clicked = False
                 self.callback()
                 
-class Image(Widget,DynamicImage):
-    def __init__(self, path:str, zoom:int, pos:pygame.Vector2):
-        image = pygame.image.load(path)
+class Image(Widget):
+    def __init__(self, image:pygame.Surface, pos:pygame.Vector2):
+        super().__init__()
+        self.image = image
         self.pos = pos
-        self.zoom = zoom
-        super(DynamicImage).__init__(image,False)
     
     def draw(self, draw_surface : pygame.Surface):
-        draw_surface.blit(self.get_image(self.zoom),self.pos)
+        draw_surface.blit(self.image,self.pos)
         
 
-Widget = typing.Union[Button, Progressbar, Label]
+#Widget = typing.Union[Button, Progressbar, Label, Image]
 
 class UI():
     def __init__(self, draw_surface: pygame.Surface) -> None:
