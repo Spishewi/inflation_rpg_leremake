@@ -8,6 +8,10 @@ class Title_screen_menu(UI):
         self.must_start = False
         self.must_quit = False
         
+        self.play_menu()
+        
+        
+    def play_menu(self):
         welcome_label_1st_line = Label(pygame.Vector2(300, 50), "WELCOME TO THIS INCREDIBLE", Default_font(25), pygame.Color(255, 255, 255))
         welcome_label_2nd_line = Label(pygame.Vector2(320, 100), "REMIX OF INFLATION RPG !!", Default_font(25), pygame.Color(255, 255, 255))
         
@@ -22,7 +26,7 @@ class Title_screen_menu(UI):
             equipment_button,
             exit_button
         )
-    
+     
 
     
     def equipment_menu(self) -> None:

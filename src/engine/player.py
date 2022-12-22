@@ -2,7 +2,7 @@ from __future__ import annotations # permet d'ajouter certaines choses non dispo
 import pygame
 import math
 from utils import Hitbox, DynamicImage
-from display.animation import Animation
+from display.graphics import Animation
 
 class Player:
     def __init__(self):
