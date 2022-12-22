@@ -9,10 +9,7 @@ from engine.map_manager import MapManager # La gestion de la map
 from display.camera_view import CameraView # la gestion de la caméra
 from engine.player import Player # la gestion du joueur
 from display.ingame_menu import Ingame_menu # la gestion du GUI
-
-from random import random
-
-
+from gameplay.battle import Battle_manager # la gestion des combats
 
 class Game:
     """
@@ -41,6 +38,9 @@ class Game:
         # on teleporte la caméra au joueur pour ne pas avoir un effet de slide au démarrage
         self.camera_view.move(1, self.player.pos, False)
 
+        # On instancie et initialise le gestionnaire de combat (important)
+        self.battle_manager = Battle_manager()
+
         self.clock = pygame.time.Clock()
         
     def run(self) -> None:
@@ -61,8 +61,16 @@ class Game:
                     self.player.reset_events()
                 self.ui.event_handler(event)
             
+            # On récupère l'ancienne position du joueur.
+            old_player_pos = self.player.pos.copy()
             # On met a jour la poisition du joueur (suivant les evenements effectués plus haut)
             self.player.move(self.map_manager, dt)
+            # On récupère sa nouvelle position après déplacement
+            new_player_pos = self.player.pos.copy()
+            # On calcul le déplacement relatif du joueur 
+            player_relative_movement = (new_player_pos - old_player_pos).magnitude()
+            # On met a jour le gestionnaire de combat
+            self.battle_manager.handle_player_movement(player_relative_movement)
 
             # On déplace la caméra sur le joueur
             self.camera_view.move(dt, self.player.pos, False)
@@ -80,7 +88,7 @@ class Game:
             # Cet variable permet de calculer tout déplacement et evenement suivant le temps et non suivant la vitesse du jeu
             dt = self.clock.tick(0) / 1000
 
-            # On affiche les FPS
+            # On affiche les FPS dans la console
             # (on utilise sys.stdout car le print de python est très mal optimisé et est trop gourmand pour tourner dans une boucle)
             #sys.stdout.write(str(1/dt)+"\n")
 

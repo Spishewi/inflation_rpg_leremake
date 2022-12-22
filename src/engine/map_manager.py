@@ -1,3 +1,4 @@
+from __future__ import annotations
 import pytmx
 import pygame
 import math
@@ -7,7 +8,7 @@ from utils import DynamicImage
 
 class MapManager:
     def __init__(self) -> None:
-        self._maps = {}
+        self._maps: dict[pytmx.TiledMap]= {}
 
     def add_map(self, map_name: str, map_path: Path) -> None:
         """
@@ -45,7 +46,7 @@ class MapManager:
             # on perdrais en lisibilité pour pas grand chose
             #print(layer.data)
             tiles = [(x, y) for x in range(minx, maxx) for y in range(miny, maxy) if layer.data[y][x] != 0]
-            
+            # voici le code sans liste en compréhension
             """
             for x in range(minx, maxx):
                 for y in range(miny, maxy):
@@ -53,3 +54,24 @@ class MapManager:
                         tiles.append((x, y))"""
             around_collisions[layer_name] = tiles
         return around_collisions
+    
+    def get_level_range(self, map_name: str, coords: pygame.Vector2) -> range:
+        # on veux savoir les coordonnées de la tile sur laquelle est le joueur.
+        coords.x = round(coords.x)
+        coords.y = round(coords.y)
+
+        # on vérifie si on est dans la map (on sais jamais ce qui peut arriver)
+        map = self.get_map(map_name)
+        if not (0 <= coords.x <= map.width and 0 <= coords.y <= map.height):
+            return
+
+        # on récupère le layer des zones
+        layer = map.get_layer_by_name("levels zones")
+        # on récupère les propriété de la tile où se trouve le joueur
+        tile_properties = map.get_tile_properties(coords.x, coords.y, layer)
+        # on lit le niveau de la zone
+        tile_level = tile_properties["level"]
+
+        # on retourne l'intervalle de niveau correspondant
+        return range(tile_level*10, (tile_level+1)*10)
+

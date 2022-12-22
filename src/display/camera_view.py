@@ -19,7 +19,6 @@ class CameraView:
         self.move_ease = move_ease
         self.factor = 1
 
-
     def set_map(self, map_name) -> None:
         """
         permet de définir quel map afficher
