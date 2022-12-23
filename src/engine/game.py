@@ -10,6 +10,7 @@ from display.camera_view import CameraView # la gestion de la caméra
 from engine.player import Player # la gestion du joueur
 from display.ingame_menu import Ingame_menu # la gestion du GUI
 from gameplay.battle import Battle_manager # la gestion des combats
+from gameplay.equipment import Equipment # la gestion de l'equipement
 
 class Game:
     """
@@ -38,8 +39,12 @@ class Game:
         # on teleporte la caméra au joueur pour ne pas avoir un effet de slide au démarrage
         self.camera_view.move(1, self.player.pos, False)
 
+        # On charge l'équipement du joueur
+        self.equipment = Equipment()
+        self.equipment.load() # on charge depuis le fichier de sauvegarde
+
         # On instancie et initialise le gestionnaire de combat (important)
-        self.battle_manager = Battle_manager()
+        self.battle_manager = Battle_manager(self.equipment)
 
         self.clock = pygame.time.Clock()
         
@@ -71,6 +76,7 @@ class Game:
             player_relative_movement = (new_player_pos - old_player_pos).magnitude()
             # On met a jour le gestionnaire de combat
             self.battle_manager.handle_player_movement(player_relative_movement)
+            self.battle_manager.handle_battle()
 
             # On déplace la caméra sur le joueur
             self.camera_view.move(dt, self.player.pos, False)
@@ -81,7 +87,7 @@ class Game:
             self.ui.update(fps=self.clock.get_fps())
 
             if self.player.direction.magnitude() != 0:
-                self.ui.update(distance=(1/10)*100*dt)
+                self.ui.update(distance=self.battle_manager.battle_chance/self.battle_manager.max_battle_chance)
             self.ui.draw()
         
             # On récupère le dt de la frame (temps entre deux frames)

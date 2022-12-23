@@ -32,7 +32,7 @@ class Ingame_menu(UI):
             self.fps_label.update_text(f"fps: {fps:.2f}")
         
         if distance != None:
-            self.fight_bar.update_value((self.fight_bar.value+distance)%100)   
+            self.fight_bar.update_value(distance)   
 
         
     def main_display(self):
@@ -54,7 +54,7 @@ class Ingame_menu(UI):
         progressbar_rect.width = self.draw_surface.get_width()-20
         progressbar_rect.height = 15
 
-        self.fight_bar = Progressbar(progressbar_rect, 0, 100, pygame.Color(85, 160, 39), pygame.Color(134, 221, 81))
+        self.fight_bar = Progressbar(progressbar_rect, 0, pygame.Color(85, 160, 39), pygame.Color(134, 221, 81))
 
         self.bind_several_widget(
             self.fps_label,
@@ -155,8 +155,8 @@ class Ingame_menu(UI):
         equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
         
         
-        sword_image  = Image(self.objects_images.get_object_picture("sword",1,7),pygame.Vector2(50,150))
-        armor_image = Image(self.objects_images.get_object_picture("armor",1,7), pygame.Vector2(50,350))
+        sword_image  = Image(self.objects_images.get_object_picture("sword",0,7),pygame.Vector2(50,150))
+        armor_image = Image(self.objects_images.get_object_picture("armor",0,7), pygame.Vector2(50,350))
         
         self.bind_several_widget(
             equipment_label,
@@ -198,8 +198,6 @@ class Ingame_menu(UI):
 
     def do_nothing(self):
         return
-
-
 
 
 class Close_button(Button):

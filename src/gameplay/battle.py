@@ -1,6 +1,7 @@
 import random
 import math
 import pygame
+from gameplay.equipment import Equipment
 
 class Entity():
     def __init__(self, pv_max: int, atk: float, crit_luck: float, crit_multiplier: float, speed: float) -> None:
@@ -90,7 +91,10 @@ class Battle():
         return Round_result(self.player, self.enemy)
 
 class Battle_manager():
-    def __init__(self) -> None:
+    def __init__(self, equipment: Equipment) -> None:
+
+        self.equipment = equipment
+
         self.battle_chance = 0
         self.max_battle_chance = 100
         self.must_trigger_battle = False
@@ -109,9 +113,6 @@ class Battle_manager():
         elif self.last_try_to_trigger_battle + 1000 < pygame.time.get_ticks() and player_relative_movement != 0:
             # on essaye de lancer un combat
             self.try_to_trigger_battle()
-
-            print(self.battle_chance)
-            print(self.must_trigger_battle)
     
     def try_to_trigger_battle(self):
         # remet à jour cette variable (pour pas essayer 60 fois par secondes et lancer instantanément des combats)
@@ -119,15 +120,23 @@ class Battle_manager():
         # on prend un nombre aléatoire entre 0 et 2
         random_number = random.random() * 2
 
-        # s'il est plus petit que le ratio entre la chance actuelle et la chance maximale
-        if random_number < self.battle_chance / self.max_battle_chance:
+        # si la chance est plus grande que 1/4 de la chance max, et que le nb random est plus petit que le ratio entre la chance actuelle et la chance maximale
+        if self.battle_chance > 0.25*self.max_battle_chance and random_number < self.battle_chance / self.max_battle_chance:
             # un combat doit être lancé
             self.must_trigger_battle = True
+    
+    def handle_battle(self):
+        if self.must_trigger_battle:
+            print("BATTLE")
+            self.remaining_battle -= 1
+            self.must_trigger_battle = False
+            self.battle_chance = 0
 
 
 
 
 
+# du debug
 if __name__ == "__main__":
     player = Entity(
         pv_max=1500,
