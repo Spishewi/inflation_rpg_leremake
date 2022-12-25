@@ -1,5 +1,7 @@
 import random
 import math
+import pygame
+from gameplay.equipment import Equipment
 
 class Entity():
     def __init__(self, pv_max: int, atk: float, crit_luck: float, crit_multiplier: float, speed: float) -> None:
@@ -47,13 +49,14 @@ class Round_result:
         else:
             self.status = Round_result.NOT_COMPLETED
 
-        
-
 class Battle():
     def __init__(self, player: Entity, level_range) -> None:
+        # on stock le joueur 
         self.player = player
+        # on choisi le niveau de l'ennemi
         enemy_level = random.choice(level_range)
-        print(enemy_level)
+        #print(enemy_level)
+        # On crée l'ennemi
         self.enemy = Entity(
             pv_max=enemy_level*100,
             atk=enemy_level*10,
@@ -68,13 +71,13 @@ class Battle():
             self.player.get_attacked(self.enemy.attack())
 
     def enemy_atk_first(self):
+        # on fait attaquer l'ennemi en premier
         self.player.get_attacked(self.enemy.attack())
         if self.player.isalive():
             self.enemy.get_attacked(self.player.attack())
 
     def process_round(self):
-        #print("player", self.player)
-        #print("enemy", self.enemy)
+        # on défini qui attaque en premier, et on fait attaquer.
         if self.player.speed > self.enemy.speed:
             self.player_atk_first()
         elif self.player.speed < self.enemy.speed:
@@ -87,8 +90,53 @@ class Battle():
 
         return Round_result(self.player, self.enemy)
 
+class Battle_manager():
+    def __init__(self, equipment: Equipment) -> None:
+
+        self.equipment = equipment
+
+        self.battle_chance = 0
+        self.max_battle_chance = 100
+        self.must_trigger_battle = False
+        self.last_try_to_trigger_battle = pygame.time.get_ticks()
+
+        self.remaining_battle = 30
+
+    def handle_player_movement(self, player_relative_movement: float) -> None:
+        # on s'est déplacé, on a donc plus de chance de lancer un combat
+        self.battle_chance += player_relative_movement
+
+        # si la chance est au maximum, on lance le combat
+        if self.battle_chance > self.max_battle_chance:
+            self.must_trigger_battle = True
+        # sinon, si ça fait plus d'une seconde qu'on a testé et que un déplacement a été effectué
+        elif self.last_try_to_trigger_battle + 1000 < pygame.time.get_ticks() and player_relative_movement != 0:
+            # on essaye de lancer un combat
+            self.try_to_trigger_battle()
+    
+    def try_to_trigger_battle(self):
+        # remet à jour cette variable (pour pas essayer 60 fois par secondes et lancer instantanément des combats)
+        self.last_try_to_trigger_battle = pygame.time.get_ticks()
+        # on prend un nombre aléatoire entre 0 et 2
+        random_number = random.random() * 2
+
+        # si la chance est plus grande que 1/4 de la chance max, et que le nb random est plus petit que le ratio entre la chance actuelle et la chance maximale
+        if self.battle_chance > 0.25*self.max_battle_chance and random_number < self.battle_chance / self.max_battle_chance:
+            # un combat doit être lancé
+            self.must_trigger_battle = True
+    
+    def handle_battle(self):
+        if self.must_trigger_battle:
+            print("BATTLE")
+            self.remaining_battle -= 1
+            self.must_trigger_battle = False
+            self.battle_chance = 0
 
 
+
+
+
+# du debug
 if __name__ == "__main__":
     player = Entity(
         pv_max=1500,
@@ -98,9 +146,9 @@ if __name__ == "__main__":
         speed=150
     )
 
-    battle = Battle(player, level_range=range(10, 12))
+    battle = Battle(player, level_range=range(10, 15))
     round_result = battle.process_round()
     while round_result.status == Round_result.NOT_COMPLETED:
         round_result = battle.process_round()
-    #print(round_result.status)
+    print(round_result.status)
 

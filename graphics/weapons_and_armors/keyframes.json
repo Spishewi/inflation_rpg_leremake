@@ -2,8 +2,8 @@
     "sprite_width":16,
     "sprite_height":16,
     "keyframes":{
-        "sword":[[0,2],[5,2]],
-        "armor":[[0,0],[5,0]],
-        "ring":[[0,6],[5,9]]
+        "sword":[[0,1],[4,3]],
+        "armor":[[0,0],[4,0]],
+        "ring":[[0,5],[4,7]]
     }
 }

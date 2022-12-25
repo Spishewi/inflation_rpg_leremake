@@ -4,7 +4,7 @@ import pygame
 import json
 
 
-class Graphics:
+class Spritesheet:
     def __init__(self, path:str):
         spritesheet = pygame.image.load(f"{path}/image.png")
         self.spritesheet = spritesheet.convert_alpha()
@@ -13,7 +13,7 @@ class Graphics:
             
     
 
-class Animation(Graphics):
+class Animation(Spritesheet):
     def __init__(self, path: str):
         super().__init__(path)
         self.previousDirection = [0,0]
@@ -100,7 +100,7 @@ class Animation(Graphics):
             return self.sprites["up-right"]["frames"][ticks].get_image(factor)
 
 
-class Objects_picture(Graphics):
+class Objects_picture(Spritesheet):
     def __init__(self, path:str) -> None:
         super().__init__(path)
         self.sprites = self.load_sprites(self.spritesheet)

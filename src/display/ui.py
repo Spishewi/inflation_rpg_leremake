@@ -21,25 +21,24 @@ class Widget():
         pass
     
 class Progressbar(Widget):
-    def __init__(self, rect: pygame.Rect, value: int | float, max_value: int | float, color: pygame.Color, outline_color: pygame.Color) -> None:
+    def __init__(self, rect: pygame.Rect, value: int | float, color: pygame.Color, outline_color: pygame.Color) -> None:
 
         self.rect = rect
         self.color = color
         self.outline_color = outline_color
 
         self.value = value
-        self.max_value = max_value
 
     def draw(self, draw_surface: pygame.Surface) -> None:
         progressbar_outline = self.rect
-        progressbar_width = math.floor((self.value/self.max_value) * (progressbar_outline.width - 4))
+        progressbar_width = math.floor((self.value) * (progressbar_outline.width - 4))
         progressbar_innerbar = pygame.Rect(progressbar_outline.x + 2, progressbar_outline.y + 2, progressbar_width, progressbar_outline.height - 4)
 
         pygame.draw.rect(draw_surface, self.outline_color, progressbar_outline, 1)
         pygame.draw.rect(draw_surface, self.color, progressbar_innerbar)
 
     def update_value(self, value: int | float) -> None:
-        self.value = min(value, self.max_value)
+        self.value = min(value, 1)
 
 class Label(Widget):
     def __init__(self, coords: pygame.Vector2, text: str, font: pygame.font.Font, text_color: pygame.Color) -> None:

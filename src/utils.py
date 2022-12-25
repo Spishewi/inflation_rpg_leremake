@@ -15,7 +15,6 @@ class Hitbox:
         self.width = float(width)
         self.height = float(height)
     
-
     def get_pygame_rect(self):
         """
         retourne un objet pygame.Rect. Attention, cette classe ne supporte que les nb entiers
