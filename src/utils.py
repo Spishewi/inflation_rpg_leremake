@@ -127,19 +127,3 @@ def int_to_str(nb:int)->str:
         nb = nb//1000
     
     return str(nb*1000)+"d"
-
-print(int_to_str(10))
-print(int_to_str(100))
-print(int_to_str(10_000))
-print(int_to_str(10_000_000))
-print(int_to_str(1_000_000_000))
-print(int_to_str(1_000_000_000_000_000_000_000_000_000_000_000_000))
-
-"""
-10
-100
-10k
-10m
-1b
-100k
-"""
