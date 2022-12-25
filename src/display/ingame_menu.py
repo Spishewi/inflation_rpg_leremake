@@ -155,16 +155,29 @@ class Ingame_menu(UI):
         equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
         
         
-        sword_image  = Image(self.objects_images.get_object_picture("sword",1,7),pygame.Vector2(50,150))
-        armor_image = Image(self.objects_images.get_object_picture("armor",1,7), pygame.Vector2(50,350))
+        sword_image  = Image(self.objects_images.get_object_picture("sword",0,7),pygame.Vector2(50,150))
+        armor_image = Image(self.objects_images.get_object_picture("armor",0,7), pygame.Vector2(50,350))
+        
+        sword_button = Button(pygame.Rect(30,130,150,150),"", Default_font(20), callback=self.sword_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        armor_button = Button(pygame.Rect(30,330,150,150),"", Default_font(20), callback=self.sword_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+
         
         self.bind_several_widget(
             equipment_label,
             close_button,
             previous_button,
+            sword_button,
             sword_image,
+            armor_button,
             armor_image
         )
+        
+    def sword_menu(self):
+        pass
+    def armor_menu(self):
+        pass
+    def rings_menu(self):
+        pass
 
     def add_point(self,stat)->int:
         '''return the new val'''
