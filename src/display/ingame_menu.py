@@ -154,22 +154,18 @@ class Ingame_menu(UI):
 
         equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
         
-        
-        sword_image  = Image(self.objects_images.get_object_picture("sword",0,7),pygame.Vector2(50,150))
-        armor_image = Image(self.objects_images.get_object_picture("armor",0,7), pygame.Vector2(50,350))
-        
-        sword_button = Button(pygame.Rect(30,130,150,150),"", Default_font(20), callback=self.sword_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-        armor_button = Button(pygame.Rect(30,330,150,150),"", Default_font(20), callback=self.sword_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        sword_button = Button(pygame.Rect(30,130,150,150),"", Default_font(20), callback=self.sword_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=self.objects_images.get_object_picture("sword",16,7))
+        armor_button = Button(pygame.Rect(30,330,150,150),"", Default_font(20), callback=self.armor_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=self.objects_images.get_object_picture("armor",5,7))
 
-        
+        image = self.objects_images.get_object_picture("ring",5,7)
+        new_button = Button(pygame.Rect(430,330,150,150),"", Default_font(20), callback=self.sword_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=image)
         self.bind_several_widget(
             equipment_label,
             close_button,
             previous_button,
             sword_button,
-            sword_image,
             armor_button,
-            armor_image
+            new_button
         )
         
     def sword_menu(self):

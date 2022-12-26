@@ -58,7 +58,7 @@ class Label(Widget):
         draw_surface.blit(self._rendered_text, self.coords)
 
 class Button(Widget):
-    def __init__(self, rect: pygame.Rect, text: str, font: pygame.font.Font, callback: typing.Callable, text_color: pygame.Color, color: pygame.Color, hover_text_color: pygame.Color = None, hover_color: pygame.Color = None):
+    def __init__(self, rect: pygame.Rect, text: str, font: pygame.font.Font, callback: typing.Callable, text_color: pygame.Color, color: pygame.Color, hover_text_color: pygame.Color = None, hover_color: pygame.Color = None, image_background:pygame.Surface = None):
         self.text = text
         self.rect = rect
         self.color = color
@@ -79,6 +79,10 @@ class Button(Widget):
 
         self.rendered_text = None
         self.rendered_text_hovered = None
+        
+        self.background = image_background
+        if self.background != None:
+            self.pos_background = pygame.Vector2((self.rect.width-self.background.get_width())/2,(self.rect.height-self.background.get_height())/2)
 
         self.hovered = False
         self.clicked = False
@@ -92,6 +96,7 @@ class Button(Widget):
     def draw(self, draw_surface: pygame.Surface) -> None:
         rect_surface = pygame.Surface(self.rect.size)
         
+        
 
         if self.hovered:
             if self.rendered_text_hovered == None:
@@ -102,6 +107,9 @@ class Button(Widget):
             pos.y = (rect_surface.get_height() - self.rendered_text_hovered.get_height()) // 2
 
             rect_surface.fill(self.hover_color)
+            if self.background != None:
+                rect_surface.blit(self.background,self.pos_background)
+            
             rect_surface.blit(self.rendered_text_hovered, pos)
         else:
             if self.rendered_text == None:
@@ -112,6 +120,8 @@ class Button(Widget):
             pos.y = (rect_surface.get_height() - self.rendered_text.get_height()) // 2
 
             rect_surface.fill(self.color)
+            if self.background != None:
+                rect_surface.blit(self.background,self.pos_background)
             rect_surface.blit(self.rendered_text, pos)
 
         draw_surface.blit(rect_surface, self.rect.topleft)
