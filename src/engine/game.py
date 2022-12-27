@@ -34,7 +34,8 @@ class Game:
 
         # On initialise le joueur
         self.player = Player()
-        self.player.pos = pygame.Vector2(53, 48)
+        map_properties = self.map_manager.get_map("map").properties
+        self.player.pos = pygame.Vector2(map_properties["X_spawn_coord"], map_properties["Y_spawn_coord"])
 
         # on teleporte la caméra au joueur pour ne pas avoir un effet de slide au démarrage
         self.camera_view.move(1, self.player.pos, False)
