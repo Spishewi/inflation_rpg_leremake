@@ -87,10 +87,12 @@ Commodo sit occaecat qui consectetur ullamco labore. Ex reprehenderit dolore sin
 ## Répartition du travail
 
 Nous avons essayé de nous répartir au mieux le travail, bien que travailler pendant les vacances de noël s'est révélé beaucoup plus dûr que prévu.
-Thomas, qui est meilleur sur tout ce qui est graphique s'est occupé des menus et de la carte.
-Moi (c'est Aurèle qui écrit), je me suis occupé de tout ce qui est moteur de jeu (système de combat, gestion interne de la map, système de sauvegarde...).
 
-Enfin nous avons travaillé ensemble sur le système d'équipement (car très lié à l'interface), ainsi que au système de stats en général. Afin d'équilibrer au mieux.
+**Thomas**, qui est meilleur sur tout ce qui est graphique s'est occupé des menus et de la carte.
+
+Moi (c'est **Aurèle** qui écrit), je me suis occupé de tout ce qui est moteur de jeu (système de combat, gestion interne de la map, système de sauvegarde...).
+
+Enfin **nous** avons travaillé ensemble sur le système d'équipement (car très lié à l'interface), ainsi que au système de stats en général. Afin d'équilibrer au mieux.
 
 On peut regarder sur le github les participations de chacun pour plus de précision. (Si ce n'est pas public, je peut fournir les graphiques).
 
