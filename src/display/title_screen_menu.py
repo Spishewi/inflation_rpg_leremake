@@ -33,7 +33,6 @@ class Title_screen_menu(UI):
         pass
     
     def set_game_starting(self):
-        print("a")
         self.must_start = True
         
     

@@ -75,7 +75,10 @@ class Button(Widget):
         else:
             self.hover_text_color = self.text_color
 
-        self.callback = callback
+        if callback != None:
+            self.callback = callback
+        else:
+            self.callback = lambda:...
 
         self.rendered_text = None
         self.rendered_text_hovered = None
@@ -86,6 +89,9 @@ class Button(Widget):
 
         self.hovered = False
         self.clicked = False
+    
+    def set_callback(self,func,parameter):
+        self.callback = lambda:func(parameter)
     
     def update(self) -> None:
         if self.rect.collidepoint(pygame.mouse.get_pos()):

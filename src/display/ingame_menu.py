@@ -3,6 +3,7 @@ from __future__ import annotations
 from display.ui import UI, Label, Button, Progressbar, Default_font, Image
 import pygame
 from display.graphics import Objects_picture
+from utils import int_to_str
 
 class Ingame_menu(UI):
     def __init__(self, draw_surface):
@@ -20,6 +21,19 @@ class Ingame_menu(UI):
             "Defense":1500,
             "Agility":128,
             "Luck":56
+        }
+        self._equipment_equiped = {
+            "sword":0,
+            "armor":0,
+            "ring1":0,
+            "ring2":0,
+            "ring3":0,
+            "ring4":0
+        }
+        self._prices = {
+            "sword":[],
+            "armor":[0, 100, 1500, 25000,100000],
+            "ring":[]
         }
         # --------------------------
 
@@ -119,61 +133,31 @@ class Ingame_menu(UI):
         self.to_add_value = {}
         self.stats_labels = {}
         y = 140
-        for stat in self.stats.keys():
-            self.show_stats(stat,y,self.stats[stat])
+        for stat,value in self.stats.items():
+            self.value[stat] = value
+            self.to_add_value[stat] = 0
 
+            stats_label = Label(pygame.Vector2(70,y+10),stat+" :",Default_font(20),pygame.Color(255,255,255))
+            
+            plus_button = Button(pygame.Rect(500,y,40,40),"+", Default_font(20),callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+            minus_button = Button(pygame.Rect(650,y,40,40),"-", Default_font(20),callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+
+            plus_button.set_callback(self.add_point,stat) # indispensable : sinon tous les bouttons changent la même stat, la dernière, à cause de la boucle
+            minus_button.set_callback(self.remove_point,stat)
+
+            stats_value_label = Label(pygame.Vector2(300,y+10),str(self.value[stat]),Default_font(20),pygame.Color(255,255,255))
+            to_add_value_label = Label(pygame.Vector2(575,y+10),str(self.to_add_value[stat]),Default_font(20),pygame.Color(255,255,255))
+
+            self.stats_labels[stat] = (stats_value_label,to_add_value_label)
+
+            self.bind_several_widget(
+                stats_label,
+                stats_value_label,
+                to_add_value_label,
+                plus_button,
+                minus_button
+            )
             y += 70
-
-    def show_stats(self,stat,y,value):
-        self.value[stat] = value
-        self.to_add_value[stat] = 0
-
-        stats_label = Label(pygame.Vector2(70,y+10),stat+" :",Default_font(20),pygame.Color(255,255,255))
-        
-        plus_button = Button(pygame.Rect(500,y,40,40),"+", Default_font(20), callback=lambda:self.add_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-        minus_button = Button(pygame.Rect(650,y,40,40),"-", Default_font(20),callback=lambda:self.remove_point(stat), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-
-        stats_value_label = Label(pygame.Vector2(300,y+10),str(self.value[stat]),Default_font(20),pygame.Color(255,255,255))
-        to_add_value_label = Label(pygame.Vector2(575,y+10),str(self.to_add_value[stat]),Default_font(20),pygame.Color(255,255,255))
-
-        self.stats_labels[stat] = (stats_value_label,to_add_value_label)
-
-        self.bind_several_widget(
-            stats_label,
-            plus_button,
-            minus_button,
-            stats_value_label,
-            to_add_value_label
-        )
-
-    def equipment_menu(self):
-        self.clear_widget()
-        
-        previous_button = Previous_button(self.draw_surface,self.main_menu)
-        close_button = Close_button(self.draw_surface,self.main_display)
-
-        equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
-        
-        sword_button = Button(pygame.Rect(30,130,150,150),"", Default_font(20), callback=self.sword_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=self.objects_images.get_object_picture("sword",16,7))
-        armor_button = Button(pygame.Rect(30,330,150,150),"", Default_font(20), callback=self.armor_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=self.objects_images.get_object_picture("armor",5,7))
-
-        image = self.objects_images.get_object_picture("ring",5,7)
-        new_button = Button(pygame.Rect(430,330,150,150),"", Default_font(20), callback=self.sword_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=image)
-        self.bind_several_widget(
-            equipment_label,
-            close_button,
-            previous_button,
-            sword_button,
-            armor_button,
-            new_button
-        )
-        
-    def sword_menu(self):
-        pass
-    def armor_menu(self):
-        pass
-    def rings_menu(self):
-        pass
 
     def add_point(self,stat)->int:
         '''return the new val'''
@@ -195,6 +179,117 @@ class Ingame_menu(UI):
             self.stats_labels[stat][1].update_text(str(self.to_add_value[stat]))
             self.stats_labels[stat][0].update_text(str(self.value[stat] + self.to_add_value[stat]))
             self.point_value_label.update_text(str(self.points))
+
+    def equipment_menu(self):
+        self.clear_widget()
+        
+        previous_button = Previous_button(self.draw_surface,self.main_menu)
+        close_button = Close_button(self.draw_surface,self.main_display)
+
+        equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
+        
+        sword_button = Button(pygame.Rect(100,200,150,150),"", Default_font(20), callback=self.sword_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=self.objects_images.get_object_picture("sword",self._equipment_equiped["sword"],7))
+        armor_button = Button(pygame.Rect(100,400,150,150),"", Default_font(20), callback=self.armor_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=self.objects_images.get_object_picture("armor",self._equipment_equiped["armor"],7))
+
+        y = 200
+        num = 1
+        for i in range(2):
+            x = 500
+            for j in range(2):
+                image = self.objects_images.get_object_picture("ring",self._equipment_equiped[f"ring{num}"],7)
+                ring_button = Button(pygame.Rect(x,y,150,150),"", Default_font(20), callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=image)
+                ring_button.set_callback(self.ring_menu,num)
+                
+                self.bind_widget(ring_button)
+                num += 1
+                x += 200
+            y += 200
+            
+        self.bind_several_widget(
+            equipment_label,
+            close_button,
+            previous_button,
+            sword_button,
+            armor_button
+        )
+      
+    def sword_menu(self):
+        self.clear_widget()
+        
+        sword_label = Label(pygame.Vector2(40,40),"SWORDS",Default_font(30),pygame.Color(255,255,255))
+        
+        previous_button = Previous_button(self.draw_surface,self.equipment_menu)
+        close_button = Close_button(self.draw_surface,self.main_display)
+        
+        self.bind_several_widget(
+            sword_label,
+            close_button,
+            previous_button
+        )
+        
+    def armor_menu(self):
+        self.clear_widget()
+        
+        armor_label = Label(pygame.Vector2(40,40),"ARMORS",Default_font(30),pygame.Color(255,255,255))
+        
+        previous_button = Previous_button(self.draw_surface,self.equipment_menu)
+        close_button = Close_button(self.draw_surface,self.main_display)
+        
+        self.bind_several_widget(
+            armor_label,
+            close_button,
+            previous_button
+        )
+        
+        y = 100
+        for i in range(5):
+            armor_button = Button(pygame.Rect(150,y,75,75),"", Default_font(20), callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70),image_background=self.objects_images.get_object_picture("armor", i,3))
+            armor_button.set_callback(self.buy_menu,("armor",i))
+            price_label = Label(pygame.Vector2(300,y+25),f"Price : {int_to_str(self._prices['armor'][i])}",Default_font(20),pygame.Color(255,255,255))
+            
+            self.bind_several_widget(
+                armor_button,
+                price_label
+            )
+            y += 100
+    
+        
+    def ring_menu(self,num):
+        self.clear_widget()
+        
+        armor_label = Label(pygame.Vector2(40,40),f"RING {num}",Default_font(30),pygame.Color(255,255,255))
+        
+        previous_button = Previous_button(self.draw_surface,self.equipment_menu)
+        close_button = Close_button(self.draw_surface,self.main_display)
+        
+        self.bind_several_widget(
+            armor_label,
+            close_button,
+            previous_button
+        )
+        
+    def buy_menu(self,object:tuple):
+        '''open the buy menu
+
+        Args:
+            object (object_type:str, object_id:int): example -> ("armor",3)
+        '''
+        self.clear_widget()
+        object_type,object_id = object
+        
+        armor_label = Label(pygame.Vector2(40,40),"BUY",Default_font(30),pygame.Color(255,255,255))
+        
+        previous_button = Previous_button(self.draw_surface,self.armor_menu)
+        close_button = Close_button(self.draw_surface,self.main_display)
+        
+        price_label = Label(pygame.Vector2(100,100),f"Do you want to buy this {object_type} for {self._prices[object_type][object_id]}€",Default_font(20),pygame.Color(255,255,255))
+        
+        self.bind_several_widget(
+            armor_label,
+            close_button,
+            previous_button,
+            price_label
+        )
 
     def get_stats_and_points(self): # renvoie un int et un dict {"nom_stat":valeur,...}
         return self._points,self._stats.copy()
