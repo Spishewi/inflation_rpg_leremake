@@ -1,3 +1,5 @@
+from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
+
 from display.title_screen_menu import Title_screen_menu
 import pygame
 

@@ -131,6 +131,8 @@ class Battle_manager():
             self.remaining_battle -= 1
             self.must_trigger_battle = False
             self.battle_chance = 0
+            if self.remaining_battle < 1:
+                print("FIN DU JEU")
 
 
 

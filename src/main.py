@@ -1,3 +1,5 @@
+from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
+
 import pygame
 
 from engine.game import Game

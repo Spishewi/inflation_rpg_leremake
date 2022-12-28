@@ -1,3 +1,5 @@
+from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
+
 from display.ui import UI, Button, Label, Default_font
 
 import pygame
