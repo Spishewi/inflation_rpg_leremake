@@ -3,7 +3,6 @@ import pytmx
 import pygame
 import math
 from pathlib import Path
-import numpy as np
 from utils import DynamicImage
 
 class MapManager:

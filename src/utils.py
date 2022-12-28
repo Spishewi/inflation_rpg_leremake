@@ -72,16 +72,6 @@ class DynamicImage:
 
         self._smooth = smooth
 
-        pixels_alpha_array = pygame.surfarray.pixels_alpha(self._original_image).flatten()
-
-        self.opaque = True
-        for pixel in pixels_alpha_array:
-            if pixel == 0:
-                self.opaque = False
-                #pygame.draw.rect(self._original_image, (127, 255, 127), (6, 6, 4, 4))
-                break
-        
-
     def get_image(self, factor: float) -> pygame.Surface:
         """
         Permet récupérer l'image de bonne taille en fonction d'un facteur.
