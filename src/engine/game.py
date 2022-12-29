@@ -17,7 +17,6 @@ class Game:
     def __init__(self, window: pygame.Surface) -> None:
         # On enregistre la fenêtre où l'on va dessiner
         self.window = window
-        self.ui = Ingame_menu(self.window)
 
         # On initialise le map Manager
         self.map_manager = MapManager()
@@ -42,6 +41,9 @@ class Game:
         self.equipment = Equipment()
         self.equipment.load() # on charge depuis le fichier de sauvegarde
         #print(self.equipment)
+        
+        # On initialise le menu
+        self.ui = Ingame_menu(self.window,self.equipment)
 
         # On instancie et initialise le gestionnaire de combat (important)
         self.battle_manager = Battle_manager(self.equipment)

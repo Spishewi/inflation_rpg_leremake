@@ -7,6 +7,8 @@ class Title_screen_menu(UI):
     def __init__(self, draw_surface: pygame.Surface) -> None:
         super().__init__(draw_surface)
         self.set_background_color(pygame.Color(50,40,20))
+        self.draw_surface = draw_surface
+        
         self.must_start = False
         self.must_quit = False
         
@@ -14,6 +16,8 @@ class Title_screen_menu(UI):
         
         
     def play_menu(self):
+        self.clear_widget()
+        
         welcome_label_1st_line = Label(pygame.Vector2(300, 50), "WELCOME TO THIS INCREDIBLE", Default_font(25), pygame.Color(255, 255, 255))
         welcome_label_2nd_line = Label(pygame.Vector2(320, 100), "REMIX OF INFLATION RPG !!", Default_font(25), pygame.Color(255, 255, 255))
         
@@ -32,7 +36,19 @@ class Title_screen_menu(UI):
 
     
     def equipment_menu(self) -> None:
-        pass
+        self.clear_widget()
+        
+        self.rect = pygame.Rect(0,20,40,40)
+        self.rect.x = self.draw_surface.get_width() - self.rect.width - 20
+
+        close_button = Button(self.rect,"X",Default_font(20),callback=self.play_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        
+        equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
+       
+        self.bind_several_widget(
+            equipment_label,
+            close_button
+        )
     
     def set_game_starting(self):
         self.must_start = True
