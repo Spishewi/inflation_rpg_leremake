@@ -1,25 +1,29 @@
 import json
 
 class Equipment():
+    # constantes
+    max_armor_level = 4
+    max_sword_level = 14
+    max_ring_level = 14
+
     def __init__(self) -> None:
+        # niveaux d'équipement par défaut
         self.armor_level = 0
-        self.max_armor_level = 4
-        self.weapon_level = 0
-        self.max_weapon_level = 14
+        self.sword_level = 0
         self.ring_level = 0
-        self.max_ring_level = 14
 
     def save(self):
         """
         sauvegarde l'équipement actuel dans un fichier json
         """
-        with open("equipment.json", "w") as f:
+        with open("../saves/equipment.json", "w") as f:
             json.dump(vars(self), f)
+
     def load(self):
         """
         charge l'equipement depuis un fichier json
         """
-        with open("equipment.json", "r") as f:
+        with open("../saves/equipment.json", "r") as f:
             save = json.load(f)
         for k,v in save.items():
             setattr(self, k, v)

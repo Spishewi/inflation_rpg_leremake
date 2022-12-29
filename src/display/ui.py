@@ -3,7 +3,6 @@ from __future__ import annotations
 import pygame
 import math
 import typing
-from utils import DynamicImage
 
 class Default_font(pygame.font.Font):
     def __init__(self,size):

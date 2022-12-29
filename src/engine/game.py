@@ -1,8 +1,6 @@
 from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
 # Imports obligatoires (dépendances, ect...)
 import pygame # affichage
-import math # calculs divers
-import sys # actions spéciales du système (sys.stdout.write() et sys.exit())
 
 # Imports des autres fichiers customs
 from engine.map_manager import MapManager # La gestion de la map
@@ -43,17 +41,21 @@ class Game:
         # On charge l'équipement du joueur
         self.equipment = Equipment()
         self.equipment.load() # on charge depuis le fichier de sauvegarde
+        #print(self.equipment)
 
         # On instancie et initialise le gestionnaire de combat (important)
         self.battle_manager = Battle_manager(self.equipment)
 
+        # L'horloge permet à pygame de limiter la framerate du jeu, c'est purement graphique
+        # on s'en sert aussi pour récupérer l'intervalle de temps (dt) entre deux frames,
+        # cela permet de faire des déplacements en fonction du temps.
         self.clock = pygame.time.Clock()
         
     def run(self) -> None:
         # variable permettant de faire fonctionner la boucle de jeu.
         running = True
         # Initialisation des variables...
-        dt = self.clock.tick(0) / 1000
+        dt = self.clock.tick(60) / 1000
         while running:
             for event in pygame.event.get():
                 # pour fermer avec la croix
@@ -77,7 +79,7 @@ class Game:
             player_relative_movement = (new_player_pos - old_player_pos).magnitude()
             # On met a jour le gestionnaire de combat
             self.battle_manager.handle_player_movement(player_relative_movement)
-            self.battle_manager.handle_battle()
+            self.battle_manager.handle_battle(self.player.pos, self.map_manager)
 
             # On déplace la caméra sur le joueur
             self.camera_view.move(dt, self.player.pos, False)
@@ -85,15 +87,20 @@ class Game:
             # On affiche la "vue" de la caméra
             self.camera_view.draw(self.window, self.player)
 
+            # On met a jour le compteur de fps
             self.ui.update(fps=self.clock.get_fps())
-
+            # On met a jour la barre de combat
             if self.player.direction.magnitude() != 0:
                 self.ui.update(distance=self.battle_manager.battle_chance/self.battle_manager.max_battle_chance)
+            # On met a jour le compteur de combat
+            self.ui.update(battle_count=(self.battle_manager.remaining_battle, self.battle_manager.number_of_battles))
+            
+            self.ui.update()
             self.ui.draw()
         
             # On récupère le dt de la frame (temps entre deux frames)
             # Cet variable permet de calculer tout déplacement et evenement suivant le temps et non suivant la vitesse du jeu
-            dt = self.clock.tick(0) / 1000
+            dt = self.clock.tick(60) / 1000
 
             # On affiche les FPS dans la console
             # (on utilise sys.stdout car le print de python est très mal optimisé et est trop gourmand pour tourner dans une boucle)

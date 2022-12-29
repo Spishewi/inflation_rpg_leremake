@@ -64,6 +64,7 @@ cd "[le/chemin/vers/le/dossier/du/projet]/src"
 python main.py
 ```
 
+Si vous rencontrez des difficultés à installer les dépendances où lancer le projet, n'hésitez pas à nous contacter sur discord. (vous nous aviez par exemple expliqué que vous aviez des difficultés avec vos versions de python)
 ## Première partie de jeu
 
 Lorem consequat velit est qui qui officia. Laborum tempor ullamco consectetur adipisicing nostrud aute laboris labore et nulla. Veniam incididunt consequat quis est enim ut nulla. Incididunt enim consequat elit occaecat quis duis enim anim velit commodo.

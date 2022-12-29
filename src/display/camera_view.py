@@ -1,10 +1,14 @@
 from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
+from typing import TYPE_CHECKING
 # Imports obligatoires (dépendances, ect...)
 import pygame # affichage
 import math # calculs divers
 
 # Imports des autres fichiers customs
-from engine.map_manager import MapManager # La gestion de la map
+
+# Import seulement pour les type-hint (opti)
+if TYPE_CHECKING:
+    from engine.map_manager import MapManager # La gestion de la map
 
 class CameraView:
     """

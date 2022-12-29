@@ -44,14 +44,20 @@ class Ingame_menu(UI):
         self._money = value
         
         
-    def update(self, fps:float | None = None, distance:int | None= None):
-        super().update()
-        
-        if fps != None:
-            self.fps_label.update_text(f"fps: {fps:.2f}")
-        
-        if distance != None:
-            self.fight_bar.update_value(distance)   
+    def update(self, **kwargs):
+        # s'il n'y a pas d'args, on update en général
+        if len(kwargs) == 0:
+            super().update()
+        else:
+            # On met a jour les arguments
+            for k, v in kwargs.items():
+                if k == "fps":
+                    self.fps_label.update_text(f"fps: {v:.2f}")
+                
+                elif k == "distance":
+                    self.fight_bar.update_value(v)
+                elif k == "battle_count":
+                    self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}")
 
         
     def main_display(self):
@@ -74,11 +80,13 @@ class Ingame_menu(UI):
         progressbar_rect.height = 15
 
         self.fight_bar = Progressbar(progressbar_rect, 0, pygame.Color(85, 160, 39), pygame.Color(134, 221, 81))
+        self.battle_count = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-25), "Remaining battles : 0/0", Default_font(15), pygame.Color(255, 255, 255))
 
         self.bind_several_widget(
             self.fps_label,
             button_menu,
-            self.fight_bar
+            self.fight_bar,
+            self.battle_count
         )
     
     def main_menu(self):
@@ -142,13 +150,13 @@ class Ingame_menu(UI):
             self.value[stat] = value
             self.to_add_value[stat] = 0
 
-            stats_label = Label(pygame.Vector2(70,y+10),stat+" :",Default_font(20),pygame.Color(255,255,255))
+            stats_label = Label(pygame.Vector2(70,y+10),stat+" :", Default_font(20),pygame.Color(255,255,255))
             
             plus_button = Button(pygame.Rect(500,y,40,40),"+", Default_font(20),callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
             minus_button = Button(pygame.Rect(650,y,40,40),"-", Default_font(20),callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
 
-            plus_button.set_callback(self.add_point,stat) # indispensable : sinon tous les bouttons changent la même stat, la dernière, à cause de la boucle
-            minus_button.set_callback(self.remove_point,stat)
+            plus_button.set_callback(self.add_point, stat) # indispensable : sinon tous les bouttons changent la même stat, la dernière, à cause de la boucle
+            minus_button.set_callback(self.remove_point, stat)
 
             stats_value_label = Label(pygame.Vector2(300,y+10),str(self.value[stat]),Default_font(20),pygame.Color(255,255,255))
             to_add_value_label = Label(pygame.Vector2(575,y+10),str(self.to_add_value[stat]),Default_font(20),pygame.Color(255,255,255))
