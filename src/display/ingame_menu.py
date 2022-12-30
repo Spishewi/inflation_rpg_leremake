@@ -5,6 +5,7 @@ import pygame
 from display.graphics import Objects_picture
 from utils import int_to_str
 from gameplay.equipment import Equipment
+from gameplay.stats import Stats
 
 class Ingame_menu(UI):
     def __init__(self, draw_surface, equipment):
@@ -21,11 +22,10 @@ class Ingame_menu(UI):
         self._points = 50
         self._money = 100
         self._stats = {
-            "Health": 500,
-            "Attack": 200,
-            "Defense": 1500,
-            "Agility": 128,
-            "Luck": 56
+            "Health": 0,
+            "Attack": 0,
+            "Agility": 0,
+            "Crit Luck": 0
         }
         # --------------------------
 
@@ -51,6 +51,15 @@ class Ingame_menu(UI):
                     self.fight_bar.update_value(v)
                 elif k == "battle_count":
                     self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}")
+                elif k == "stats":
+                    self._stats = {
+                        "Health": v.pv + Stats.default_pv,
+                        "Attack": v.atk + Stats.default_atk,
+                        "Agility": v.speed + Stats.default_speed,
+                        "Crit Luck": v.crit_luck + Stats.default_crit_luck
+                    }
+                    self._points = v.remaining_points
+                    self._money = v.money
 
     def main_display(self):
         self.clear_widget()
