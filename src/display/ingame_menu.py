@@ -5,6 +5,7 @@ import pygame
 from display.graphics import Objects_picture
 from utils import int_to_str
 
+
 class Ingame_menu(UI):
     def __init__(self, draw_surface):
         super().__init__(draw_surface)
@@ -17,33 +18,32 @@ class Ingame_menu(UI):
         self._points = 50
         self._money = 100
         self._stats = {
-            "Health":500,
-            "Attack":200,
-            "Defense":1500,
-            "Agility":128,
-            "Luck":56
+            "Health": 500,
+            "Attack": 200,
+            "Defense": 1500,
+            "Agility": 128,
+            "Luck": 56
         }
         self._equipment = {
-            "sword":0,
-            "armor":0,
-            "ring":0
+            "sword": 0,
+            "armor": 0,
+            "ring": 0
         }
         self._prices = {
-            "sword":[1,10,100,1000,10000,100000,1000000,10000000,100000000,1000000000,10000000000,100000000000,1000000000000,10000000000000,100000000000000],
-            "armor":[1, 100, 1500, 25000,100000],
-            "ring":[]
+            "sword": [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000, 10000000000000, 100000000000000],
+            "armor": [1, 100, 1500, 25000, 100000],
+            "ring": []
         }
         # --------------------------
 
-        self.main_display() 
-    
+        self.main_display()
+
     def get_money(self):
         return self._money
-    
-    def set_money(self,value):
+
+    def set_money(self, value):
         self._money = value
-        
-        
+
     def update(self, **kwargs):
         # s'il n'y a pas d'args, on update en général
         if len(kwargs) == 0:
@@ -53,26 +53,25 @@ class Ingame_menu(UI):
             for k, v in kwargs.items():
                 if k == "fps":
                     self.fps_label.update_text(f"fps: {v:.2f}")
-                
+
                 elif k == "distance":
                     self.fight_bar.update_value(v)
                 elif k == "battle_count":
                     self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}")
 
-        
     def main_display(self):
         self.clear_widget()
         self.set_background_color(None)
         self.set_grab(False)
 
+        self.fps_label = Label(pygame.Vector2(10, 10), "", Default_font(15), pygame.Color(255, 255, 255))
 
-        self.fps_label  = Label(pygame.Vector2(10, 10), "", Default_font(15), pygame.Color(255, 255, 255))
-        
-        button_rect = pygame.Rect((0,20,100,40))
+        button_rect = pygame.Rect((0, 20, 100, 40))
         button_rect.x = self.draw_surface.get_width() - button_rect.width - 20
-        
-        button_menu = Button(button_rect, "Menu", Default_font(20), callback=self.main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-        
+
+        button_menu = Button(button_rect, "Menu", Default_font(20), callback=self.main_menu, text_color=pygame.Color(
+            255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
+
         progressbar_rect = pygame.Rect((0, 0, 0, 0))
         progressbar_rect.x = 10
         progressbar_rect.y = self.draw_surface.get_height() - 25
@@ -80,7 +79,8 @@ class Ingame_menu(UI):
         progressbar_rect.height = 15
 
         self.fight_bar = Progressbar(progressbar_rect, 0, pygame.Color(85, 160, 39), pygame.Color(134, 221, 81))
-        self.battle_count = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-25), "Remaining battles : 0/0", Default_font(15), pygame.Color(255, 255, 255))
+        self.battle_count = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-25),
+                                  "Remaining battles : 0/0", Default_font(15), pygame.Color(255, 255, 255))
 
         self.bind_several_widget(
             self.fps_label,
@@ -88,25 +88,27 @@ class Ingame_menu(UI):
             self.fight_bar,
             self.battle_count
         )
-    
+
     def main_menu(self):
         self.clear_widget()
-        self.set_background_color(pygame.Color(20,20,20,150))
+        self.set_background_color(pygame.Color(20, 20, 20, 150))
         self.set_grab(True)
-        
-        previous_button = Previous_button(self.draw_surface,self.main_display)
-        close_button = Close_button(self.draw_surface,self.main_display)
 
-        stats_button_rect = pygame.Rect(0,200,130,40)
+        previous_button = Previous_button(self.draw_surface, self.main_display)
+        close_button = Close_button(self.draw_surface, self.main_display)
+
+        stats_button_rect = pygame.Rect(0, 200, 130, 40)
         stats_button_rect.x = self.draw_surface.get_width()/2 - stats_button_rect.width/2
-        stats_button = Button(stats_button_rect,"Stats",Default_font(20),callback=self.stats_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        stats_button = Button(stats_button_rect, "Stats", Default_font(20), callback=self.stats_menu, text_color=pygame.Color(
+            255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
 
-        equipment_button_rect = pygame.Rect(0,300,200,40)
+        equipment_button_rect = pygame.Rect(0, 300, 200, 40)
         equipment_button_rect.x = self.draw_surface.get_width()/2 - equipment_button_rect.width/2
-        equipment_button = Button(equipment_button_rect,"Equipment",Default_font(20),callback=self.equipment_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        equipment_button = Button(equipment_button_rect, "Equipment", Default_font(20), callback=self.equipment_menu, text_color=pygame.Color(
+            255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
 
-        menu_label = Label(pygame.Vector2(40,40),"MENU",Default_font(30),pygame.Color(255,255,255))
-       
+        menu_label = Label(pygame.Vector2(40, 40), "MENU", Default_font(30), pygame.Color(255, 255, 255))
+
         self.bind_several_widget(
             menu_label,
             stats_button,
@@ -118,19 +120,21 @@ class Ingame_menu(UI):
     def stats_menu(self):
         self.clear_widget()
 
-
         self.points, self.stats = self.get_stats_and_points()
-        
-        previous_button = Previous_button(self.draw_surface,self.main_menu)
-        close_button = Close_button(self.draw_surface,self.main_display)
 
-        stats_title = Label(pygame.Vector2(40,40),"STATS",Default_font(30),pygame.Color(255,255,255))
+        previous_button = Previous_button(self.draw_surface, self.main_menu)
+        close_button = Close_button(self.draw_surface, self.main_display)
 
-        point_label = Label(pygame.Vector2(900,150),"Points :",Default_font(25),pygame.Color(255,255,255))
-        self.point_value_label = Label(pygame.Vector2(915,200),str(self.points),Default_font(40),pygame.Color(255,255,255))
+        stats_title = Label(pygame.Vector2(40, 40), "STATS", Default_font(30), pygame.Color(255, 255, 255))
 
-        done_button = Button(pygame.Rect(925,350,100,40),"Done", Default_font(20), callback=lambda:self.set_stats_and_points(self.points,self.stats), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-        cancel_button = Button(pygame.Rect(900,400,150,40),"Cancel", Default_font(20), callback=self.main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        point_label = Label(pygame.Vector2(900, 150), "Points :", Default_font(25), pygame.Color(255, 255, 255))
+        self.point_value_label = Label(pygame.Vector2(915, 200), str(
+            self.points), Default_font(40), pygame.Color(255, 255, 255))
+
+        done_button = Button(pygame.Rect(925, 350, 100, 40), "Done", Default_font(20), callback=lambda: self.set_stats_and_points(
+            self.points, self.stats), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
+        cancel_button = Button(pygame.Rect(900, 400, 150, 40), "Cancel", Default_font(20), callback=self.main_menu, text_color=pygame.Color(
+            255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
 
         self.bind_several_widget(
             close_button,
@@ -146,22 +150,27 @@ class Ingame_menu(UI):
         self.to_add_value = {}
         self.stats_labels = {}
         y = 140
-        for stat,value in self.stats.items():
+        for stat, value in self.stats.items():
             self.value[stat] = value
             self.to_add_value[stat] = 0
 
-            stats_label = Label(pygame.Vector2(70,y+10),stat+" :", Default_font(20),pygame.Color(255,255,255))
-            
-            plus_button = Button(pygame.Rect(500,y,40,40),"+", Default_font(20),callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-            minus_button = Button(pygame.Rect(650,y,40,40),"-", Default_font(20),callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+            stats_label = Label(pygame.Vector2(70, y+10), stat+" :", Default_font(20), pygame.Color(255, 255, 255))
 
-            plus_button.set_callback(self.add_point, stat) # indispensable : sinon tous les bouttons changent la même stat, la dernière, à cause de la boucle
+            plus_button = Button(pygame.Rect(500, y, 40, 40), "+", Default_font(20), callback=None, text_color=pygame.Color(
+                255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
+            minus_button = Button(pygame.Rect(650, y, 40, 40), "-", Default_font(20), callback=None, text_color=pygame.Color(
+                255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
+
+            # indispensable : sinon tous les bouttons changent la même stat, la dernière, à cause de la boucle
+            plus_button.set_callback(self.add_point, stat)
             minus_button.set_callback(self.remove_point, stat)
 
-            stats_value_label = Label(pygame.Vector2(300,y+10),str(self.value[stat]),Default_font(20),pygame.Color(255,255,255))
-            to_add_value_label = Label(pygame.Vector2(575,y+10),str(self.to_add_value[stat]),Default_font(20),pygame.Color(255,255,255))
+            stats_value_label = Label(pygame.Vector2(300, y+10),
+                                      str(self.value[stat]), Default_font(20), pygame.Color(255, 255, 255))
+            to_add_value_label = Label(pygame.Vector2(
+                575, y+10), str(self.to_add_value[stat]), Default_font(20), pygame.Color(255, 255, 255))
 
-            self.stats_labels[stat] = (stats_value_label,to_add_value_label)
+            self.stats_labels[stat] = (stats_value_label, to_add_value_label)
 
             self.bind_several_widget(
                 stats_label,
@@ -172,19 +181,19 @@ class Ingame_menu(UI):
             )
             y += 70
 
-    def add_point(self,stat)->int:
+    def add_point(self, stat) -> int:
         '''return the new val'''
         if self.points != 0:
             self.to_add_value[stat] += 1
             self.points -= 1
-            
+
             self.stats[stat] = self.value[stat] + self.to_add_value[stat]
             self.stats_labels[stat][1].update_text(str(self.to_add_value[stat]))
             self.stats_labels[stat][0].update_text(str(self.stats[stat]))
             self.point_value_label.update_text(str(self.points))
-            return 
+            return
 
-    def remove_point(self,stat):
+    def remove_point(self, stat):
         if self.to_add_value[stat] != 0:
             self.points += 1
             self.to_add_value[stat] -= 1
@@ -195,50 +204,51 @@ class Ingame_menu(UI):
 
     def equipment_menu(self):
         self.clear_widget()
-        
-        previous_button = Previous_button(self.draw_surface,self.main_menu)
-        close_button = Close_button(self.draw_surface,self.main_display)
 
-        equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
-        
-        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.get_money())} €",Default_font(20),pygame.Color(255,255,255))
-            
+        previous_button = Previous_button(self.draw_surface, self.main_menu)
+        close_button = Close_button(self.draw_surface, self.main_display)
+
+        equipment_label = Label(pygame.Vector2(40, 40), "EQUIPMENT", Default_font(30), pygame.Color(255, 255, 255))
+
+        money_label = Label(pygame.Vector2(400, 40), f"You have : {int_to_str(self.get_money())} €", Default_font(
+            20), pygame.Color(255, 255, 255))
+
         self.bind_several_widget(
             equipment_label,
             money_label,
             close_button,
             previous_button
         )
-        
-        y=150
-        for k,v in self._equipment.items():
-            image = Image(self.objects_images.get_object_picture(k,v,7),pygame.Vector2(100,y))
-            label = Label(pygame.Vector2(300,y+50),f"{k} lvl {v}",Default_font(20),pygame.Color(255,255,255))
+
+        y = 150
+        for k, v in self._equipment.items():
+            image = Image(self.objects_images.get_object_picture(k, v, 7), pygame.Vector2(100, y))
+            label = Label(pygame.Vector2(300, y+50), f"{k} lvl {v}", Default_font(20), pygame.Color(255, 255, 255))
             self.bind_several_widget(
                 image,
                 label
             )
             y += 150
 
-    def buy_menu(self,object:tuple):
+    def buy_menu(self, object: tuple):
         '''open the buy menu
 
         Args:
             object (object_type:str, object_id:int): example -> ("armor",3)
         '''
         self.clear_widget()
-        object_type,object_id = object
-        
-        
-        armor_label = Label(pygame.Vector2(40,40),"BUY",Default_font(30),pygame.Color(255,255,255))
-        
-        previous_button = Previous_button(self.draw_surface,self.equipment_menu)
-        close_button = Close_button(self.draw_surface,self.main_display)
-        
-        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.get_money())} €",Default_font(20),pygame.Color(255,255,255))
-        
-        price_label = Label(pygame.Vector2(100,100),f"Do you want to upgrade your {object_type} for {int_to_str(self._prices[object_type][object_id])} €",Default_font(20),pygame.Color(255,255,255))
-        
+        object_type, object_id = object
+
+        armor_label = Label(pygame.Vector2(40, 40), "BUY", Default_font(30), pygame.Color(255, 255, 255))
+
+        previous_button = Previous_button(self.draw_surface, self.equipment_menu)
+        close_button = Close_button(self.draw_surface, self.main_display)
+
+        money_label = Label(pygame.Vector2(400, 40), f"You have : {int_to_str(self.get_money())} €", Default_font(
+            20), pygame.Color(255, 255, 255))
+
+        price_label = Label(pygame.Vector2(100, 100), f"Do you want to upgrade your {object_type} for {int_to_str(self._prices[object_type][object_id])} €", Default_font(20), pygame.Color(255, 255, 255))
+
         self.bind_several_widget(
             armor_label,
             close_button,
@@ -247,30 +257,31 @@ class Ingame_menu(UI):
             money_label
         )
 
-    def get_stats_and_points(self): # renvoie un int et un dict {"nom_stat":valeur,...}
-        return self._points,self._stats.copy()
+    def get_stats_and_points(self):  # renvoie un int et un dict {"nom_stat":valeur,...}
+        return self._points, self._stats.copy()
 
-    def set_stats_and_points(self,points:int,stats:list) -> None:
+    def set_stats_and_points(self, points: int, stats: list) -> None:
         self.main_menu()
         self._points = points
         self._stats = stats
-
 
     def do_nothing(self):
         return
 
 
 class Close_button(Button):
-    def __init__(self,draw_surface:pygame.Surface,main_menu):
-        self.rect = pygame.Rect(0,20,40,40)
+    def __init__(self, draw_surface: pygame.Surface, main_menu):
+        self.rect = pygame.Rect(0, 20, 40, 40)
         self.rect.x = draw_surface.get_width() - self.rect.width - 20
 
-        super().__init__(self.rect,"X",Default_font(20),callback=main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        super().__init__(self.rect, "X", Default_font(20), callback=main_menu, text_color=pygame.Color(
+            255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
 
 
 class Previous_button(Button):
-    def __init__(self,draw_surface:pygame.Surface,main_menu):
-        self.rect = pygame.Rect(0,20,40,40)
+    def __init__(self, draw_surface: pygame.Surface, main_menu):
+        self.rect = pygame.Rect(0, 20, 40, 40)
         self.rect.x = draw_surface.get_width() - self.rect.width - 80
 
-        super().__init__(self.rect,"<",Default_font(20),callback=main_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
+        super().__init__(self.rect, "<", Default_font(20), callback=main_menu, text_color=pygame.Color(
+            255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))

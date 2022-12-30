@@ -1,5 +1,6 @@
 import json
 
+
 class Equipment():
     # constantes
     max_armor_level = 4
@@ -25,11 +26,12 @@ class Equipment():
         """
         with open("../saves/equipment.json", "r") as f:
             save = json.load(f)
-        for k,v in save.items():
+        for k, v in save.items():
             setattr(self, k, v)
 
     def __str__(self) -> str:
         return "\n".join([f"{k}: {v}" for k, v in vars(self).items()])
+
 
 if __name__ == "__main__":
     e = Equipment()

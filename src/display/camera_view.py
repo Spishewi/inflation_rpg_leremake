@@ -1,19 +1,21 @@
-from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
+from __future__ import annotations  # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
 from typing import TYPE_CHECKING
 # Imports obligatoires (dépendances, ect...)
-import pygame # affichage
-import math # calculs divers
+import pygame  # affichage
+import math  # calculs divers
 
 # Imports des autres fichiers customs
 
 # Import seulement pour les type-hint (opti)
 if TYPE_CHECKING:
-    from engine.map_manager import MapManager # La gestion de la map
+    from engine.map_manager import MapManager  # La gestion de la map
+
 
 class CameraView:
     """
     permet d'afficher une partie d'une map
     """
+
     def __init__(self, map_manager: MapManager, move_ease: float) -> None:
 
         # création des variables utiles
@@ -29,14 +31,14 @@ class CameraView:
         """
         self.map_name = map_name
 
-    def move(self, dt: float, coords: pygame.Vector2, teleport: bool=False) -> None:
+    def move(self, dt: float, coords: pygame.Vector2, teleport: bool = False) -> None:
         """
             Mettre a jour les coordonnés sur la map
         """
         if teleport:
             self.coords.x = coords.x
             self.coords.y = coords.y
-        else: # On applique le "ease" (on adoucie le déplacement)
+        else:  # On applique le "ease" (on adoucie le déplacement)
             self.coords.x += (coords.x - self.coords.x) * (min((dt * self.move_ease * self.factor), 1))
             self.coords.y += (coords.y - self.coords.y) * (min((dt * self.move_ease * self.factor), 1))
 
@@ -67,7 +69,7 @@ class CameraView:
         # déplacement des tiles suivant la position de la caméra
         offset_x = math.floor(-self.coords.x * tile_size_factor + half_width)
         offset_y = math.floor(-self.coords.y * tile_size_factor + half_height)
-        
+
         # calcul de la zone à afficher
         minx = math.floor(self.coords.x - x_const)
         maxx = math.ceil(self.coords.x + x_const) + 1
@@ -76,7 +78,8 @@ class CameraView:
         maxy = math.ceil(self.coords.y + y_const) + 1
 
         # on récupère les coordonnées du joueur
-        player_pos = pygame.Vector2(math.floor(player.pos.x * tile_size_factor) + offset_x, math.floor(player.pos.y * tile_size_factor) + offset_y)
+        player_pos = pygame.Vector2(math.floor(player.pos.x * tile_size_factor) + offset_x,
+                                    math.floor(player.pos.y * tile_size_factor) + offset_y)
 
         # on récupère toutes les tiles qui seront à afficher à cette frame
         tiles = []
@@ -84,7 +87,7 @@ class CameraView:
         for layer_index, layer in enumerate(map.layers):
             for y in range(max(miny, 0), min(maxy, map.height)):
                 for x in range(max(minx, 0), min(maxx, map.width)):
-                    if layer.visible :# or layer.name == "collisions" | and layer.name == "zones_outline"
+                    if layer.visible:  # or layer.name == "collisions" | and layer.name == "zones_outline"
                         # récupération de l'image de la tile
                         tile_image = map.get_tile_image(x, y, layer_index)
                         if tile_image is not None:
@@ -97,24 +100,16 @@ class CameraView:
                     # permet de mettre le joueur sur le bon layer
 
                 if layer.name == "walls" and math.floor(player.pos.y) == y:
-                    
-                    tiles.append((player.get_animation(self.factor),(player_pos)))
-        
+                    tiles.append((player.get_animation(self.factor), (player_pos)))
+
         # On met la couleur de fond de la map
         draw_surface.fill(map.background_color)
 
         # On dessine toutes les tiles
         draw_surface.blits(tiles, doreturn=False)
-        
+
         # du debug en plus
 
         #player_rect = player.get_rect()
         #print((player_pos.x, player_pos.y, player_rect.width * tile_size_factor, player_rect.height * tile_size_factor))
         #pygame.draw.rect(draw_surface,"red",pygame.Rect(player_pos.x, player_pos.y,1*tile_size_factor,1*tile_size_factor))
-        
-        
-    
-
-
-        
-        
