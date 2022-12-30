@@ -2,10 +2,16 @@ from __future__ import annotations # permet d'ajouter certaines choses non dispo
 
 from display.title_screen_menu import Title_screen_menu
 import pygame
+from gameplay.equipment import Equipment
 
 class Title_screen():
     def __init__(self, window: pygame.Surface) -> None:
-        self.ui = Title_screen_menu(window)
+        # On charge l'équipment du joueur
+        self.equipment = Equipment()
+        self.equipment.load()
+        
+        # On initialise l'affichage
+        self.ui = Title_screen_menu(window,self.equipment)
 
         self.clock = pygame.time.Clock()
     

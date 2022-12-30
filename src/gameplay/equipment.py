@@ -31,6 +31,9 @@ class Equipment():
 
     def __str__(self) -> str:
         return "\n".join([f"{k}: {v}" for k, v in vars(self).items()])
+    
+    def get_dict(self):
+        return{"sword":self.sword_level,"armor":self.armor_level,"ring":self.ring_level}
 
 
 if __name__ == "__main__":

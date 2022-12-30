@@ -4,15 +4,18 @@ from display.ui import UI, Label, Button, Progressbar, Default_font, Image
 import pygame
 from display.graphics import Objects_picture
 from utils import int_to_str
-
+from gameplay.equipment import Equipment
 
 class Ingame_menu(UI):
-    def __init__(self, draw_surface):
+    def __init__(self, draw_surface, equipment):
         super().__init__(draw_surface)
 
         self.draw_surface = draw_surface
         self.objects_images = Objects_picture("../graphics/weapons_and_armors")
-
+        
+        self.equipment = equipment
+        self.equipment_dict = self.get_equipment()
+        
         # TODO
         # to remove -----------------
         self._points = 50
@@ -23,16 +26,6 @@ class Ingame_menu(UI):
             "Defense": 1500,
             "Agility": 128,
             "Luck": 56
-        }
-        self._equipment = {
-            "sword": 0,
-            "armor": 0,
-            "ring": 0
-        }
-        self._prices = {
-            "sword": [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000, 10000000000000, 100000000000000],
-            "armor": [1, 100, 1500, 25000, 100000],
-            "ring": []
         }
         # --------------------------
 
@@ -208,62 +201,43 @@ class Ingame_menu(UI):
         previous_button = Previous_button(self.draw_surface, self.main_menu)
         close_button = Close_button(self.draw_surface, self.main_display)
 
-        equipment_label = Label(pygame.Vector2(40, 40), "EQUIPMENT", Default_font(30), pygame.Color(255, 255, 255))
-
-        money_label = Label(pygame.Vector2(400, 40), f"You have : {int_to_str(self.get_money())} €", Default_font(
-            20), pygame.Color(255, 255, 255))
-
+        equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
+        
+        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.get_money())} $",Default_font(20),pygame.Color(255,255,255))
+            
         self.bind_several_widget(
             equipment_label,
             money_label,
             close_button,
             previous_button
         )
-
-        y = 150
-        for k, v in self._equipment.items():
-            image = Image(self.objects_images.get_object_picture(k, v, 7), pygame.Vector2(100, y))
-            label = Label(pygame.Vector2(300, y+50), f"{k} lvl {v}", Default_font(20), pygame.Color(255, 255, 255))
+        
+        y=150
+        for k,v in self.equipment_dict.items():
+            image = Image(self.objects_images.get_object_picture(k,v,7),pygame.Vector2(100,y))
+            label = Label(pygame.Vector2(300,y+50),f"{k} lvl {v}",Default_font(20),pygame.Color(255,255,255))
             self.bind_several_widget(
                 image,
                 label
             )
             y += 150
 
-    def buy_menu(self, object: tuple):
-        '''open the buy menu
 
-        Args:
-            object (object_type:str, object_id:int): example -> ("armor",3)
-        '''
-        self.clear_widget()
-        object_type, object_id = object
+    def get_stats_and_points(self): # renvoie un int et un dict {"nom_stat":valeur,...}
+        return self._points,self._stats.copy()
 
-        armor_label = Label(pygame.Vector2(40, 40), "BUY", Default_font(30), pygame.Color(255, 255, 255))
-
-        previous_button = Previous_button(self.draw_surface, self.equipment_menu)
-        close_button = Close_button(self.draw_surface, self.main_display)
-
-        money_label = Label(pygame.Vector2(400, 40), f"You have : {int_to_str(self.get_money())} €", Default_font(
-            20), pygame.Color(255, 255, 255))
-
-        price_label = Label(pygame.Vector2(100, 100), f"Do you want to upgrade your {object_type} for {int_to_str(self._prices[object_type][object_id])} €", Default_font(20), pygame.Color(255, 255, 255))
-
-        self.bind_several_widget(
-            armor_label,
-            close_button,
-            previous_button,
-            price_label,
-            money_label
-        )
-
-    def get_stats_and_points(self):  # renvoie un int et un dict {"nom_stat":valeur,...}
-        return self._points, self._stats.copy()
-
-    def set_stats_and_points(self, points: int, stats: list) -> None:
+    def set_stats_and_points(self,points:int,stats:dict) -> None:
         self.main_menu()
         self._points = points
         self._stats = stats
+
+    def get_equipment(self):
+        return {
+            "armor":self.equipment.armor_level,
+            "sword":self.equipment.sword_level,
+            "ring":self.equipment.ring_level
+        }
+
 
     def do_nothing(self):
         return
