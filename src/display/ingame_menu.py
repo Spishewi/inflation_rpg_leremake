@@ -27,11 +27,6 @@ class Ingame_menu(UI):
             "Agility":128,
             "Luck":56
         }
-        self._prices = {
-            "sword":[1,10,100,1000,10000,100000,1000000,10000000,100000000,1000000000,10000000000,100000000000,1000000000000,10000000000000,100000000000000],
-            "armor":[1, 100, 1500, 25000,100000],
-            "ring":[]
-        }
         # --------------------------
 
         self.main_display() 
@@ -200,7 +195,7 @@ class Ingame_menu(UI):
 
         equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
         
-        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.get_money())} €",Default_font(20),pygame.Color(255,255,255))
+        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.get_money())} $",Default_font(20),pygame.Color(255,255,255))
             
         self.bind_several_widget(
             equipment_label,
@@ -219,32 +214,6 @@ class Ingame_menu(UI):
             )
             y += 150
 
-    def buy_menu(self,object:tuple):
-        '''open the buy menu
-
-        Args:
-            object (object_type:str, object_id:int): example -> ("armor",3)
-        '''
-        self.clear_widget()
-        object_type,object_id = object
-        
-        
-        armor_label = Label(pygame.Vector2(40,40),"BUY",Default_font(30),pygame.Color(255,255,255))
-        
-        previous_button = Previous_button(self.draw_surface,self.equipment_menu)
-        close_button = Close_button(self.draw_surface,self.main_display)
-        
-        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.get_money())} €",Default_font(20),pygame.Color(255,255,255))
-        
-        price_label = Label(pygame.Vector2(100,100),f"Do you want to upgrade your {object_type} for {int_to_str(self._prices[object_type][object_id])} €",Default_font(20),pygame.Color(255,255,255))
-        
-        self.bind_several_widget(
-            armor_label,
-            close_button,
-            previous_button,
-            price_label,
-            money_label
-        )
 
     def get_stats_and_points(self): # renvoie un int et un dict {"nom_stat":valeur,...}
         return self._points,self._stats.copy()
