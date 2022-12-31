@@ -10,11 +10,13 @@ de créer un jeu graphique. Nous avons bien sûr tout de même essayé de coller
 ## Description du projet
 Notre jeu s'inspire fortement du jeu [inflation RPG](https://play.google.com/store/apps/details?id=air.infurerpgkuesuto&hl=fr).
 
-Le jeu s'articule autour d'un gameplay roguelite. Nous sommes laché à chaque partie dans une grotte, et le but est d'aller le plus loin possible et de level-up en un nombre donné de combat. A la fin de la partie, une récompense proportionnelle au niveau obtenu sera donné, permettant d'améliorer de l'equipement en vue d'une autre partie.
+Le jeu s'articule autour d'un gameplay [roguelite](https://en.wiktionary.org/wiki/rogue-lite). Nous sommes laché à chaque partie dans une grotte, et le but est d'aller le plus loin possible et de level-up en un nombre donné de combat. A la fin de la partie, une récompense proportionnelle au niveau obtenu sera donné, permettant d'améliorer de l'equipement en vue d'une autre partie.
 
 Le jeu contient donc une gestion de niveau et de stats remise à zéro à chaque partie, et d'une gestion de l'équipement, elle, sauvegardé entre les parties.
 
 Les combats se lancent aléatoirement en fonction de la barre de combat (en bas de l'écran), et se font automatiquement suivant la zone de niveau dans laquelle le joueur se trouve au moment où le combat se lance. L'issue du combat est donc déterminé suivant la zone où le joueur se trouve et sa chance. Il est du devoir du joueur d'aller dans une zone assez haut level pour pouvoir monter rapidement en niveau, tout en faisant attention à ne pas voir trop grand.
+
+pour plus d'informations, voir [première partie de jeu](#première-partie-de-jeu).
 
 ## dépendances
 
@@ -24,7 +26,7 @@ Les combats se lancent aléatoirement en fonction de la barre de combat (en bas 
   
 ### Python
 
-**ATTENTION** : Nous utilisons des fonctionnalités récente de python, comme les "type-hint". Ces fonctionnalités ne fonctionne que sur les versions de python ultérieurs à python 3.9+.
+**ATTENTION** : Nous utilisons des fonctionnalités récente de python, comme les [*type-hint*](https://realpython.com/lessons/type-hinting/). Ces fonctionnalités ne fonctionne que sur les versions de python ultérieurs à python 3.9+.
 Une méthode très simple pour permettre d'utiliser ces annotations dans de plus anciennes version de python (comme celles du lycée) est d'ajouter cette ligne en haut de chaques fichiers
 ```py
 from __future__ import annotations
@@ -37,7 +39,7 @@ Ce module permet l'affichage graphique du jeu. Il est donc indispensable.
 **ATTENTION** : pygame n'est pas à ce jour disponible pour python 3.11 (la dernière version de python). De ce fait, notre programme n'est pas non plus compatible avec cette dernière version.
 
 ### Pytmx
-Ce module nous permet de charger des fichiers de map pour notre jeu. Sans ce module, nous ne pouvons pas charger de map, ou très difficilement. (convertissant à la main des fichiers de map en csv, puis en les lisant tel quel). Il permet concrêtement de *parser* les fichiers **.tmx**, fichier de carte créé par l'éditeur de carte renommé [Tiled](https://www.mapeditor.org/). Celà permet ensuite à notre programme de jouer avec l'objet `TiledMap`, afin d'afficher la carte, connaitre l'emplacement des zones, des collisions...
+Ce module nous permet de charger des fichiers de map pour notre jeu. Sans ce module, nous ne pouvons pas charger de map, ou très difficilement. (convertissant à la main des fichiers de map en csv, puis en les lisant tel quel). Il permet concrêtement de [*parser*](https://www.lalanguefrancaise.com/dictionnaire/definition/parser) les fichiers **.tmx**, fichier de carte créé par l'éditeur de carte renommé [Tiled](https://www.mapeditor.org/). Celà permet ensuite à notre programme de jouer avec l'objet `TiledMap`, afin d'afficher la carte, connaitre l'emplacement des zones, des collisions...
 
 
 ## Installation
@@ -79,11 +81,11 @@ Les combats se joue automatiquement, vous n'avez donc pas à vous en faire.
 
 ![](https://dummyimage.com/1200x650/000000/fff.png&text=Screenshot+combats)
 
-Une fois le combats terminé, proportionnellement à la différence de niveaux entre vous et l'ennemi, vous gagnerez des points, que vous pourrez répartir a partir du menu des stats. Il se trouve en haut à droite (*Menu* -> *Stats*)
+Une fois le combat terminé, proportionnellement à la différence de niveaux entre vous et l'ennemi, vous gagnerez des points, que vous pourrez répartir a partir du menu des stats. Il se trouve en haut à droite (*Menu* -> *Stats*)
 
 ![](screenshots/3.png)
 
-Vous pourrez grâce à vous stats nouvellement acquisent aller dans des zones de plus hant niveau afin d'avancer dans le jeu. Votre but est donc de monter le plsu rapidement possible dans de hautes zones afin de pouvoir en fin de partie gagner plus d'argent, et acheter de meilleur equipement pour la prochaine partie. (l'equipement permettant de multiplier différentes stats, et donc de pouvoir monter dans de plus hautes zones à la partie suivante et gagner plus d'argent, ect...).
+Vous pourrez grâce à vous stats nouvellement acquisent aller dans des zones de plus hant niveau afin d'avancer dans le jeu. Votre but est donc de monter le plus rapidement possible dans de hautes zones afin de pouvoir en fin de partie gagner plus d'argent, et acheter de meilleur equipement pour la prochaine partie. (l'equipement permettant de multiplier différentes stats, et donc de pouvoir monter dans de plus hautes zones à la partie suivante et gagner plus d'argent, ect...).
 
 Une fois la partie terminé, il y a donc cet ecran qui s'ouvre. Vous pouvez ici acheter de l'equipement qui servira au prochaines parties.
 
