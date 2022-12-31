@@ -57,7 +57,7 @@ class Label(Widget):
         draw_surface.blit(self._rendered_text, self.coords)
 
 class Button(Widget):
-    def __init__(self, rect: pygame.Rect, text: str, font: pygame.font.Font, callback: typing.Callable, text_color: pygame.Color, color: pygame.Color, hover_text_color: pygame.Color = None, hover_color: pygame.Color = None, image_background:pygame.Surface = None):
+    def __init__(self, rect: pygame.Rect, text: str, font: pygame.font.Font, callback: typing.Callable, text_color: pygame.Color, color: pygame.Color, hover_text_color: pygame.Color = None, hover_color: pygame.Color = None, image_background:pygame.Surface = None, multiclick: bool = False):
         self.text = text
         self.rect = rect
         self.color = color
@@ -77,7 +77,7 @@ class Button(Widget):
         if callback != None:
             self.callback = callback
         else:
-            self.callback = lambda:...
+            self.callback = lambda:... # ?
 
         self.rendered_text = None
         self.rendered_text_hovered = None
@@ -88,6 +88,10 @@ class Button(Widget):
 
         self.hovered = False
         self.clicked = False
+
+        self.multiclick = multiclick
+        self.last_callback_trigger = pygame.time.get_ticks()
+        self.multiclick_timer = 1000
     
     def set_callback(self,func,parameter):
         self.callback = lambda:func(parameter)
@@ -97,6 +101,18 @@ class Button(Widget):
             self.hovered = True
         else:
             self.hovered = False
+
+        if self.multiclick and self.clicked and self.last_callback_trigger + self.multiclick_timer < pygame.time.get_ticks():
+            self.last_callback_trigger = pygame.time.get_ticks()
+            self.multiclick_timer /= 2
+            if self.multiclick_timer < 50:
+                self.multiclick_timer = 50
+            self.callback()
+        
+        elif self.multiclick and not self.clicked:
+            self.last_callback_trigger = 0 # permet de spam click
+            self.multiclick_timer = 1000 # remet par défaut l'accélération
+        
 
     def draw(self, draw_surface: pygame.Surface) -> None:
         rect_surface = pygame.Surface(self.rect.size)
@@ -138,7 +154,8 @@ class Button(Widget):
         elif event.type == pygame.MOUSEBUTTONUP:
             if self.clicked:
                 self.clicked = False
-                self.callback()
+                if not self.multiclick:
+                    self.callback()
                 
 class Image(Widget):
     def __init__(self, image:pygame.Surface, pos:pygame.Vector2):
