@@ -10,11 +10,13 @@ de créer un jeu graphique. Nous avons bien sûr tout de même essayé de coller
 ## Description du projet
 Notre jeu s'inspire fortement du jeu [inflation RPG](https://play.google.com/store/apps/details?id=air.infurerpgkuesuto&hl=fr).
 
-Le jeu s'articule autour d'un gameplay roguelite. Nous sommes laché à chaque partie dans une grotte, et le but est d'aller le plus loin possible et de level-up en un nombre donné de combat. A la fin de la partie, une récompense proportionnelle au niveau obtenu sera donné, permettant d'améliorer de l'equipement en vue d'une autre partie.
+Le jeu s'articule autour d'un gameplay [roguelite](https://en.wiktionary.org/wiki/rogue-lite). Nous sommes laché à chaque partie dans une grotte, et le but est d'aller le plus loin possible et de level-up en un nombre donné de combat. A la fin de la partie, une récompense proportionnelle au niveau obtenu sera donné, permettant d'améliorer de l'equipement en vue d'une autre partie.
 
 Le jeu contient donc une gestion de niveau et de stats remise à zéro à chaque partie, et d'une gestion de l'équipement, elle, sauvegardé entre les parties.
 
 Les combats se lancent aléatoirement en fonction de la barre de combat (en bas de l'écran), et se font automatiquement suivant la zone de niveau dans laquelle le joueur se trouve au moment où le combat se lance. L'issue du combat est donc déterminé suivant la zone où le joueur se trouve et sa chance. Il est du devoir du joueur d'aller dans une zone assez haut level pour pouvoir monter rapidement en niveau, tout en faisant attention à ne pas voir trop grand.
+
+pour plus d'informations, voir [première partie de jeu](#première-partie-de-jeu).
 
 ## dépendances
 
@@ -24,7 +26,7 @@ Les combats se lancent aléatoirement en fonction de la barre de combat (en bas 
   
 ### Python
 
-**ATTENTION** : Nous utilisons des fonctionnalités récente de python, comme les "type-hint". Ces fonctionnalités ne fonctionne que sur les versions de python ultérieurs à python 3.9+.
+**ATTENTION** : Nous utilisons des fonctionnalités récente de python, comme les [*type-hint*](https://realpython.com/lessons/type-hinting/). Ces fonctionnalités ne fonctionne que sur les versions de python ultérieurs à python 3.9+.
 Une méthode très simple pour permettre d'utiliser ces annotations dans de plus anciennes version de python (comme celles du lycée) est d'ajouter cette ligne en haut de chaques fichiers
 ```py
 from __future__ import annotations
@@ -37,7 +39,7 @@ Ce module permet l'affichage graphique du jeu. Il est donc indispensable.
 **ATTENTION** : pygame n'est pas à ce jour disponible pour python 3.11 (la dernière version de python). De ce fait, notre programme n'est pas non plus compatible avec cette dernière version.
 
 ### Pytmx
-Ce module nous permet de charger des fichiers de map pour notre jeu. Sans ce module, nous ne pouvons pas charger de map, ou très difficilement. (convertissant à la main des fichiers de map en csv, puis en les lisant tel quel). Il permet concrêtement de *parser* les fichiers **.tmx**, fichier de carte créé par l'éditeur de carte renommé [Tiled](https://www.mapeditor.org/). Celà permet ensuite à notre programme de jouer avec l'objet `TiledMap`, afin d'afficher la carte, connaitre l'emplacement des zones, des collisions...
+Ce module nous permet de charger des fichiers de map pour notre jeu. Sans ce module, nous ne pouvons pas charger de map, ou très difficilement. (convertissant à la main des fichiers de map en csv, puis en les lisant tel quel). Il permet concrêtement de [*parser*](https://www.lalanguefrancaise.com/dictionnaire/definition/parser) les fichiers **.tmx**, fichier de carte créé par l'éditeur de carte renommé [Tiled](https://www.mapeditor.org/). Celà permet ensuite à notre programme de jouer avec l'objet `TiledMap`, afin d'afficher la carte, connaitre l'emplacement des zones, des collisions...
 
 
 ## Installation
@@ -67,15 +69,29 @@ python main.py
 Si vous rencontrez des difficultés à installer les dépendances où lancer le projet, n'hésitez pas à nous contacter sur discord. (vous nous aviez par exemple expliqué que vous aviez des difficultés avec vos versions de python)
 ## Première partie de jeu
 
-Lorem consequat velit est qui qui officia. Laborum tempor ullamco consectetur adipisicing nostrud aute laboris labore et nulla. Veniam incididunt consequat quis est enim ut nulla. Incididunt enim consequat elit occaecat quis duis enim anim velit commodo.
+Une fois le jeu lancé pour la première fois et la partie lancé, vous atterissez dans une grotte. A partir de ce moment, tout mouvement augmente la chance de lancer un combat. Cette chance est visible grâce à la barre de progression en bas de l'écran.
+On peut également observer le nombre de combats restants avant la fin de la partie.
 
-Sunt excepteur eiusmod velit irure consequat. Qui veniam amet cupidatat cupidatat consequat duis in cillum proident aliqua magna irure eu. Enim pariatur dolore anim veniam incididunt mollit aliqua consectetur labore culpa laboris et duis. Officia dolore incididunt elit do do ipsum ullamco nisi et.
+![](screenshots/1.png)
 
-Deserunt laborum ut nulla ullamco minim mollit velit magna et laboris esse est. Veniam laboris non cillum fugiat Lorem. Et quis sit commodo ullamco ad velit ea occaecat pariatur officia. Laborum eu minim proident fugiat cillum duis aute laboris sit cillum. Cillum sunt et quis aute Lorem nisi aliqua.
+Attention à la zone dans laquelle vous vous trouvez, aller dans une zone de trop haut niveau peut vous coûter une defaite !
 
-Aute voluptate nostrud consequat esse est proident id incididunt sint cillum duis fugiat aliqua irure. Id mollit culpa non occaecat mollit Lorem ad laboris in enim id excepteur duis sit. Ullamco ex reprehenderit voluptate ut elit eu pariatur.
+Au bout d'un moment, un combat vas se lancer.
+Les combats se joue automatiquement, vous n'avez donc pas à vous en faire.
 
-Commodo dolore incididunt non duis excepteur magna pariatur. Minim deserunt nostrud aliqua cupidatat consectetur ex elit ea nisi sit. Sint excepteur labore id laboris minim nulla ad irure ea anim irure consequat veniam in. Nostrud ea proident consectetur ullamco eu est consequat. Nisi fugiat elit reprehenderit dolore nisi in tempor excepteur minim nulla deserunt ut cupidatat.
+![](https://dummyimage.com/1200x650/000000/fff.png&text=Screenshot+combats)
+
+Une fois le combat terminé, proportionnellement à la différence de niveaux entre vous et l'ennemi, vous gagnerez des points, que vous pourrez répartir a partir du menu des stats. Il se trouve en haut à droite (*Menu* -> *Stats*)
+
+![](screenshots/3.png)
+
+Vous pourrez grâce à vous stats nouvellement acquisent aller dans des zones de plus hant niveau afin d'avancer dans le jeu. Votre but est donc de monter le plus rapidement possible dans de hautes zones afin de pouvoir en fin de partie gagner plus d'argent, et acheter de meilleur equipement pour la prochaine partie. (l'equipement permettant de multiplier différentes stats, et donc de pouvoir monter dans de plus hautes zones à la partie suivante et gagner plus d'argent, ect...).
+
+Une fois la partie terminé, il y a donc cet ecran qui s'ouvre. Vous pouvez ici acheter de l'equipement qui servira au prochaines parties.
+
+![](screenshots/5.png)
+
+Attention, essayez d'acheter un maximum, car une fois cet ecran quitté, votre argent restant sera perdu !
 
 ## Fonctionnalités manquantes
 
@@ -85,6 +101,17 @@ Tempor sit nulla consectetur minim dolore eu do duis do occaecat dolore non elit
 
 Commodo sit occaecat qui consectetur ullamco labore. Ex reprehenderit dolore sint anim ut minim pariatur quis ad ullamco sunt enim aliqua irure. Qui dolor id do veniam ad proident consectetur tempor culpa ad magna elit. Sit quis amet magna aliquip exercitation labore culpa irure sint. Incididunt ut adipisicing id laboris minim. Eu ex eu dolore laboris nisi.
 
+## Structure du code
+
+Afin de réaliser au mieux ce projet, et de vous permettre aussi de comprendre ce que l'on a fait, nous avons essayé de découper au mieux notre code.
+Dans le dossier `src`, on le fichier `main.py` qui permet de lancer le jeu, ainsi que 3 dossiers : 
+- `display` qui contient tout ce qui est en rapport avec l'affichage
+- `engine` qui est en raport avec tout ce qui est moteur de jeu (chargement de la map en memoire, collisions, gestion de la boucle principale)
+- `gameplay` qui s'occupe de tout ce qui est en rapport avec les mechaniques de jeu (stats, xp, equipement, sauvegarde de l'equipement, et combats)
+
+Celà permet d'à peut près séparer ce qui est noté du reste (principalement `display`)
+
+Nous avons essayé de commenter au mieux le code, en donnant la priorité au fichiers les plus importants.
 ## Répartition du travail
 
 Nous avons essayé de nous répartir au mieux le travail, bien que travailler pendant les vacances de noël s'est révélé beaucoup plus dûr que prévu.
