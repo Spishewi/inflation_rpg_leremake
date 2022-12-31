@@ -9,6 +9,7 @@ from engine.player import Player # la gestion du joueur
 from display.ingame_menu import Ingame_menu # la gestion du GUI
 from gameplay.battle import Battle_manager # la gestion des combats
 from gameplay.equipment import Equipment # la gestion de l'equipement
+from gameplay.stats import Stats # La gestion des stats + argent + level ect...
 
 class Game:
     """
@@ -41,6 +42,9 @@ class Game:
         self.equipment = Equipment()
         self.equipment.load() # on charge depuis le fichier de sauvegarde
         #print(self.equipment)
+
+        # On charge le système de stats
+        self.stats = Stats(self.equipment)
         
         # On initialise le menu
         self.ui = Ingame_menu(self.window,self.equipment)
@@ -81,7 +85,7 @@ class Game:
             player_relative_movement = (new_player_pos - old_player_pos).magnitude()
             # On met a jour le gestionnaire de combat
             self.battle_manager.handle_player_movement(player_relative_movement)
-            self.battle_manager.handle_battle(self.player.pos, self.map_manager)
+            self.battle_manager.handle_battle(self.player.pos, self.map_manager, self.stats)
 
             # On déplace la caméra sur le joueur
             self.camera_view.move(dt, self.player.pos, False)
@@ -96,6 +100,7 @@ class Game:
                 self.ui.update(distance=self.battle_manager.battle_chance/self.battle_manager.max_battle_chance)
             # On met a jour le compteur de combat
             self.ui.update(battle_count=(self.battle_manager.remaining_battle, self.battle_manager.number_of_battles))
+            self.ui.update(stats=self.stats)
             
             self.ui.update()
             self.ui.draw()

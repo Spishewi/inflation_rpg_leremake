@@ -8,6 +8,7 @@ import pygame
 if TYPE_CHECKING:
     from gameplay.equipment import Equipment
     from engine.map_manager import MapManager
+    from gameplay.stats import Stats
 
 class Entity():
     def __init__(self, pv_max: int, atk: float, crit_luck: float, crit_multiplier: float, speed: float) -> None:
@@ -60,15 +61,15 @@ class Battle():
         # on stock le joueur 
         self.player = player
         # on choisi le niveau de l'ennemi
-        enemy_level = random.choice(level_range)
+        self.enemy_level = random.choice(level_range)
         #print(enemy_level)
         # On crée l'ennemi
         self.enemy = Entity(
-            pv_max=enemy_level*100,
-            atk=enemy_level*10,
+            pv_max=self.enemy_level*10,
+            atk=self.enemy_level*10,
             crit_luck=0.5,
             crit_multiplier=1.2,
-            speed=enemy_level*10
+            speed=self.enemy_level*10
             )
     
     def player_atk_first(self):
@@ -97,7 +98,7 @@ class Battle():
         return Round_result(self.player, self.enemy)
 
 class Battle_manager():
-    number_of_battles = 30
+    number_of_battles = 15
     def __init__(self, equipment: Equipment) -> None:
 
         self.equipment = equipment
@@ -134,30 +135,27 @@ class Battle_manager():
             # un combat doit être lancé
             self.must_trigger_battle = True
     
-    def handle_battle(self, player_coords, map_manager: MapManager):
+    def handle_battle(self, player_coords, map_manager: MapManager, player_stats: Stats):
         if self.must_trigger_battle and self.current_battle == None:
             # mise a jour des variables
-            self.remaining_battle -= 1
             self.must_trigger_battle = False
             self.battle_chance = 0
 
             # demarrage d'un combat
-            player = Entity(
-                pv_max=1500,
-                atk=1500,
-                crit_luck=0.7,
-                crit_multiplier=1.5,
-                speed=150
-            )
-            if self.remaining_battle < 1:
-                print("FIN DU JEU")
-            self.current_battle = Battle(player, map_manager.get_level_range("map", player_coords))
+            self.current_battle = Battle(player_stats.get_player_entity(), map_manager.get_level_range("map", player_coords))
+
         elif self.current_battle != None:
             round_result = self.current_battle.process_round()
+            if round_result.status == Round_result.WIN:
+                self.remaining_battle -= 1
+                player_stats.handle_win(self.current_battle.enemy_level)
+            elif round_result.status == Round_result.LOST:
+                self.remaining_battle -= 3
             if round_result.status != Round_result.NOT_COMPLETED:
                 print(round_result.status)
-                print("LEVEL-UP")
                 self.current_battle = None
+                if self.remaining_battle <= 0:
+                    print("FIN DU JEU")
 
             
 
