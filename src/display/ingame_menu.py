@@ -159,9 +159,9 @@ class Ingame_menu(UI):
             stats_label = Label(pygame.Vector2(70, y+10), stat+" :", Default_font(20), pygame.Color(255, 255, 255))
 
             plus_button = Button(pygame.Rect(500, y, 40, 40), "+", Default_font(20), callback=None, text_color=pygame.Color(
-                255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
+                255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70), multiclick=True)
             minus_button = Button(pygame.Rect(650, y, 40, 40), "-", Default_font(20), callback=None, text_color=pygame.Color(
-                255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
+                255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70), multiclick=True)
 
             # indispensable : sinon tous les bouttons changent la même stat, la dernière, à cause de la boucle
             plus_button.set_callback(self.add_point, stat)
@@ -185,7 +185,7 @@ class Ingame_menu(UI):
 
     def add_point(self, stat) -> int:
         '''return the new val'''
-        if self.points != 0:
+        if self.points > 0:
             self.to_add_value[stat] += 1
             self.points -= 1
 
