@@ -145,6 +145,9 @@ class Image(Widget):
         super().__init__()
         self.image = image
         self.pos = pos
+        
+    def update_image(self,image:pygame.Surface):
+        self.image = image
     
     def draw(self, draw_surface : pygame.Surface):
         draw_surface.blit(self.image,self.pos)

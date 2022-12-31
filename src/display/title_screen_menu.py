@@ -17,6 +17,9 @@ class Title_screen_menu(UI):
         self.must_start = False
         self.must_quit = False
         
+        self.images = []
+        self.prices_labels = []
+        
         self.equipment = player_equipment
         self.play_menu()
         
@@ -39,7 +42,12 @@ class Title_screen_menu(UI):
             exit_button
         )
      
-
+    def update_equipment_widgets(self):
+        for image,k in self.images:
+            image.update_image(self.objects_images.get_object_picture(k, self.equipment.level[k], 7))
+        for label,k in self.prices_labels:
+            label.update_text(f"Price : {self.equipment.prices[k][self.equipment.level[k]+1]} $")
+        self.money_label.update_text(f"You have : {int_to_str(self.equipment.money)} $")
     
     def equipment_menu(self) -> None:
         self.clear_widget()
@@ -50,20 +58,27 @@ class Title_screen_menu(UI):
         close_button = Button(self.rect,"X",Default_font(20),callback=self.play_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
         
         equipment_label = Label(pygame.Vector2(40, 40), "EQUIPMENT",Default_font(30), pygame.Color(255, 255, 255))
-        money_label = Label(pygame.Vector2(400, 40), f"You have : {int_to_str(self.equipment.money)} $", Default_font(20), pygame.Color(255, 255, 255))
+        self.money_label = Label(pygame.Vector2(400, 40), f"You have : {int_to_str(self.equipment.money)} $", Default_font(20), pygame.Color(255, 255, 255))
             
         self.bind_several_widget(
             equipment_label,
             close_button,
-            money_label
+            self.money_label
         )
-    
+
+        self.images = []
+        self.prices_labels = []
+        
         x = 150
         for k,v in self.equipment.level.items():
             object_image = Image(self.objects_images.get_object_picture(k, v, 7), pygame.Vector2(x+60, 200))
+            self.images.append((object_image,k))
+            
             price_label = Label(pygame.Vector2(x, 350), f"Price : {self.equipment.prices[k][v+1]} $", Default_font(20), pygame.Color(255,255,255))
+            self.prices_labels.append((price_label,k))
+            
             upgrade_button = Button(pygame.Rect(x, 400, 250, 100), "Upgrade", Default_font(20), callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
-            upgrade_button.set_callback(self.equipment.upgrade_object, k)
+            upgrade_button.set_callback(self.upgrade_object, k)
             
             self.bind_several_widget(
                 object_image,
@@ -72,7 +87,9 @@ class Title_screen_menu(UI):
             )
             x += 350
         
-    
+    def upgrade_object(self,object_type):
+        self.equipment.upgrade_object(object_type)
+        self.update_equipment_widgets()
     
     def set_game_starting(self):
         self.must_start = True    

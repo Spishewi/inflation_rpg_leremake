@@ -8,24 +8,22 @@ from gameplay.equipment import Equipment
 from gameplay.stats import Stats
 
 class Ingame_menu(UI):
-    def __init__(self, draw_surface, equipment:Equipment):
+    STATS_NAMES = {
+        "pv":"Health",
+        "atk":"Attack",
+        "speed":"Agility",
+        "crit_luck":"Crit Luck"
+    }
+        
+    def __init__(self, draw_surface, equipment:Equipment, stats:Stats):
         super().__init__(draw_surface)
 
         self.draw_surface = draw_surface
         self.objects_images = Objects_picture("../graphics/weapons_and_armors")
         
-        self.equipment = equipment
+        self.player_equipment = equipment
+        self.player_stats = stats
         
-        # TODO
-        # to remove -----------------
-        self._points = 50
-        self._stats = {
-            "Health": 0,
-            "Attack": 0,
-            "Agility": 0,
-            "Crit Luck": 0
-        }
-        # --------------------------
 
         self.main_display()
 
@@ -43,15 +41,7 @@ class Ingame_menu(UI):
                     self.fight_bar.update_value(v)
                 elif k == "battle_count":
                     self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}")
-                elif k == "stats":
-                    self._stats = {
-                        "Health": v.pv + Stats.default_pv,
-                        "Attack": v.atk + Stats.default_atk,
-                        "Agility": v.speed + Stats.default_speed,
-                        "Crit Luck": v.crit_luck + Stats.default_crit_luck
-                    }
-                    self._points = v.remaining_points
-                    self._money = v.money
+                
 
     def main_display(self):
         self.clear_widget()
@@ -122,8 +112,7 @@ class Ingame_menu(UI):
         stats_title = Label(pygame.Vector2(40, 40), "STATS", Default_font(30), pygame.Color(255, 255, 255))
 
         point_label = Label(pygame.Vector2(900, 150), "Points :", Default_font(25), pygame.Color(255, 255, 255))
-        self.point_value_label = Label(pygame.Vector2(915, 200), str(
-            self.points), Default_font(40), pygame.Color(255, 255, 255))
+        self.point_value_label = Label(pygame.Vector2(915, 200), str(self.points), Default_font(40), pygame.Color(255, 255, 255))
 
         done_button = Button(pygame.Rect(925, 350, 100, 40), "Done", Default_font(20), callback=lambda: self.set_stats_and_points(
             self.points, self.stats), text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
@@ -148,7 +137,7 @@ class Ingame_menu(UI):
             self.value[stat] = value
             self.to_add_value[stat] = 0
 
-            stats_label = Label(pygame.Vector2(70, y+10), stat+" :", Default_font(20), pygame.Color(255, 255, 255))
+            stats_label = Label(pygame.Vector2(70, y+10), Ingame_menu.STATS_NAMES[stat]+" :", Default_font(20), pygame.Color(255, 255, 255))
 
             plus_button = Button(pygame.Rect(500, y, 40, 40), "+", Default_font(20), callback=None, text_color=pygame.Color(
                 255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
@@ -204,7 +193,7 @@ class Ingame_menu(UI):
 
         equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
         
-        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.equipment.money)} $",Default_font(20),pygame.Color(255,255,255))
+        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.player_equipment.money)} $",Default_font(20),pygame.Color(255,255,255))
             
         self.bind_several_widget(
             equipment_label,
@@ -214,7 +203,7 @@ class Ingame_menu(UI):
         )
         
         y=150
-        for k,v in self.equipment.level.items():
+        for k,v in self.player_equipment.level.items():
             image = Image(self.objects_images.get_object_picture(k,v,7),pygame.Vector2(100,y))
             label = Label(pygame.Vector2(300,y+50),f"{k} lvl {v}",Default_font(20),pygame.Color(255,255,255))
             self.bind_several_widget(
@@ -225,12 +214,12 @@ class Ingame_menu(UI):
 
 
     def get_stats_and_points(self): # renvoie un int et un dict {"nom_stat":valeur,...}
-        return self._points,self._stats.copy()
+        return self.player_stats.remaining_points,self.player_stats.stats.copy()
 
     def set_stats_and_points(self,points:int,stats:dict) -> None:
         self.main_menu()
-        self._points = points
-        self._stats = stats
+        self.player_stats.remaining_points = points
+        self.player_stats.stats = stats
 
     def do_nothing(self):
         return

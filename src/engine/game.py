@@ -47,7 +47,7 @@ class Game:
         self.stats = Stats(self.equipment)
         
         # On initialise le menu
-        self.ui = Ingame_menu(self.window,self.equipment)
+        self.ui = Ingame_menu(self.window,self.equipment,self.stats)
 
         # On instancie et initialise le gestionnaire de combat (important)
         self.battle_manager = Battle_manager(self.equipment)
@@ -60,6 +60,7 @@ class Game:
     def run(self) -> None:
         # variable permettant de faire fonctionner la boucle de jeu.
         running = True
+        restart = True
         # Initialisation des variables...
         dt = self.clock.tick(60) / 1000
         while running:
@@ -68,6 +69,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     # on met la condition d'arrêt à "vrai"
                     running = False
+                    restart = False
                 # On envoie les evenements au joueur.
                 if not self.ui.get_grab():
                     self.player.event_handler(event)
@@ -85,7 +87,9 @@ class Game:
             player_relative_movement = (new_player_pos - old_player_pos).magnitude()
             # On met a jour le gestionnaire de combat
             self.battle_manager.handle_player_movement(player_relative_movement)
-            self.battle_manager.handle_battle(self.player.pos, self.map_manager, self.stats)
+            restart = self.battle_manager.handle_battle(self.player.pos, self.map_manager, self.stats)
+            if restart:
+                running = False
 
             # On déplace la caméra sur le joueur
             self.camera_view.move(dt, self.player.pos, False)
@@ -115,3 +119,5 @@ class Game:
 
             # On met à jour l'image à l'écran suivant tout ce qu'on à calculé depuis la dernière frame.
             pygame.display.update()
+        self.equipment.save()
+        return restart

@@ -98,7 +98,7 @@ class Battle():
         return Round_result(self.player, self.enemy)
 
 class Battle_manager():
-    number_of_battles = 15
+    number_of_battles = 1
     def __init__(self, equipment: Equipment) -> None:
 
         self.equipment = equipment
@@ -111,6 +111,8 @@ class Battle_manager():
         self.remaining_battle = Battle_manager.number_of_battles
 
         self.current_battle = None
+        
+        self.game_end = False
 
     def handle_player_movement(self, player_relative_movement: float) -> None:
         # on s'est déplacé, on a donc plus de chance de lancer un combat
@@ -156,6 +158,8 @@ class Battle_manager():
                 self.current_battle = None
                 if self.remaining_battle <= 0:
                     print("FIN DU JEU")
+                    return True
+        return False
 
             
 

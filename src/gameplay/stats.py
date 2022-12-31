@@ -21,26 +21,24 @@ class Stats:
         self.equipment = equipment
 
         # les points
-        self.pv = 0
-        self.atk = 0
-        self.crit_luck = 0
-        self.speed = 0
-
+        self.stats = {
+            "pv":0,
+            "atk":0,
+            "crit_luck":0,
+            "speed":0
+        }
         self.remaining_points = 0
-        
-        # l'argent
-        self.money = 0
 
         # l'experience
         self.xp = 1
 
     def get_player_entity(self):
         player = Entity(
-            pv_max = (self.pv + Stats.default_pv)*(1 + self.equipment.armor_level),
-            atk = (self.atk + Stats.default_atk)*(1 + self.equipment.sword_level / 7),
-            crit_luck = 1-(1/math.sqrt(1 + self.crit_luck + Stats.default_crit_luck)),
-            crit_multiplier = 1 + self.equipment.ring_level / 7,
-            speed = self.speed + self.default_speed
+            pv_max = (self.stats["pv"] + Stats.default_pv)*(1 + self.equipment.level["armor"]),
+            atk = (self.stats["atk"] + Stats.default_atk)*(1 + self.equipment.level["sword"] / 7),
+            crit_luck = 1-(1/math.sqrt(1 + self.stats["crit_luck"] + Stats.default_crit_luck)),
+            crit_multiplier = 1 + self.equipment.level["ring"] / 7,
+            speed = self.stats["speed"] + self.default_speed
             )
         return player
 
@@ -48,9 +46,11 @@ class Stats:
         level_difference = enemy_level - self.xp
         print(self.xp, enemy_level, level_difference, 2**(level_difference + 5))
         self.xp += 2**(level_difference + 5) # équation à vérifier
-        self.remaining_points += math.sqrt(self.xp) - (self.pv + self.atk + self.crit_luck + self.speed)
+        self.remaining_points += int(math.sqrt(self.xp) - (self.stats["pv"] + self.stats["atk"] + self.stats["crit_luck"] + self.stats["pv"]))
+        
+        print((self.xp,self.remaining_points))
 
-        self.money = self.xp # temporaire aussi
+        self.equipment.money = self.xp # temporaire aussi
 
 
     
