@@ -221,9 +221,6 @@ class Ingame_menu(UI):
         self.player_stats.remaining_points = points
         self.player_stats.stats = stats
 
-    def do_nothing(self):
-        return
-
 
 class Close_button(Button):
     def __init__(self, draw_surface: pygame.Surface, main_menu):

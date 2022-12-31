@@ -19,7 +19,8 @@ class Title_screen():
         # variable permettant de faire fonctionner la boucle de jeu.
         # Initialisation des variables...
         dt = self.clock.tick(0) / 1000
-        while True:
+        running = True
+        while running:
             for event in pygame.event.get():
                 # pour fermer avec la croix
                 if event.type == pygame.QUIT or self.ui.must_quit:
@@ -30,7 +31,7 @@ class Title_screen():
             
 
             if self.ui.must_start:
-                return True
+                running = False
             
             self.ui.update()
             self.ui.draw()
@@ -38,3 +39,5 @@ class Title_screen():
             dt = self.clock.tick(0) / 1000
             
             pygame.display.update()
+        self.equipment.save()
+        return True
