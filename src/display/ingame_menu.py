@@ -7,19 +7,17 @@ from utils import int_to_str
 from gameplay.equipment import Equipment
 
 class Ingame_menu(UI):
-    def __init__(self, draw_surface, equipment):
+    def __init__(self, draw_surface, equipment:Equipment):
         super().__init__(draw_surface)
 
         self.draw_surface = draw_surface
         self.objects_images = Objects_picture("../graphics/weapons_and_armors")
         
         self.equipment = equipment
-        self.equipment_dict = self.get_equipment()
         
         # TODO
         # to remove -----------------
         self._points = 50
-        self._money = 100
         self._stats = {
             "Health": 500,
             "Attack": 200,
@@ -30,12 +28,6 @@ class Ingame_menu(UI):
         # --------------------------
 
         self.main_display()
-
-    def get_money(self):
-        return self._money
-
-    def set_money(self, value):
-        self._money = value
 
     def update(self, **kwargs):
         # s'il n'y a pas d'args, on update en général
@@ -203,7 +195,7 @@ class Ingame_menu(UI):
 
         equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
         
-        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.get_money())} $",Default_font(20),pygame.Color(255,255,255))
+        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.equipment.money)} $",Default_font(20),pygame.Color(255,255,255))
             
         self.bind_several_widget(
             equipment_label,
@@ -213,7 +205,7 @@ class Ingame_menu(UI):
         )
         
         y=150
-        for k,v in self.equipment_dict.items():
+        for k,v in self.equipment.level.items():
             image = Image(self.objects_images.get_object_picture(k,v,7),pygame.Vector2(100,y))
             label = Label(pygame.Vector2(300,y+50),f"{k} lvl {v}",Default_font(20),pygame.Color(255,255,255))
             self.bind_several_widget(
@@ -230,14 +222,6 @@ class Ingame_menu(UI):
         self.main_menu()
         self._points = points
         self._stats = stats
-
-    def get_equipment(self):
-        return {
-            "armor":self.equipment.armor_level,
-            "sword":self.equipment.sword_level,
-            "ring":self.equipment.ring_level
-        }
-
 
     def do_nothing(self):
         return
