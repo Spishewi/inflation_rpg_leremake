@@ -10,10 +10,13 @@ if TYPE_CHECKING:
 
 class Stats:
     # default values
-    default_pv = 100
-    default_atk = 100
-    default_crit_luck = 0
-    default_speed = 100
+    default_value = {
+        "pv":100,
+        "atk":100,
+        "crit_luck":0,
+        "speed":100 
+    }
+    
 
     def __init__(self, equipment: Equipment) -> None:
         
@@ -34,11 +37,11 @@ class Stats:
 
     def get_player_entity(self):
         player = Entity(
-            pv_max = (self.stats["pv"] + Stats.default_pv)*(1 + self.equipment.level["armor"]),
-            atk = (self.stats["atk"] + Stats.default_atk)*(1 + self.equipment.level["sword"] / 7),
-            crit_luck = 1-(1/math.sqrt(1 + self.stats["crit_luck"] + Stats.default_crit_luck)),
+            pv_max = (self.stats["pv"] + Stats.default_value["pv"])*(1 + self.equipment.level["armor"]),
+            atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"] / 7),
+            crit_luck = 1-(1/math.sqrt(1 + self.stats["crit_luck"] + Stats.default_value["crit_luck"])),
             crit_multiplier = 1 + self.equipment.level["ring"] / 7,
-            speed = self.stats["speed"] + self.default_speed
+            speed = self.stats["speed"] + self.default_value["speed"]
             )
         return player
 

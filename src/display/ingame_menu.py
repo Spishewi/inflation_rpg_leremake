@@ -149,7 +149,7 @@ class Ingame_menu(UI):
             minus_button.set_callback(self.remove_point, stat)
 
             stats_value_label = Label(pygame.Vector2(300, y+10),
-                                      str(self.value[stat]), Default_font(20), pygame.Color(255, 255, 255))
+                                      str(Stats.default_value[stat] + self.value[stat]), Default_font(20), pygame.Color(255, 255, 255))
             to_add_value_label = Label(pygame.Vector2(
                 575, y+10), str(self.to_add_value[stat]), Default_font(20), pygame.Color(255, 255, 255))
 
@@ -171,8 +171,8 @@ class Ingame_menu(UI):
             self.points -= 1
 
             self.stats[stat] = self.value[stat] + self.to_add_value[stat]
-            self.stats_labels[stat][1].update_text(str(self.to_add_value[stat]))
-            self.stats_labels[stat][0].update_text(str(self.stats[stat]))
+            self.stats_labels[stat][0].update_text(str(Stats.default_value[stat] + self.stats[stat]))
+            self.stats_labels[stat][1].update_text(str(self.to_add_value[stat])) # to add label
             self.point_value_label.update_text(str(self.points))
             return
 

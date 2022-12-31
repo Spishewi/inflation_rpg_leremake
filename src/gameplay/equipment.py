@@ -26,7 +26,7 @@ class Equipment():
         sauvegarde l'équipement actuel dans un fichier json
         """
         with open("../saves/equipment.json", "w") as f:
-            json.dump(self.level, f)
+            json.dump(vars(self), f)
 
     def load(self):
         """
@@ -38,8 +38,10 @@ class Equipment():
             setattr(self, k, v)
             
     def upgrade_object(self, object_type:str):
-        if self.prices[object_type][self.level[object_type]+1] <= self.money:
+        price = self.prices[object_type][self.level[object_type]]
+        if  price <= self.money :
             self.level[object_type] += 1
+            self.money -= price
 
     def __str__(self) -> str:
         return "\n".join([f"{k}: {v}" for k, v in vars(self).items()])

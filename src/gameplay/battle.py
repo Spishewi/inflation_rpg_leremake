@@ -98,7 +98,7 @@ class Battle():
         return Round_result(self.player, self.enemy)
 
 class Battle_manager():
-    number_of_battles = 15
+    number_of_battles = 2
     def __init__(self, equipment: Equipment) -> None:
 
         self.equipment = equipment
