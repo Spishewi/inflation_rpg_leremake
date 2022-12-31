@@ -41,6 +41,7 @@ class Game:
         # On charge l'équipement du joueur
         self.equipment = Equipment()
         self.equipment.load() # on charge depuis le fichier de sauvegarde
+        self.equipment.money = 0
         #print(self.equipment)
 
         # On charge le système de stats
