@@ -105,8 +105,8 @@ class Button(Widget):
         if self.multiclick and self.clicked and self.last_callback_trigger + self.multiclick_timer < pygame.time.get_ticks():
             self.last_callback_trigger = pygame.time.get_ticks()
             self.multiclick_timer /= 2
-            if self.multiclick_timer < 50:
-                self.multiclick_timer = 50
+            if self.multiclick_timer < 10:
+                self.multiclick_timer = 10
             self.callback()
         
         elif self.multiclick and not self.clicked:
