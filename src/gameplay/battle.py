@@ -58,7 +58,7 @@ class Round_result:
             self.status = Round_result.NOT_COMPLETED
 
 class Battle():
-    def __init__(self, player: Entity, level_range) -> None:
+    def __init__(self, player: Entity, level_range, battle_ui) -> None:
         # on stock le joueur 
         self.player = player
         # on choisi le niveau de l'ennemi
@@ -72,17 +72,29 @@ class Battle():
             crit_multiplier=1.2,
             speed=self.enemy_level*10
             )
+        # on stock l'interface de bataille pour y afficher les informations
+        self.battle_ui = battle_ui
     
     def player_atk_first(self):
-        self.enemy.get_attacked(self.player.attack())
+        player_damages = self.player.attack()
+        self.enemy.get_attacked(player_damages)
+        self.battle_ui.add_round(f"You attack, the enemy lost {player_damages} hp")
+        
         if self.enemy.isalive():
-            self.player.get_attacked(self.enemy.attack())
+            enemy_damages = self.enemy.attack()
+            self.player.get_attacked(enemy_damages)
+            self.battle_ui.add_round(f"The enemy attack, you lost {enemy_damages} hp")
 
     def enemy_atk_first(self):
         # on fait attaquer l'ennemi en premier
-        self.player.get_attacked(self.enemy.attack())
+        enemy_damages = self.enemy.attack()
+        self.player.get_attacked(enemy_damages)
+        self.battle_ui.add_round(f"The enemy attack, you lost {enemy_damages} hp")
+        
         if self.player.isalive():
-            self.enemy.get_attacked(self.player.attack())
+            player_damages = self.player.attack()
+            self.enemy.get_attacked(player_damages)
+            self.battle_ui.add_round(f"You attack, the enemy lost {player_damages} hp")
 
     def process_round(self):
         # on défini qui attaque en premier, et on fait attaquer.

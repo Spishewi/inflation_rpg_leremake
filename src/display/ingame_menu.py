@@ -225,7 +225,7 @@ class Ingame_menu(UI):
 class Battle_ui:
     def __init__(self, ingame_menu:Ingame_menu):
         self.ingame_menu = ingame_menu
-        self.x_max = self.ingame_menu.draw_surface.get_height()
+        self.y_max = self.ingame_menu.draw_surface.get_height()
         
     def start_battle(self):
         self.rounds = []
@@ -247,12 +247,12 @@ class Battle_ui:
         self.draw_rounds()
         
     def draw_rounds(self):
-        x = self.x_max - 100
+        y = self.y_max - 100
         for round in self.rounds:
-            if x > 0:  # évite d'afficher des textes non visibles
-                label = Label(pygame.Vector2(x, 100), round, Default_font(20), pygame.Color(255,255,255))
+            if y > 0:  # évite d'afficher des textes non visibles
+                label = Label(pygame.Vector2(100, y), round, Default_font(20), pygame.Color(255,255,255))
                 self.ingame_menu.bind_widget(label)
-                x -= 50
+                y -= 50
             else:
                 return
     
@@ -262,7 +262,6 @@ class Battle_ui:
         
     def battle_end(self):
         ...
-
 
 class Close_button(Button):
     def __init__(self, draw_surface: pygame.Surface, main_menu):
