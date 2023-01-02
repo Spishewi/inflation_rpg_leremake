@@ -93,7 +93,7 @@ class Button(Widget):
         self.last_callback_trigger = pygame.time.get_ticks()
         self.multiclick_timer = 1000
     
-    def set_callback(self,func:typing.Callable,parameter):
+    def set_callback(self,func,parameter):
         self.callback = lambda:func(parameter)
     
     def update(self) -> None:
@@ -106,7 +106,7 @@ class Button(Widget):
             self.last_callback_trigger = pygame.time.get_ticks()
             self.multiclick_timer /= 2
             if self.multiclick_timer < 10:
-                self.multiclick_timer = 10
+                self.multiclick_timer = 50
             self.callback()
         
         elif self.multiclick and not self.clicked:

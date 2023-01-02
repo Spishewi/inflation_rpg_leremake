@@ -33,27 +33,35 @@ class Stats:
         self.remaining_points = 0
 
         # l'experience
+        self.lvl = 1
         self.xp = 1
+        self.xp_needed_lvl_up = 1000 * self.lvl
+
 
     def get_player_entity(self):
         player = Entity(
             pv_max = (self.stats["pv"] + Stats.default_value["pv"])*(1 + self.equipment.level["armor"]),
-            atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"] / 7),
-            crit_luck = 1-(1/math.sqrt(1 + self.stats["crit_luck"] + Stats.default_value["crit_luck"])),
+            atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"]) / 10,
+            crit_luck = 1-(math.log10(10 + self.stats["crit_luck"] + Stats.default_value["crit_luck"])),
             crit_multiplier = 1 + self.equipment.level["ring"] / 7,
             speed = self.stats["speed"] + self.default_value["speed"]
             )
         return player
 
     def handle_win(self, enemy_level: int):
-        level_difference = enemy_level - self.xp
-        print(self.xp, enemy_level, level_difference, 2**(level_difference + 5))
-        self.xp += 2**(level_difference + 5) # équation à vérifier
-        self.remaining_points += int(math.sqrt(self.xp) - (self.stats["pv"] + self.stats["atk"] + self.stats["crit_luck"] + self.stats["pv"]))
+
+        print(self.lvl, enemy_level)
+        self.xp += enemy_level*1000 # équation à vérifier
+
+        while self.xp >= self.xp_needed_lvl_up:
+            self.lvl += 1
+            self.xp -= self.xp_needed_lvl_up
+            self.xp_needed_lvl_up = 1000 * self.lvl
+            self.remaining_points += 15
         
         print((self.xp,self.remaining_points))
 
-        self.equipment.money = self.xp # temporaire aussi
+        self.equipment.money = self.lvl*1000 # temporaire aussi
 
 
     

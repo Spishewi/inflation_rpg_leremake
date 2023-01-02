@@ -3,14 +3,14 @@ from typing import TYPE_CHECKING
 
 import random
 import pygame
-import typing
-from display.ingame_menu import Ingame_menu
 
+#from display.ingame_menu import Ingame_menu
 # Import seulement pour les type-hint (opti)
 if TYPE_CHECKING:
     from gameplay.equipment import Equipment
     from engine.map_manager import MapManager
     from gameplay.stats import Stats
+    
 
 class Entity():
     def __init__(self, pv_max: int, atk: float, crit_luck: float, crit_multiplier: float, speed: float) -> None:
@@ -66,9 +66,13 @@ class Battle():
         self.enemy_level = random.choice(level_range)
         #print(enemy_level)
         # On crée l'ennemi
+
+        enemy_points = self.enemy_level*15
+        enemy_points_repartitions = random.random()/2 + 0.25
+
         self.enemy = Entity(
-            pv_max=self.enemy_level*10,
-            atk=self.enemy_level*10,
+            pv_max=(5/1000)*enemy_points*enemy_points_repartitions**2,
+            atk=(5/1000)*enemy_points*(1-enemy_points_repartitions)**2,
             crit_luck=0.5,
             crit_multiplier=1.2,
             speed=self.enemy_level*10
@@ -100,13 +104,11 @@ class Battle():
         return Round_result(self.player, self.enemy)
 
 class Battle_manager():
-    number_of_battles = 2
-    def __init__(self, equipment: Equipment, battle_ui:Ingame_menu.Battle_ui) -> None:
-
-        self.equipment = equipment
+    number_of_battles = 30
+    def __init__(self) -> None:
 
         self.battle_chance = 0
-        self.max_battle_chance = 100
+        self.max_battle_chance =  25 # 100 TODO
         self.must_trigger_battle = False
         self.last_try_to_trigger_battle = pygame.time.get_ticks()
 
@@ -114,7 +116,7 @@ class Battle_manager():
 
         self.current_battle = None
         
-        self.battle_ui = battle_ui
+        #self.battle_ui = battle_ui
         
         self.game_end = False
 
@@ -149,7 +151,7 @@ class Battle_manager():
 
             # demarrage d'un combat
             self.current_battle = Battle(player_stats.get_player_entity(), map_manager.get_level_range("map", player_coords))
-            self.battle_ui.start_battle()
+            #self.battle_ui.start_battle()
 
         elif self.current_battle != None:
             round_result = self.current_battle.process_round()
