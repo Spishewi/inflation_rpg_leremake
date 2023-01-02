@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 
 import random
 import pygame
+import typing
+from display.ingame_menu import Ingame_menu
 
 # Import seulement pour les type-hint (opti)
 if TYPE_CHECKING:
@@ -99,7 +101,7 @@ class Battle():
 
 class Battle_manager():
     number_of_battles = 2
-    def __init__(self, equipment: Equipment) -> None:
+    def __init__(self, equipment: Equipment, battle_ui:Ingame_menu.Battle_ui) -> None:
 
         self.equipment = equipment
 
@@ -111,6 +113,8 @@ class Battle_manager():
         self.remaining_battle = Battle_manager.number_of_battles
 
         self.current_battle = None
+        
+        self.battle_ui = battle_ui
         
         self.game_end = False
 
@@ -145,6 +149,7 @@ class Battle_manager():
 
             # demarrage d'un combat
             self.current_battle = Battle(player_stats.get_player_entity(), map_manager.get_level_range("map", player_coords))
+            self.battle_ui.start_battle()
 
         elif self.current_battle != None:
             round_result = self.current_battle.process_round()
@@ -153,6 +158,7 @@ class Battle_manager():
                 player_stats.handle_win(self.current_battle.enemy_level)
             elif round_result.status == Round_result.LOST:
                 self.remaining_battle -= 3
+                
             if round_result.status != Round_result.NOT_COMPLETED:
                 print(round_result.status)
                 self.current_battle = None
