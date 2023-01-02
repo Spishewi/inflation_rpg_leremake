@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 import random
 import pygame
 import typing
-from display.ingame_menu import Ingame_menu
 
 # Import seulement pour les type-hint (opti)
 if TYPE_CHECKING:
@@ -101,7 +100,7 @@ class Battle():
 
 class Battle_manager():
     number_of_battles = 2
-    def __init__(self, equipment: Equipment, battle_ui:Ingame_menu.Battle_ui) -> None:
+    def __init__(self, equipment: Equipment, battle_ui) -> None:
 
         self.equipment = equipment
 

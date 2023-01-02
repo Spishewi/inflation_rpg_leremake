@@ -15,7 +15,7 @@ class Ingame_menu(UI):
         "crit_luck":"Crit Luck"
     }
         
-    def __init__(self, draw_surface, equipment:Equipment, stats:Stats):
+    def __init__(self, draw_surface:pygame.Surface, equipment:Equipment, stats:Stats):
         super().__init__(draw_surface)
 
         self.draw_surface = draw_surface
@@ -181,8 +181,9 @@ class Ingame_menu(UI):
             self.points += 1
             self.to_add_value[stat] -= 1
 
-            self.stats_labels[stat][1].update_text(str(self.to_add_value[stat]))
-            self.stats_labels[stat][0].update_text(str(self.value[stat] + self.to_add_value[stat]))
+            self.stats[stat] = self.value[stat] + self.to_add_value[stat]
+            self.stats_labels[stat][0].update_text(str(Stats.default_value[stat] + self.stats[stat]))
+            self.stats_labels[stat][1].update_text(str(self.to_add_value[stat])) # to add label
             self.point_value_label.update_text(str(self.points))
 
     def equipment_menu(self):
@@ -222,18 +223,42 @@ class Ingame_menu(UI):
         self.player_stats.stats = stats
         
 class Battle_ui:
-    def start_battle(self,ingame_manu:Ingame_menu):
+    def __init__(self, ingame_menu:Ingame_menu):
+        self.ingame_menu = ingame_menu
+        self.x_max = self.ingame_menu.draw_surface.get_height()
+        
+    def start_battle(self):
         self.rounds = []
-        self.ingame_menu = ingame_manu
         self.draw()
         
     def draw(self):
-        self.clear_widget()
-        close_button = Close_button(self.ingame_menu.draw_surface, self.ingame_menu.main_display)
+        self.ingame_menu.clear_widget()
+        self.ingame_menu.set_background_color(pygame.Color(20, 20, 20, 150))
+        self.ingame_menu.set_grab(True)
         
+        close_button = Close_button(self.ingame_menu.draw_surface, self.ingame_menu.main_display)
+        battle_label = Label(pygame.Vector2(40, 40), "BATTLE", Default_font(30), pygame.Color(255, 255, 255))
+        
+        
+        self.ingame_menu.bind_several_widget(
+            close_button,
+            battle_label
+        )
+        self.draw_rounds()
+        
+    def draw_rounds(self):
+        x = self.x_max - 100
+        for round in self.rounds:
+            if x > 0:  # évite d'afficher des textes non visibles
+                label = Label(pygame.Vector2(x, 100), round, Default_font(20), pygame.Color(255,255,255))
+                self.ingame_menu.bind_widget(label)
+                x -= 50
+            else:
+                return
     
-    def add_round(self,*args:str):
+    def add_round(self, *args:str):
         self.rounds += list(args)
+        self.draw_rounds()
         
     def battle_end(self):
         ...
