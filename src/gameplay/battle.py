@@ -117,7 +117,7 @@ class Battle():
 
 class Battle_manager():
     number_of_battles = 30
-    def __init__(self) -> None:
+    def __init__(self, battle_ui) -> None:
 
         self.battle_chance = 0
         self.max_battle_chance =  25 # 100 TODO
@@ -128,7 +128,7 @@ class Battle_manager():
 
         self.current_battle = None
         
-        #self.battle_ui = battle_ui
+        self.battle_ui = battle_ui
         
         self.game_end = False
 

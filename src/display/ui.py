@@ -115,9 +115,7 @@ class Button(Widget):
         
 
     def draw(self, draw_surface: pygame.Surface) -> None:
-        rect_surface = pygame.Surface(self.rect.size)
-        
-        
+        rect_surface = pygame.Surface(self.rect.size, pygame.SRCALPHA)
 
         if self.hovered:
             if self.rendered_text_hovered == None:
