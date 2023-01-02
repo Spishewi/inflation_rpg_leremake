@@ -12,7 +12,7 @@ class Stats:
     # default values
     default_value = {
         "pv":100,
-        "atk":100,
+        "atk":10,
         "crit_luck":0,
         "speed":100 
     }
@@ -41,7 +41,7 @@ class Stats:
     def get_player_entity(self):
         player = Entity(
             pv_max = (self.stats["pv"] + Stats.default_value["pv"])*(1 + self.equipment.level["armor"]),
-            atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"]) / 10,
+            atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"]/ 10),
             crit_luck = 1-(math.log10(10 + self.stats["crit_luck"] + Stats.default_value["crit_luck"])),
             crit_multiplier = 1 + self.equipment.level["ring"] / 7,
             speed = self.stats["speed"] + self.default_value["speed"]
@@ -49,19 +49,17 @@ class Stats:
         return player
 
     def handle_win(self, enemy_level: int):
-
-        print(self.lvl, enemy_level)
-        self.xp += enemy_level*1000 # équation à vérifier
+        self.xp += enemy_level*2000 # équation à vérifier
 
         while self.xp >= self.xp_needed_lvl_up:
             self.lvl += 1
             self.xp -= self.xp_needed_lvl_up
             self.xp_needed_lvl_up = 1000 * self.lvl
             self.remaining_points += 15
-        
-        print((self.xp,self.remaining_points))
 
         self.equipment.money = self.lvl*1000 # temporaire aussi
+
+        print(self.lvl)
 
 
     
