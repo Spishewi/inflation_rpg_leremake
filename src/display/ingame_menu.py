@@ -40,7 +40,7 @@ class Ingame_menu(UI):
                 elif k == "distance":
                     self.fight_bar.update_value(v)
                 elif k == "battle_count":
-                    self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}")
+                    self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}") 
                 
 
     def main_display(self):
@@ -220,6 +220,23 @@ class Ingame_menu(UI):
         self.main_menu()
         self.player_stats.remaining_points = points
         self.player_stats.stats = stats
+        
+class Battle_ui:
+    def start_battle(self,ingame_manu:Ingame_menu):
+        self.rounds = []
+        self.ingame_menu = ingame_manu
+        self.draw()
+        
+    def draw(self):
+        self.clear_widget()
+        close_button = Close_button(self.ingame_menu.draw_surface, self.ingame_menu.main_display)
+        
+    
+    def add_round(self,*args:str):
+        self.rounds += list(args)
+        
+    def battle_end(self):
+        ...
 
 
 class Close_button(Button):

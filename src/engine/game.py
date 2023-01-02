@@ -49,9 +49,10 @@ class Game:
         
         # On initialise le menu
         self.ui = Ingame_menu(self.window,self.equipment,self.stats)
+        self.battle_ui = self.ui.Battle_ui(self.ui)
 
         # On instancie et initialise le gestionnaire de combat (important)
-        self.battle_manager = Battle_manager(self.equipment)
+        self.battle_manager = Battle_manager(self.equipment,self.battle_ui)
 
         # L'horloge permet à pygame de limiter la framerate du jeu, c'est purement graphique
         # on s'en sert aussi pour récupérer l'intervalle de temps (dt) entre deux frames,
