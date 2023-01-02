@@ -104,10 +104,8 @@ class Battle():
         return Round_result(self.player, self.enemy)
 
 class Battle_manager():
-    number_of_battles = 2
-    def __init__(self, equipment: Equipment, battle_ui) -> None:
-
-        self.equipment = equipment
+    number_of_battles = 30
+    def __init__(self) -> None:
 
         self.battle_chance = 0
         self.max_battle_chance =  25 # 100 TODO
