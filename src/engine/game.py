@@ -6,7 +6,7 @@ import pygame # affichage
 from engine.map_manager import MapManager # La gestion de la map
 from display.camera_view import CameraView # la gestion de la caméra
 from engine.player import Player # la gestion du joueur
-from display.ingame_menu import Ingame_menu, Battle_ui # la gestion du GUI
+from display.ingame_menu import Ingame_menu,Battle_ui # la gestion du GUI
 from gameplay.battle import Battle_manager # la gestion des combats
 from gameplay.equipment import Equipment # la gestion de l'equipement
 from gameplay.stats import Stats # La gestion des stats + argent + level ect...
@@ -49,7 +49,7 @@ class Game:
         
         # On initialise le menu
         self.ui = Ingame_menu(self.window,self.equipment,self.stats)
-        #self.battle_ui = Battle_ui(self.ui)
+        self.battle_ui = Battle_ui(self.ui)
 
         # On instancie et initialise le gestionnaire de combat (important)
         self.battle_manager = Battle_manager(self.equipment)
