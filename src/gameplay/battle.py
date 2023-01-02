@@ -78,23 +78,23 @@ class Battle():
     def player_atk_first(self):
         player_damages = self.player.attack()
         self.enemy.get_attacked(player_damages)
-        self.battle_ui.add_round(f"You attack, the enemy lost {player_damages} hp")
+        self.battle_ui.add_round(f"You attack, the enemy lost {int(player_damages)} hp")
         
         if self.enemy.isalive():
             enemy_damages = self.enemy.attack()
             self.player.get_attacked(enemy_damages)
-            self.battle_ui.add_round(f"The enemy attack, you lost {enemy_damages} hp")
+            self.battle_ui.add_round(f"The enemy attack, you lost {int(enemy_damages)} hp")
 
     def enemy_atk_first(self):
         # on fait attaquer l'ennemi en premier
         enemy_damages = self.enemy.attack()
         self.player.get_attacked(enemy_damages)
-        self.battle_ui.add_round(f"The enemy attack, you lost {enemy_damages} hp")
+        self.battle_ui.add_round(f"The enemy attack, you lost {int(enemy_damages)} hp")
         
         if self.player.isalive():
             player_damages = self.player.attack()
             self.enemy.get_attacked(player_damages)
-            self.battle_ui.add_round(f"You attack, the enemy lost {player_damages} hp")
+            self.battle_ui.add_round(f"You attack, the enemy lost {int(player_damages)} hp")
 
     def process_round(self):
         # on défini qui attaque en premier, et on fait attaquer.
@@ -111,7 +111,7 @@ class Battle():
         return Round_result(self.player, self.enemy)
 
 class Battle_manager():
-    number_of_battles = 2
+    number_of_battles = 15
     def __init__(self, equipment: Equipment, battle_ui) -> None:
 
         self.equipment = equipment
@@ -159,7 +159,7 @@ class Battle_manager():
             self.battle_chance = 0
 
             # demarrage d'un combat
-            self.current_battle = Battle(player_stats.get_player_entity(), map_manager.get_level_range("map", player_coords))
+            self.current_battle = Battle(player_stats.get_player_entity(), map_manager.get_level_range("map", player_coords), self.battle_ui)
             self.battle_ui.start_battle()
 
         elif self.current_battle != None:
@@ -167,8 +167,10 @@ class Battle_manager():
             if round_result.status == Round_result.WIN:
                 self.remaining_battle -= 1
                 player_stats.handle_win(self.current_battle.enemy_level)
+                self.battle_ui.add_round("YOU WIN")
             elif round_result.status == Round_result.LOST:
                 self.remaining_battle -= 3
+                self.battle_ui.add_round("YOU LOOSE")
                 
             if round_result.status != Round_result.NOT_COMPLETED:
                 print(round_result.status)

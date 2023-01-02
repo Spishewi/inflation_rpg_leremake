@@ -229,6 +229,7 @@ class Battle_ui:
         
     def start_battle(self):
         self.rounds = []
+        self.rounds_labels = []
         self.draw()
         
     def draw(self):
@@ -247,17 +248,22 @@ class Battle_ui:
         self.draw_rounds()
         
     def draw_rounds(self):
+        for label in self.rounds_labels:
+            self.ingame_menu.unbind_widget(label)
+        self.rounds_labels = []
+        
         y = self.y_max - 100
         for round in self.rounds:
             if y > 0:  # évite d'afficher des textes non visibles
                 label = Label(pygame.Vector2(100, y), round, Default_font(20), pygame.Color(255,255,255))
+                self.rounds_labels.append(label)
                 self.ingame_menu.bind_widget(label)
                 y -= 50
             else:
                 return
     
     def add_round(self, *args:str):
-        self.rounds += list(args)
+        self.rounds = list(args) + self.rounds
         self.draw_rounds()
         
     def battle_end(self):
