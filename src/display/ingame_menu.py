@@ -8,6 +8,8 @@ from gameplay.equipment import Equipment
 from gameplay.stats import Stats
 
 class Ingame_menu(UI):
+    # cette classe gère tous les menus du jeu durant une partie
+    
     STATS_NAMES = {
         "pv":"Health",
         "atk":"Attack",
@@ -16,15 +18,18 @@ class Ingame_menu(UI):
     }
         
     def __init__(self, draw_surface:pygame.Surface, equipment:Equipment, stats:Stats):
+        # on initialise la classe parent : UI
         super().__init__(draw_surface)
 
+        # on définie la surface sur laquelle on va dessiner ainsi que les images des objets
         self.draw_surface = draw_surface
         self.objects_images = Objects_picture("../graphics/weapons_and_armors")
         
+        # on stock les objets equipment et stats liés au joueur
         self.player_equipment = equipment
         self.player_stats = stats
         
-
+        # on créé l'affichage principal : fps, nombre de combats restants, bouton menu,...
         self.main_display()
 
     def update(self, **kwargs):
@@ -43,11 +48,15 @@ class Ingame_menu(UI):
                     self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}") 
                 
 
-    def main_display(self):
+    def main_display(self): # affichage principal
+        # on vide la fenêtre
         self.clear_widget()
+        # on enlève la couleur d'arrière-plan
         self.set_background_color(None)
+        # on permet au jeu et au joueur de capter les imput
         self.set_grab(False)
 
+        # on créé tous les éléments
         self.fps_label = Label(pygame.Vector2(10, 10), "", Default_font(15), pygame.Color(255, 255, 255))
 
         button_rect = pygame.Rect((0, 20, 100, 40))
@@ -66,6 +75,8 @@ class Ingame_menu(UI):
         self.battle_count = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-25),
                                   "Remaining battles : 0/0", Default_font(15), pygame.Color(255, 255, 255))
 
+
+        # on affiche tous les éléments
         self.bind_several_widget(
             self.fps_label,
             button_menu,
@@ -73,11 +84,14 @@ class Ingame_menu(UI):
             self.battle_count
         )
 
-    def main_menu(self):
+    def main_menu(self): # menu principal
         self.clear_widget()
+        # on définie la couleur d'arrière avec un degré de transparence
         self.set_background_color(pygame.Color(20, 20, 20, 150))
+        # on 'intercepte' les imputs pour que l'on ne puisse plus faire bouger le joueur
         self.set_grab(True)
 
+        # on créé et affiche tous les éléments
         previous_button = Previous_button(self.draw_surface, self.main_display)
         close_button = Close_button(self.draw_surface, self.main_display)
 
@@ -101,11 +115,13 @@ class Ingame_menu(UI):
             previous_button
         )
 
-    def stats_menu(self):
+    def stats_menu(self): # menu stats, permet de voir ses stats et d'attribuer ses points
         self.clear_widget()
 
+        # on récupère les informations à afficher
         self.points, self.stats = self.get_stats_and_points()
 
+        # on créé et affiche des éléments
         previous_button = Previous_button(self.draw_surface, self.main_menu)
         close_button = Close_button(self.draw_surface, self.main_display)
 
@@ -129,10 +145,12 @@ class Ingame_menu(UI):
             cancel_button
         )
 
+         
         self.value = {}
         self.to_add_value = {}
         self.stats_labels = {}
         y = 140
+        # affiche autant de lignes que de stats
         for stat, value in self.stats.items():
             self.value[stat] = value
             self.to_add_value[stat] = 0
@@ -164,8 +182,8 @@ class Ingame_menu(UI):
             )
             y += 70
 
-    def add_point(self, stat) -> int:
-        '''return the new val'''
+    def add_point(self, stat):
+        # ajoute un point si c'est possible à la stat choisie
         if self.points > 0:
             self.to_add_value[stat] += 1
             self.points -= 1
@@ -174,9 +192,9 @@ class Ingame_menu(UI):
             self.stats_labels[stat][0].update_text(str(Stats.default_value[stat] + self.stats[stat]))
             self.stats_labels[stat][1].update_text(str(self.to_add_value[stat])) # to add label
             self.point_value_label.update_text(str(self.points))
-            return
 
     def remove_point(self, stat):
+        # enlève un point si c'est possible à la stat choisie
         if self.to_add_value[stat] != 0:
             self.points += 1
             self.to_add_value[stat] -= 1
