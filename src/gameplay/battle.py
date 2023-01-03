@@ -83,24 +83,25 @@ class Battle():
     
     def player_atk_first(self):
         player_damages = self.player.attack()
+        print("a")
+        self.battle_ui.add_round(f"You attack, the enemy loses {int(player_damages)} hp")
         self.enemy.get_attacked(player_damages)
-        self.battle_ui.add_round(f"You attack, the enemy lost {int(player_damages)} hp")
         
         if self.enemy.isalive():
             enemy_damages = self.enemy.attack()
             self.player.get_attacked(enemy_damages)
-            self.battle_ui.add_round(f"The enemy attack, you lost {int(enemy_damages)} hp")
+            self.battle_ui.add_round(f"The enemy attacks, you lose {int(enemy_damages)} hp")
 
     def enemy_atk_first(self):
         # on fait attaquer l'ennemi en premier
         enemy_damages = self.enemy.attack()
         self.player.get_attacked(enemy_damages)
-        self.battle_ui.add_round(f"The enemy attack, you lost {int(enemy_damages)} hp")
+        self.battle_ui.add_round(f"The enemy attacks, you lose {int(enemy_damages)} hp")
         
         if self.player.isalive():
             player_damages = self.player.attack()
             self.enemy.get_attacked(player_damages)
-            self.battle_ui.add_round(f"You attack, the enemy lost {int(player_damages)} hp")
+            self.battle_ui.add_round(f"You attack, the enemy loses {int(player_damages)} hp")
 
     def process_round(self):
         # on défini qui attaque en premier, et on fait attaquer.
