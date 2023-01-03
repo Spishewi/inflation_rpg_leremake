@@ -109,6 +109,7 @@ class Game:
             self.ui.update(stats=self.stats)
             
             self.ui.update()
+            self.battle_ui.update()
             self.ui.draw()
         
             # On récupère le dt de la frame (temps entre deux frames)

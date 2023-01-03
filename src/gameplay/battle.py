@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from gameplay.equipment import Equipment
     from engine.map_manager import MapManager
     from gameplay.stats import Stats
+    from display.ingame_menu import Battle_ui
     
 
 class Entity():
@@ -117,7 +118,7 @@ class Battle():
 
 class Battle_manager():
     number_of_battles = 30
-    def __init__(self, battle_ui) -> None:
+    def __init__(self, battle_ui:Battle_ui) -> None:
 
         self.battle_chance = 0
         self.max_battle_chance =  25 # 100 TODO
