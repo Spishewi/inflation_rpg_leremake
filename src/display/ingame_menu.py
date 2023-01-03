@@ -243,11 +243,23 @@ class Ingame_menu(UI):
 class Battle_ui:
     def __init__(self, ingame_menu:Ingame_menu):
         self.ingame_menu = ingame_menu
+        self.x_max = self.ingame_menu.draw_surface.get_width()
         self.y_max = self.ingame_menu.draw_surface.get_height()
+
+        self.last_time_row = 0
+        self.in_battle = False 
+
+    def update(self):
+        if self.last_time_row + 400 < pygame.time.get_ticks() and self.in_battle:
+            self.last_time_row = pygame.time.get_ticks()
+            self.draw_rounds()
         
     def start_battle(self):
         self.rounds = []
         self.rounds_labels = []
+        self.displayed_rows = 0
+        self.in_battle = True
+        self.last_time_row = pygame.time.get_ticks()
         self.draw()
         
     def draw(self):
@@ -255,25 +267,27 @@ class Battle_ui:
         self.ingame_menu.set_background_color(pygame.Color(20, 20, 20, 150))
         self.ingame_menu.set_grab(True)
         
-        close_button = Close_button(self.ingame_menu.draw_surface, self.ingame_menu.main_display)
+        close_or_skip_button = Button(pygame.Rect(0, 0, self.x_max, self.y_max), "", Default_font(20), self.close_or_skip_battle_ui, text_color=pygame.Color(
+            0, 0, 0, 0), color=pygame.Color(0, 0, 0, 0),  hover_color=pygame.Color(0, 0, 0, 0))
         battle_label = Label(pygame.Vector2(40, 40), "BATTLE", Default_font(30), pygame.Color(255, 255, 255))
         
         
         self.ingame_menu.bind_several_widget(
-            close_button,
+            close_or_skip_button,
             battle_label
         )
-        self.draw_rounds()
         
     def draw_rounds(self):
         for label in self.rounds_labels:
             self.ingame_menu.unbind_widget(label)
         self.rounds_labels = []
+        self.displayed_rows += 1
         
         y = self.y_max - 100
-        for round in self.rounds:
-            if y > 0:  # évite d'afficher des textes non visibles
-                label = Label(pygame.Vector2(100, y), round, Default_font(20), pygame.Color(255,255,255))
+        rows_nb = len(self.rounds)-1
+        for i in range(rows_nb-min(self.displayed_rows,rows_nb),rows_nb):
+            if y > 50 and self.rounds != []:  # évite d'afficher des textes non visibles
+                label = Label(pygame.Vector2(100, y), self.rounds[i], Default_font(20), pygame.Color(255,255,255))
                 self.rounds_labels.append(label)
                 self.ingame_menu.bind_widget(label)
                 y -= 50
@@ -282,10 +296,17 @@ class Battle_ui:
     
     def add_round(self, *args:str):
         self.rounds = list(args) + self.rounds
-        self.draw_rounds()
+
+    def close_or_skip_battle_ui(self):
+        if self.displayed_rows < len(self.rounds)-1:
+            self.displayed_rows = len(self.rounds)-1
+            self.draw_rounds()
+        else:
+            self.battle_end()
+            self.ingame_menu.main_display()
         
     def battle_end(self):
-        ...
+        self.in_battle = False
 
 class Close_button(Button):
     def __init__(self, draw_surface: pygame.Surface, main_menu):
