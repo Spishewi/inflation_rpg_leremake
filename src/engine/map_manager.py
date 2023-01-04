@@ -67,5 +67,5 @@ class MapManager:
         tile_level = tile_properties["level"]
 
         # on retourne l'intervalle de niveau correspondant
-        return range(tile_level*10, (tile_level+1)*10)
+        return range(tile_level*10+1, (tile_level+1)*10+1)
 
