@@ -31,6 +31,8 @@ class Ingame_menu(UI):
         
         # on créé l'affichage principal : fps, nombre de combats restants, bouton menu,...
         self.main_display()
+        self.main_menu()        # pour le set grab et le background
+        self.stats_menu()
 
     def update(self, **kwargs):
         # s'il n'y a pas d'args, on update en général
