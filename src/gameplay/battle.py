@@ -83,24 +83,24 @@ class Battle():
     
     def player_atk_first(self):
         player_damages = self.player.attack()
-        self.battle_ui.add_round(f"You attack, the enemy loses {int(player_damages)} hp")
+        self.battle_ui.add_round(True, f"You attack, the enemy loses {int(player_damages)} hp")
         self.enemy.get_attacked(player_damages)
         
         if self.enemy.isalive():
             enemy_damages = self.enemy.attack()
             self.player.get_attacked(enemy_damages)
-            self.battle_ui.add_round(f"The enemy attacks, you lose {int(enemy_damages)} hp")
+            self.battle_ui.add_round(False, f"The enemy attacks, you lose {int(enemy_damages)} hp")
 
     def enemy_atk_first(self):
         # on fait attaquer l'ennemi en premier
         enemy_damages = self.enemy.attack()
         self.player.get_attacked(enemy_damages)
-        self.battle_ui.add_round(f"The enemy attacks, you lose {int(enemy_damages)} hp")
+        self.battle_ui.add_round(False, f"The enemy attacks, you lose {int(enemy_damages)} hp")
         
         if self.player.isalive():
             player_damages = self.player.attack()
             self.enemy.get_attacked(player_damages)
-            self.battle_ui.add_round(f"You attack, the enemy loses {int(player_damages)} hp")
+            self.battle_ui.add_round(True, f"You attack, the enemy loses {int(player_damages)} hp")
 
     def process_round(self):
         # on défini qui attaque en premier, et on fait attaquer.
@@ -171,10 +171,10 @@ class Battle_manager():
             if round_result.status == Round_result.WIN:
                 self.remaining_battle -= 1
                 player_stats.handle_win(self.current_battle.enemy_level)
-                self.battle_ui.add_round("YOU WIN")
+                self.battle_ui.add_round(True, "YOU WIN")
             elif round_result.status == Round_result.LOST:
                 self.remaining_battle -= 3
-                self.battle_ui.add_round("YOU LOOSE")
+                self.battle_ui.add_round(False, "YOU LOOSE")
                 
             if round_result.status != Round_result.NOT_COMPLETED:
                 print(round_result.status)

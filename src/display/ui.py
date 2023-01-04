@@ -47,7 +47,9 @@ class Label(Widget):
         
         self.text = None
         self._rendered_text = None
+        
         self.box = pygame.Rect(self.coords.x, self.coords.y, 0, 0)
+        
         self.update_text(text)
 
     def update_text(self, text):
