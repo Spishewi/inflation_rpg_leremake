@@ -33,7 +33,7 @@ class Stats:
         self.remaining_points = 0
 
         # l'experience
-        self.lvl = 1
+        self.lvl = 10
         self.xp = 1
         self.xp_needed_lvl_up = 1000 * self.lvl
 
