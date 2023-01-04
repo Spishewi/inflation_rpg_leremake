@@ -247,18 +247,18 @@ class Battle_ui:
         self.y_max = self.ingame_menu.draw_surface.get_height()
 
         self.last_time_row = 0
-        self.in_battle = False 
+        self.printing = False 
 
     def update(self):
-        if self.last_time_row + 400 < pygame.time.get_ticks() and self.in_battle:
+        if self.last_time_row + 400 < pygame.time.get_ticks() and self.printing:
             self.last_time_row = pygame.time.get_ticks()
             self.draw_rounds()
         
     def start_battle(self):
         self.rounds = []
         self.rounds_labels = []
-        self.displayed_rows = 0
-        self.in_battle = True
+        self.displayed_rows = -1
+        self.printing = True
         self.last_time_row = pygame.time.get_ticks()
         self.draw()
         
@@ -282,10 +282,15 @@ class Battle_ui:
             self.ingame_menu.unbind_widget(label)
         self.rounds_labels = []
         self.displayed_rows += 1
+        print(self.displayed_rows)
         
         y = self.y_max - 100
         rows_nb = len(self.rounds)-1
-        for i in range(rows_nb-min(self.displayed_rows,rows_nb),rows_nb):
+
+        if rows_nb-self.displayed_rows == 0:
+            self.printing = False
+
+        for i in range(rows_nb-min(self.displayed_rows,rows_nb),rows_nb+1):
             if y > 50 and self.rounds != []:  # évite d'afficher des textes non visibles
                 label = Label(pygame.Vector2(100, y), self.rounds[i], Default_font(20), pygame.Color(255,255,255))
                 self.rounds_labels.append(label)
