@@ -32,8 +32,8 @@ class Game:
 
         # On initialise le joueur
         self.player = Player()
-        map_properties = self.map_manager.get_map("map").properties
-        self.player.pos = pygame.Vector2(map_properties["X_spawn_coord"], map_properties["Y_spawn_coord"])
+        spawn_point = self.map_manager.get_map("map").get_object_by_name("spawnpoint_leftcorner")
+        self.player.pos = pygame.Vector2(spawn_point.x/16,spawn_point.y/16)
 
         # on teleporte la caméra au joueur pour ne pas avoir un effet de slide au démarrage
         self.camera_view.move(1, self.player.pos, False)
@@ -54,6 +54,9 @@ class Game:
 
         # On instancie et initialise le gestionnaire de combat (important)
         self.battle_manager = Battle_manager(self.battle_ui)
+        
+        exit_rect = self.map_manager.get_map("map").get_object_by_name("final_boss_and_end_gate")
+        self.exit_rect = pygame.Rect(exit_rect.x,exit_rect.y,exit_rect.width,exit_rect.height)
 
         # L'horloge permet à pygame de limiter la framerate du jeu, c'est purement graphique
         # on s'en sert aussi pour récupérer l'intervalle de temps (dt) entre deux frames,
