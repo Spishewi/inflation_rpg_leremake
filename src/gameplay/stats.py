@@ -43,7 +43,7 @@ class Stats:
         player = Entity(
             pv_max = (self.stats["pv"] + Stats.default_value["pv"])*(1 + self.equipment.level["armor"]/5*10),
             atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"]/15*10),
-            crit_luck = math.sin((1-1/((self.stats["crit_luck"] + Stats.default_value["crit_luck"])/30+1))**10)*1.25,
+            crit_luck = 1-1/math.log((self.stats["crit_luck"] + Stats.default_value["crit_luck"])+10),
             crit_multiplier = 1 + self.equipment.level["ring"] / 7,
             speed = self.stats["speed"] + self.default_value["speed"]
             )
