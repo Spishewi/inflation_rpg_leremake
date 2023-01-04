@@ -1,12 +1,14 @@
 import json
 import os
-
+from math import floor
 
 class Equipment():
     # constantes
-    max_armor_level = 4
-    max_sword_level = 14
-    max_ring_level = 14
+    max_level = {
+        "armor":4,
+        "sword":14,
+        "ring":14
+    }
 
     def __init__(self) -> None:
         # niveaux d'équipement par défaut
@@ -15,11 +17,6 @@ class Equipment():
             "armor":0,
             "sword":0,
             "ring":0
-        }
-        self.prices = {
-            "sword":[1,10,100,1000,10000,100000,1000000,10000000,100000000,1000000000,10000000000,100000000000,1000000000000,10000000000000,100000000000000],
-            "armor":[1, 100, 1500, 25000,100000],
-            "ring":[i for i in range(15)]
         }
 
     def save(self):
@@ -53,15 +50,19 @@ class Equipment():
                     self.level = v
             
     def upgrade_object(self, object_type:str):
-        price = self.prices[object_type][self.level[object_type]]
+        price = self.get_price(object_type,self.level[object_type])
         if  price <= self.money :
             self.level[object_type] += 1
             self.money -= price
             self.save()
         
-
     def __str__(self) -> str:
         return "\n".join([f"{k}: {v}" for k, v in vars(self).items()])
+
+    def get_price(self,object_type:str, nb:int):
+        return floor((20*(1+nb*(10/(Equipment.max_level[object_type]+1))))/1.1)**2/2
+
+
 
 
 if __name__ == "__main__":

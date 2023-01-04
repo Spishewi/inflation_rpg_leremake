@@ -83,7 +83,6 @@ class Battle():
     
     def player_atk_first(self):
         player_damages = self.player.attack()
-        print("a")
         self.battle_ui.add_round(True, f"You attack, the enemy loses {int(player_damages)} hp")
         self.enemy.get_attacked(player_damages)
         

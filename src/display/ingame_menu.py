@@ -285,7 +285,6 @@ class Battle_ui:
             self.ingame_menu.unbind_widget(label)
         self.rounds_labels = []
         self.displayed_rows += 1
-        print(self.displayed_rows)
         
         y = self.y_max - 100
         rows_nb = len(self.rounds)-1
