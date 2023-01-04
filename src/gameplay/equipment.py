@@ -52,7 +52,7 @@ class Equipment():
         return "\n".join([f"{k}: {v}" for k, v in vars(self).items()])
 
     def get_price(self,object_type:str, nb:int):
-        return floor((20*(1+nb*(10/(Equipment.max_level[object_type]+1))))/1.1)**2
+        return floor((20*(1+nb*(10/(Equipment.max_level[object_type]+1))))/1.1)**2/2
 
 
 
