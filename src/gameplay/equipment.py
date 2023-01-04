@@ -1,4 +1,5 @@
 import json
+import os
 
 
 class Equipment():
@@ -25,19 +26,26 @@ class Equipment():
         """
         sauvegarde l'équipement actuel dans un fichier json
         """
+
+        os.makedirs("../saves", exist_ok=True) # crée le dossier s'il n'existe pas
+        
+        # crée le fichier de sauvegarde
         with open("../saves/equipment.json", "w") as f:
             json.dump({"money": self.money, "level": self.level}, f)
+            
 
     def load(self):
         """
         charge l'equipement depuis un fichier json
         """
         try:
+            # lit le fichier de sauvegarde
             with open("../saves/equipment.json", "r") as f:
                 save = json.load(f)
         except FileNotFoundError:
             pass
         else:
+            # charge le fichier de sauvegarde
             for k, v in save.items():
                 if k == "money":
                     self.money = v
