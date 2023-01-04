@@ -58,9 +58,7 @@ class Stats:
             self.xp_needed_lvl_up = 1000 * self.lvl
             self.remaining_points += 15
 
-        self.equipment.money = self.lvl*1000 # temporaire aussi
-
-        print(self.lvl)
+        self.equipment.money = self.lvl**2
 
 
     
