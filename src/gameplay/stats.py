@@ -41,8 +41,8 @@ class Stats:
 
     def get_player_entity(self):
         player = Entity(
-            pv_max = (self.stats["pv"] + Stats.default_value["pv"])*(1 + self.equipment.level["armor"]),
-            atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"]/ 10),
+            pv_max = (self.stats["pv"] + Stats.default_value["pv"])*(1 + self.equipment.level["armor"]/5*10),
+            atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"]/15*10),
             crit_luck = 1-(math.log10(10 + self.stats["crit_luck"] + Stats.default_value["crit_luck"])),
             crit_multiplier = 1 + self.equipment.level["ring"] / 7,
             speed = self.stats["speed"] + self.default_value["speed"]

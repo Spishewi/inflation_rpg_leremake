@@ -45,7 +45,9 @@ class Ingame_menu(UI):
                 elif k == "distance":
                     self.fight_bar.update_value(v)
                 elif k == "battle_count":
-                    self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}") 
+                    self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}")
+                elif k == "level":
+                    self.level_display.update_text(f"Level : {v}")
                 
 
     def main_display(self): # affichage principal
@@ -74,6 +76,8 @@ class Ingame_menu(UI):
         self.fight_bar = Progressbar(progressbar_rect, 0, pygame.Color(85, 160, 39), pygame.Color(134, 221, 81))
         self.battle_count = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-25),
                                   "Remaining battles : 0/0", Default_font(15), pygame.Color(255, 255, 255))
+        self.level_display = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-50),
+                                  "Level : 0", Default_font(15), pygame.Color(255, 255, 255))
 
 
         # on affiche tous les éléments
@@ -81,7 +85,8 @@ class Ingame_menu(UI):
             self.fps_label,
             button_menu,
             self.fight_bar,
-            self.battle_count
+            self.battle_count,
+            self.level_display
         )
 
     def main_menu(self): # menu principal
@@ -303,6 +308,8 @@ class Battle_ui:
         self.rounds = list(args) + self.rounds
 
     def close_or_skip_battle_ui(self):
+        self.printing = False
+
         if self.displayed_rows < len(self.rounds)-1:
             self.displayed_rows = len(self.rounds)-1
             self.draw_rounds()

@@ -66,7 +66,7 @@ class Player:
     def event_handler(self, event: pygame.event): 
         """
             defini la direction du joueur en fonction des touches pressés
-        """        
+        """
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT or event.key == pygame.K_q:
                 self.direction.x -= 1
@@ -85,6 +85,20 @@ class Player:
                 self.direction.y += 1
             elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 self.direction.y -= 1
+        
+        # pour corriger des pb quand des inputs sont sauté,
+        # on réinitialise au cas où les inputs quand on touche pas au clavier
+        key_sequence = pygame.key.get_pressed()
+        if (not key_sequence[pygame.K_LEFT] and
+            not key_sequence[pygame.K_RIGHT] and
+            not key_sequence[pygame.K_UP] and
+            not key_sequence[pygame.K_DOWN] and
+            not key_sequence[pygame.K_z] and
+            not key_sequence[pygame.K_q] and 
+            not key_sequence[pygame.K_s] and
+            not key_sequence[pygame.K_d]):
+            self.reset_events()
+
 
     def reset_events(self):
         self.direction.x = 0

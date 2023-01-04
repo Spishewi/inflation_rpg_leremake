@@ -50,6 +50,7 @@ class Game:
         # On initialise le menu
         self.ui = Ingame_menu(self.window,self.equipment,self.stats)
         self.battle_ui = Battle_ui(self.ui)
+        self.ui_grab_state = False
 
         # On instancie et initialise le gestionnaire de combat (important)
         self.battle_manager = Battle_manager(self.battle_ui)
@@ -73,10 +74,14 @@ class Game:
                     running = False
                     restart = False
                 # On envoie les evenements au joueur.
-                if not self.ui.get_grab():
-                    self.player.event_handler(event)
-                else:
+                # Seulement si auun menu n'est ouvert
+                if self.ui.get_grab() != self.ui_grab_state:
                     self.player.reset_events()
+                    self.ui_grab_state = self.ui.get_grab()
+                    
+                if not self.ui_grab_state:
+                    self.player.event_handler(event)
+
                 self.ui.event_handler(event)
             
             # On récupère l'ancienne position du joueur.
@@ -106,6 +111,8 @@ class Game:
                 self.ui.update(distance=self.battle_manager.battle_chance/self.battle_manager.max_battle_chance)
             # On met a jour le compteur de combat
             self.ui.update(battle_count=(self.battle_manager.remaining_battle, self.battle_manager.number_of_battles))
+            # On met a jour l'affichage du niveau
+            self.ui.update(level=self.stats.lvl)
             self.ui.update(stats=self.stats)
             
             self.ui.update()

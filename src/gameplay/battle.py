@@ -72,8 +72,8 @@ class Battle():
         enemy_points_repartitions = random.random()/2 + 0.25
 
         self.enemy = Entity(
-            pv_max=50+(5/1000)*(enemy_points*enemy_points_repartitions)**2,
-            atk=5+(5/1000)*(enemy_points*(1-enemy_points_repartitions))**2,
+            pv_max=100+(11/2000)*(enemy_points*enemy_points_repartitions)**2,
+            atk=10+(11/2000)*(enemy_points*(1-enemy_points_repartitions))**2,
             crit_luck=random.random()/2,
             crit_multiplier=1.2,
             speed=self.enemy_level*10

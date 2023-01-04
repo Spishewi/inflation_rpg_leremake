@@ -47,11 +47,16 @@ class Label(Widget):
         
         self.text = None
         self._rendered_text = None
+        self.box = pygame.Rect(self.coords.x, self.coords.y, 0, 0)
         self.update_text(text)
 
     def update_text(self, text):
         self.text = text
         self._rendered_text = self.font.render(self.text, False, self.text_color)
+        box = self._rendered_text.get_rect()
+        self.box.width = box.width
+        self.box.height = box.height
+
 
     def draw(self, draw_surface: pygame.Surface) -> None:
         draw_surface.blit(self._rendered_text, self.coords)
