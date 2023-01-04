@@ -49,7 +49,6 @@ class Ingame_menu(UI):
                 elif k == "level":
                     self.level_display.update_text(f"Level : {v}")
                 
-
     def main_display(self): # affichage principal
         # on vide la fenêtre
         self.clear_widget()
@@ -236,7 +235,6 @@ class Ingame_menu(UI):
             )
             y += 150
 
-
     def get_stats_and_points(self): # renvoie un int et un dict {"nom_stat":valeur,...}
         return self.player_stats.remaining_points,self.player_stats.stats.copy()
 
@@ -296,16 +294,22 @@ class Battle_ui:
             self.printing = False
 
         for i in range(rows_nb-min(self.displayed_rows,rows_nb),rows_nb+1):
+            window_width, window_height = pygame.display.get_window_size()
+            #the_round = reverse(self.rounds)[i]
             if y > 50 and self.rounds != []:  # évite d'afficher des textes non visibles
-                label = Label(pygame.Vector2(100, y), self.rounds[i], Default_font(20), pygame.Color(255,255,255))
+                if self.rounds[i]["is_player"] == True:
+                    label = Label(pygame.Vector2(100, y), self.rounds[i]["message"], Default_font(20), pygame.Color(127,255,127))
+                else:
+                    label = Label(pygame.Vector2(100, y), self.rounds[i]["message"], Default_font(20), pygame.Color(255,127,127))
+                    label.coords.x = window_width - label.box.width - 100
                 self.rounds_labels.append(label)
                 self.ingame_menu.bind_widget(label)
                 y -= 50
             else:
                 return
     
-    def add_round(self, *args:str):
-        self.rounds = list(args) + self.rounds
+    def add_round(self, is_player: bool, message: str):
+        self.rounds.insert(0, {"is_player": is_player, "message": message})
 
     def close_or_skip_battle_ui(self):
         self.printing = False
