@@ -7,7 +7,7 @@ from utils import int_to_str
 
 import pygame
 class Title_screen_menu(UI):
-    def __init__(self, draw_surface: pygame.Surface, player_equipment:Equipment) -> None:
+    def __init__(self, draw_surface: pygame.Surface, player_equipment:Equipment, first_game:bool) -> None:
         super().__init__(draw_surface)
         self.set_background_color(pygame.Color(50,40,20))
         self.draw_surface = draw_surface
@@ -22,7 +22,10 @@ class Title_screen_menu(UI):
         self.upgrade_buttons = {}
         
         self.equipment = player_equipment
-        self.play_menu()
+        if first_game:
+            self.play_menu()
+        else:
+            self.equipment_menu()
         
         
     def play_menu(self):
