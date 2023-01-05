@@ -253,6 +253,7 @@ class Battle_ui:
 
         self.last_time_row = 0
         self.printing = False 
+        self.battle_ui_opened = False
 
     def update(self):
         if self.last_time_row + 400 < pygame.time.get_ticks() and self.printing:
@@ -264,6 +265,7 @@ class Battle_ui:
         self.rounds_labels = []
         self.displayed_rows = -1
         self.printing = True
+        self.battle_ui_opened = True
         self.last_time_row = pygame.time.get_ticks()
         self.draw()
         
@@ -319,11 +321,8 @@ class Battle_ui:
             self.displayed_rows = len(self.rounds)-1
             self.draw_rounds()
         else:
-            self.battle_end()
+            self.battle_ui_opened = False
             self.ingame_menu.main_display()
-        
-    def battle_end(self):
-        self.in_battle = False
 
 class Close_button(Button):
     def __init__(self, draw_surface: pygame.Surface, main_menu):

@@ -98,7 +98,7 @@ class Game:
             # On met a jour le gestionnaire de combat
             self.battle_manager.handle_player_movement(player_relative_movement)
             restart = self.battle_manager.handle_battle(self.player.pos, self.map_manager, self.stats)
-            if restart:
+            if restart and not self.battle_ui.battle_ui_opened:
                 running = False
 
             # On déplace la caméra sur le joueur

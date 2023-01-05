@@ -21,5 +21,6 @@ if __name__ == '__main__':
         if title_screen_launch_game and running:
             game = Game(window)
             game_launch_title_screen = game.run()
+            print("FIN DU JEU")
         else:
             running = False

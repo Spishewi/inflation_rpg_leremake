@@ -179,9 +179,10 @@ class Battle_manager():
             if round_result.status != Round_result.NOT_COMPLETED:
                 print(round_result.status)
                 self.current_battle = None
-                if self.remaining_battle <= 0:
-                    print("FIN DU JEU")
-                    return True
+                
+        if self.remaining_battle <= 0:
+            return True
+                
         return False
 
             

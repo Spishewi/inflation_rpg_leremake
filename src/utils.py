@@ -117,6 +117,7 @@ def int_to_str(nb:int)->str:
             return int(number*10)/10
         return int(number*100)/100
     
+    
     unities = ["","k","m","b","t","q","Q","s","S","o","n"]
     for unity in unities:
         if nb < 1000:
