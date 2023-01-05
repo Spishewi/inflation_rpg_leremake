@@ -110,10 +110,17 @@ class DynamicImage:
     
     
 def int_to_str(nb:int)->str:
-    unities = ["","k","m","b","t","q","Q","s","S","o","n","d"]
+    def only_three_digits(number):
+        if number >= 100:
+            return int(number)
+        if number >= 10:
+            return int(number*10)/10
+        return int(number*100)/100
+    
+    unities = ["","k","m","b","t","q","Q","s","S","o","n"]
     for unity in unities:
         if nb < 1000:
-            return str(nb)+unity
-        nb = nb//1000
+            return str(only_three_digits(nb))+unity
+        nb = nb/1000
     
-    return str(nb*1000)+"d"
+    return str(only_three_digits(nb))+"d"

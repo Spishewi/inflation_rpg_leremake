@@ -241,7 +241,7 @@ class Ingame_menu(UI):
         return self.player_stats.remaining_points,self.player_stats.stats.copy()
 
     def set_stats_and_points(self,points:int,stats:dict) -> None:
-        self.main_menu()
+        self.main_display()
         self.player_stats.remaining_points = points
         self.player_stats.stats = stats
         
