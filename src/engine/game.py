@@ -48,7 +48,7 @@ class Game:
         self.stats = Stats(self.equipment)
         
         # On initialise le menu
-        self.ui = Ingame_menu(self.window,self.equipment,self.stats)
+        self.ui = Ingame_menu(self.window,self)
         self.battle_ui = Battle_ui(self.ui)
         self.ui_grab_state = False
 
@@ -57,6 +57,8 @@ class Game:
         
         exit_rect = self.map_manager.get_map("map").get_object_by_name("final_boss_and_end_gate")
         self.exit_rect = pygame.Rect(exit_rect.x,exit_rect.y,exit_rect.width,exit_rect.height)
+        
+        self.restart = False
 
         # L'horloge permet à pygame de limiter la framerate du jeu, c'est purement graphique
         # on s'en sert aussi pour récupérer l'intervalle de temps (dt) entre deux frames,
@@ -66,7 +68,8 @@ class Game:
     def run(self) -> None:
         # variable permettant de faire fonctionner la boucle de jeu.
         running = True
-        restart = True
+        self.restart = False
+        restart = False
         # Initialisation des variables...
         dt = self.clock.tick(60) / 1000
         while running:
@@ -98,7 +101,7 @@ class Game:
             # On met a jour le gestionnaire de combat
             self.battle_manager.handle_player_movement(player_relative_movement)
             restart = self.battle_manager.handle_battle(self.player.pos, self.map_manager, self.stats)
-            if restart and not self.battle_ui.battle_ui_opened:
+            if (restart and not self.battle_ui.battle_ui_opened) or self.restart:
                 running = False
 
             # On déplace la caméra sur le joueur
@@ -133,4 +136,4 @@ class Game:
             # On met à jour l'image à l'écran suivant tout ce qu'on à calculé depuis la dernière frame.
             pygame.display.update()
         self.equipment.save()
-        return restart
+        return self.restart or restart
