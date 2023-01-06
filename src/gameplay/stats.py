@@ -50,7 +50,7 @@ class Stats:
         return player
 
     def handle_win(self, enemy_level: int):
-        self.xp += enemy_level*2000 # équation à vérifier
+        self.xp += enemy_level * (enemy_level/self.lvl) *2000 # équation à vérifier
 
         while self.xp >= self.xp_needed_lvl_up:
             self.lvl += 1
