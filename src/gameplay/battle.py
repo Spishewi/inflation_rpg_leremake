@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 import random
 import pygame
+from utils import int_to_str
 
 #from display.ingame_menu import Ingame_menu
 # Import seulement pour les type-hint (opti)
@@ -83,24 +84,24 @@ class Battle():
     
     def player_atk_first(self):
         player_damages = self.player.attack()
-        self.battle_ui.add_round(True, f"You attack, the enemy loses {int(player_damages)} hp")
+        self.battle_ui.add_round(True, f"You attack, the enemy loses {int_to_str(player_damages)} hp")
         self.enemy.get_attacked(player_damages)
         
         if self.enemy.isalive():
             enemy_damages = self.enemy.attack()
             self.player.get_attacked(enemy_damages)
-            self.battle_ui.add_round(False, f"The enemy attacks, you lose {int(enemy_damages)} hp")
+            self.battle_ui.add_round(False, f"The enemy attacks, you lose {int_to_str(enemy_damages)} hp")
 
     def enemy_atk_first(self):
         # on fait attaquer l'ennemi en premier
         enemy_damages = self.enemy.attack()
         self.player.get_attacked(enemy_damages)
-        self.battle_ui.add_round(False, f"The enemy attacks, you lose {int(enemy_damages)} hp")
+        self.battle_ui.add_round(False, f"The enemy attacks, you lose {int_to_str(enemy_damages)} hp")
         
         if self.player.isalive():
             player_damages = self.player.attack()
             self.enemy.get_attacked(player_damages)
-            self.battle_ui.add_round(True, f"You attack, the enemy loses {int(player_damages)} hp")
+            self.battle_ui.add_round(True, f"You attack, the enemy loses {int_to_str(player_damages)} hp")
 
     def process_round(self):
         # on défini qui attaque en premier, et on fait attaquer.
@@ -128,6 +129,7 @@ class Battle_manager():
         self.remaining_battle = Battle_manager.number_of_battles
 
         self.current_battle = None
+        self.round_result = None
         
         self.battle_ui = battle_ui
         
@@ -178,6 +180,7 @@ class Battle_manager():
                 
             if round_result.status != Round_result.NOT_COMPLETED:
                 print(round_result.status)
+                self.round_result = round_result.status
                 self.current_battle = None
                 
         if self.remaining_battle <= 0:

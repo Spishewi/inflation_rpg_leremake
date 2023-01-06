@@ -34,7 +34,6 @@ class Ingame_menu(UI):
         
         # on récupère le jeu pour avoir les infos voulues
         self.game = game
-        print(game)
         
         # on stock les objets equipment et stats liés au joueur
         self.player_equipment = self.game.equipment

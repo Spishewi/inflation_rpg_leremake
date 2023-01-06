@@ -96,6 +96,8 @@ class Title_screen_menu(UI):
                 upgrade_button
             )
             x += 350
+
+        self.update_equipment_widgets()
         
     def upgrade_object(self,object_type):
         self.equipment.upgrade_object(object_type)

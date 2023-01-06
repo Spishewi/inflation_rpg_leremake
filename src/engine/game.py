@@ -10,6 +10,7 @@ from display.ingame_menu import Ingame_menu,Battle_ui # la gestion du GUI
 from gameplay.battle import Battle_manager # la gestion des combats
 from gameplay.equipment import Equipment # la gestion de l'equipement
 from gameplay.stats import Stats # La gestion des stats + argent + level ect...
+from utils import Hitbox
 
 class Game:
     """
@@ -56,7 +57,7 @@ class Game:
         self.battle_manager = Battle_manager(self.battle_ui)
         
         exit_rect = self.map_manager.get_map("map").get_object_by_name("final_boss_and_end_gate")
-        self.exit_rect = pygame.Rect(exit_rect.x,exit_rect.y,exit_rect.width,exit_rect.height)
+        self.exit_rect = Hitbox(exit_rect.x/16,exit_rect.y/16,exit_rect.width/16,exit_rect.height/16)
         
         self.restart = False
 
@@ -70,6 +71,7 @@ class Game:
         running = True
         self.restart = False
         restart = False
+        last_battle = False
         # Initialisation des variables...
         dt = self.clock.tick(60) / 1000
         while running:
@@ -82,11 +84,12 @@ class Game:
                 # On envoie les evenements au joueur.
                 # Seulement si auun menu n'est ouvert
                 if self.ui.get_grab() != self.ui_grab_state:
-                    self.player.reset_events()
                     self.ui_grab_state = self.ui.get_grab()
                     
                 if not self.ui_grab_state:
                     self.player.event_handler(event)
+                else :
+                    self.player.reset_events()
 
                 self.ui.event_handler(event)
             
@@ -124,6 +127,22 @@ class Game:
             self.ui.update()
             self.battle_ui.update()
             self.ui.draw()
+
+            # on regarde si on doit lancer le combat de boss
+            if self.exit_rect.overlap2(self.player.get_hitbox()) and not last_battle:
+                self.battle_manager.must_trigger_battle = True
+                last_battle = True
+
+            if last_battle:
+                if self.battle_manager.round_result == "win":
+                    print("YOU WIN")
+                    restart = False
+                    running = False
+                elif self.battle_manager.round_result == "lost":
+                    last_battle = False
+                    self.player.pos.y = self.player.pos.y +2
+
+
         
             # On récupère le dt de la frame (temps entre deux frames)
             # Cet variable permet de calculer tout déplacement et evenement suivant le temps et non suivant la vitesse du jeu

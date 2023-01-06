@@ -21,26 +21,6 @@ class Hitbox:
         """
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
-    def collide(self, hitbox: Hitbox) -> bool:
-        """
-        retourne True si les hitbox se touche ou overlap.
-        """
-        if not (self.x <= hitbox.x <= self.x + self.width or hitbox.x <= self.x <= hitbox.x + hitbox.width):
-            return False
-        if not (self.y <= hitbox.y <= self.y + self.height or hitbox.y <= self.y <= hitbox.y + hitbox.height):
-            return False
-        return True
-
-    def overlap(self, hitbox: Hitbox) -> bool:
-        """
-        retourne True si les hitbox overlap, mais False s'y elles se touchent juste.
-        """
-        if not (self.x < hitbox.x < self.x + self.width or hitbox.x < self.x < hitbox.x + hitbox.width):
-            return False
-        if not (self.y < hitbox.y < self.y + self.height or hitbox.y < self.y < hitbox.y + hitbox.height):
-            return False
-        return True
-
     def overlap2(self, hitbox: Hitbox) -> bool:
         if self.x + self.width <= hitbox.x or hitbox.x + hitbox.width <= self.x :
             return False
