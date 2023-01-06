@@ -101,6 +101,8 @@ class Player:
 
 
     def reset_events(self):
-        pygame.event.clear()
+        pygame.event.clear(pygame.KEYDOWN)
+        pygame.event.clear(pygame.KEYUP)
+        
         self.direction.x = 0
         self.direction.y = 0

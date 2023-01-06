@@ -49,7 +49,7 @@ class Game:
         self.stats = Stats(self.equipment)
         
         # On initialise le menu
-        self.ui = Ingame_menu(self.window,self.equipment,self.stats)
+        self.ui = Ingame_menu(self.window,self)
         self.battle_ui = Battle_ui(self.ui)
         self.ui_grab_state = False
 
@@ -57,7 +57,9 @@ class Game:
         self.battle_manager = Battle_manager(self.battle_ui)
         
         exit_rect = self.map_manager.get_map("map").get_object_by_name("final_boss_and_end_gate")
-        self.exit_rect = Hitbox(exit_rect.x, exit_rect.y, exit_rect.width, exit_rect.height)
+        self.exit_rect = Hitbox(exit_rect.x/16,exit_rect.y/16,exit_rect.width/16,exit_rect.height/16)
+        
+        self.restart = False
 
         # L'horloge permet à pygame de limiter la framerate du jeu, c'est purement graphique
         # on s'en sert aussi pour récupérer l'intervalle de temps (dt) entre deux frames,
@@ -67,7 +69,9 @@ class Game:
     def run(self) -> None:
         # variable permettant de faire fonctionner la boucle de jeu.
         running = True
-        restart = True
+        self.restart = False
+        restart = False
+        last_battle = False
         # Initialisation des variables...
         dt = self.clock.tick(60) / 1000
         while running:
@@ -80,11 +84,12 @@ class Game:
                 # On envoie les evenements au joueur.
                 # Seulement si auun menu n'est ouvert
                 if self.ui.get_grab() != self.ui_grab_state:
-                    self.player.reset_events()
                     self.ui_grab_state = self.ui.get_grab()
                     
                 if not self.ui_grab_state:
                     self.player.event_handler(event)
+                else :
+                    self.player.reset_events()
 
                 self.ui.event_handler(event)
             
@@ -99,7 +104,7 @@ class Game:
             # On met a jour le gestionnaire de combat
             self.battle_manager.handle_player_movement(player_relative_movement)
             restart = self.battle_manager.handle_battle(self.player.pos, self.map_manager, self.stats)
-            if restart:
+            if (restart and not self.battle_ui.battle_ui_opened) or self.restart:
                 running = False
 
             # On déplace la caméra sur le joueur
@@ -122,6 +127,22 @@ class Game:
             self.ui.update()
             self.battle_ui.update()
             self.ui.draw()
+
+            # on regarde si on doit lancer le combat de boss
+            if self.exit_rect.overlap2(self.player.get_hitbox()) and not last_battle:
+                self.battle_manager.must_trigger_battle = True
+                last_battle = True
+
+            if last_battle:
+                if self.battle_manager.round_result == "win":
+                    print("YOU WIN")
+                    restart = False
+                    running = False
+                elif self.battle_manager.round_result == "lost":
+                    last_battle = False
+                    self.player.pos.y = self.player.pos.y +2
+
+
         
             # On récupère le dt de la frame (temps entre deux frames)
             # Cet variable permet de calculer tout déplacement et evenement suivant le temps et non suivant la vitesse du jeu
@@ -134,4 +155,4 @@ class Game:
             # On met à jour l'image à l'écran suivant tout ce qu'on à calculé depuis la dernière frame.
             pygame.display.update()
         self.equipment.save()
-        return restart
+        return self.restart or restart

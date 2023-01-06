@@ -5,13 +5,13 @@ import pygame
 from gameplay.equipment import Equipment
 
 class Title_screen():
-    def __init__(self, window: pygame.Surface) -> None:
+    def __init__(self, window: pygame.Surface, first_game:bool) -> None:
         # On charge l'équipment du joueur
         self.equipment = Equipment()
         self.equipment.load()
         
         # On initialise l'affichage
-        self.ui = Title_screen_menu(window,self.equipment)
+        self.ui = Title_screen_menu(window,self.equipment, first_game)
 
         self.clock = pygame.time.Clock()
     

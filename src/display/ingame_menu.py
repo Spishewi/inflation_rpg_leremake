@@ -1,11 +1,18 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
 
 from display.ui import UI, Label, Button, Progressbar, Default_font, Image
 import pygame
 from display.graphics import Objects_picture
 from utils import int_to_str
-from gameplay.equipment import Equipment
 from gameplay.stats import Stats
+
+# Import seulement pour les type-hint (opti)
+if TYPE_CHECKING:
+    from gameplay.equipment import Equipment
+    from engine.game import Game
+    
 
 class Ingame_menu(UI):
     # cette classe gère tous les menus du jeu durant une partie
@@ -17,7 +24,7 @@ class Ingame_menu(UI):
         "crit_luck":"Crit Luck"
     }
         
-    def __init__(self, draw_surface:pygame.Surface, equipment:Equipment, stats:Stats):
+    def __init__(self, draw_surface:pygame.Surface, game:Game):
         # on initialise la classe parent : UI
         super().__init__(draw_surface)
 
@@ -25,9 +32,12 @@ class Ingame_menu(UI):
         self.draw_surface = draw_surface
         self.objects_images = Objects_picture("../graphics/weapons_and_armors")
         
+        # on récupère le jeu pour avoir les infos voulues
+        self.game = game
+        
         # on stock les objets equipment et stats liés au joueur
-        self.player_equipment = equipment
-        self.player_stats = stats
+        self.player_equipment = self.game.equipment
+        self.player_stats = self.game.stats
         
         # on créé l'affichage principal : fps, nombre de combats restants, bouton menu,...
         self.main_display()
@@ -101,14 +111,19 @@ class Ingame_menu(UI):
         previous_button = Previous_button(self.draw_surface, self.main_display)
         close_button = Close_button(self.draw_surface, self.main_display)
 
-        stats_button_rect = pygame.Rect(0, 200, 130, 40)
+        stats_button_rect = pygame.Rect(0, 170, 130, 40)
         stats_button_rect.x = self.draw_surface.get_width()/2 - stats_button_rect.width/2
         stats_button = Button(stats_button_rect, "Stats", Default_font(20), callback=self.stats_menu, text_color=pygame.Color(
             255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
 
-        equipment_button_rect = pygame.Rect(0, 300, 200, 40)
+        equipment_button_rect = pygame.Rect(0, 270, 200, 40)
         equipment_button_rect.x = self.draw_surface.get_width()/2 - equipment_button_rect.width/2
         equipment_button = Button(equipment_button_rect, "Equipment", Default_font(20), callback=self.equipment_menu, text_color=pygame.Color(
+            255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
+        
+        play_menu_button_rect = pygame.Rect(0, 470, 100, 40)
+        play_menu_button_rect.x = self.draw_surface.get_width()/2 - play_menu_button_rect.width/2
+        play_menu_button = Button(play_menu_button_rect, "Quit", Default_font(20), callback=self.quit, text_color=pygame.Color(
             255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color=pygame.Color(70, 70, 70))
 
         menu_label = Label(pygame.Vector2(40, 40), "MENU", Default_font(30), pygame.Color(255, 255, 255))
@@ -118,7 +133,8 @@ class Ingame_menu(UI):
             stats_button,
             equipment_button,
             close_button,
-            previous_button
+            previous_button,
+            play_menu_button
         )
 
     def stats_menu(self): # menu stats, permet de voir ses stats et d'attribuer ses points
@@ -241,9 +257,13 @@ class Ingame_menu(UI):
         return self.player_stats.remaining_points,self.player_stats.stats.copy()
 
     def set_stats_and_points(self,points:int,stats:dict) -> None:
-        self.main_menu()
+        self.main_display()
         self.player_stats.remaining_points = points
         self.player_stats.stats = stats
+        
+    def quit(self):
+        self.game.restart = True
+        self.game.running = False
         
 class Battle_ui:
     def __init__(self, ingame_menu:Ingame_menu):
@@ -253,6 +273,7 @@ class Battle_ui:
 
         self.last_time_row = 0
         self.printing = False 
+        self.battle_ui_opened = False
 
     def update(self):
         if self.last_time_row + 400 < pygame.time.get_ticks() and self.printing:
@@ -264,6 +285,7 @@ class Battle_ui:
         self.rounds_labels = []
         self.displayed_rows = -1
         self.printing = True
+        self.battle_ui_opened = True
         self.last_time_row = pygame.time.get_ticks()
         self.draw()
         
@@ -319,11 +341,8 @@ class Battle_ui:
             self.displayed_rows = len(self.rounds)-1
             self.draw_rounds()
         else:
-            self.battle_end()
+            self.battle_ui_opened = False
             self.ingame_menu.main_display()
-        
-    def battle_end(self):
-        self.in_battle = False
 
 class Close_button(Button):
     def __init__(self, draw_surface: pygame.Surface, main_menu):

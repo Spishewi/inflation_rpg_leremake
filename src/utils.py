@@ -21,26 +21,6 @@ class Hitbox:
         """
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
-    def collide(self, hitbox: Hitbox) -> bool:
-        """
-        retourne True si les hitbox se touche ou overlap.
-        """
-        if not (self.x <= hitbox.x <= self.x + self.width or hitbox.x <= self.x <= hitbox.x + hitbox.width):
-            return False
-        if not (self.y <= hitbox.y <= self.y + self.height or hitbox.y <= self.y <= hitbox.y + hitbox.height):
-            return False
-        return True
-
-    def overlap(self, hitbox: Hitbox) -> bool:
-        """
-        retourne True si les hitbox overlap, mais False s'y elles se touchent juste.
-        """
-        if not (self.x < hitbox.x < self.x + self.width or hitbox.x < self.x < hitbox.x + hitbox.width):
-            return False
-        if not (self.y < hitbox.y < self.y + self.height or hitbox.y < self.y < hitbox.y + hitbox.height):
-            return False
-        return True
-
     def overlap2(self, hitbox: Hitbox) -> bool:
         if self.x + self.width <= hitbox.x or hitbox.x + hitbox.width <= self.x :
             return False
@@ -110,10 +90,18 @@ class DynamicImage:
     
     
 def int_to_str(nb:int)->str:
-    unities = ["","k","m","b","t","q","Q","s","S","o","n","d"]
+    def only_three_digits(number):
+        if number >= 100:
+            return int(number)
+        if number >= 10:
+            return int(number*10)/10
+        return int(number*100)/100
+    
+    
+    unities = ["","k","m","b","t","q","Q","s","S","o","n"]
     for unity in unities:
         if nb < 1000:
-            return str(nb)+unity
-        nb = nb//1000
+            return str(only_three_digits(nb))+unity
+        nb = nb/1000
     
-    return str(nb*1000)+"d"
+    return str(only_three_digits(nb))+"d"
