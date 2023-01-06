@@ -10,6 +10,7 @@ from display.ingame_menu import Ingame_menu,Battle_ui # la gestion du GUI
 from gameplay.battle import Battle_manager # la gestion des combats
 from gameplay.equipment import Equipment # la gestion de l'equipement
 from gameplay.stats import Stats # La gestion des stats + argent + level ect...
+from utils import Hitbox # les hitbox pour detecter la zone de fin
 
 class Game:
     """
@@ -56,7 +57,7 @@ class Game:
         self.battle_manager = Battle_manager(self.battle_ui)
         
         exit_rect = self.map_manager.get_map("map").get_object_by_name("final_boss_and_end_gate")
-        self.exit_rect = pygame.Rect(exit_rect.x,exit_rect.y,exit_rect.width,exit_rect.height)
+        self.exit_rect = Hitbox(exit_rect.x, exit_rect.y, exit_rect.width, exit_rect.height)
 
         # L'horloge permet à pygame de limiter la framerate du jeu, c'est purement graphique
         # on s'en sert aussi pour récupérer l'intervalle de temps (dt) entre deux frames,

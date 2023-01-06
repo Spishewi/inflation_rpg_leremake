@@ -76,7 +76,7 @@ class Battle():
             atk=10+(11/2000)*(enemy_points*(1-enemy_points_repartitions))**2,
             crit_luck=random.random()/2,
             crit_multiplier=1.2,
-            speed=self.enemy_level*10
+            speed=100+self.enemy_level * 2
             )
         # on stock l'interface de bataille pour y afficher les informations
         self.battle_ui = battle_ui
@@ -121,7 +121,7 @@ class Battle_manager():
     def __init__(self, battle_ui:Battle_ui) -> None:
 
         self.battle_chance = 0
-        self.max_battle_chance =  25 # 100 TODO
+        self.max_battle_chance =  50
         self.must_trigger_battle = False
         self.last_try_to_trigger_battle = pygame.time.get_ticks()
 
