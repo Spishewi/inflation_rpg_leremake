@@ -49,18 +49,47 @@ class Ingame_menu(UI):
         if len(kwargs) == 0:
             super().update()
         else:
-            # On met a jour les arguments
+            # On regarde ce qu'il faut update
             for k, v in kwargs.items():
+                # on s'occupe des fps
                 if k == "fps":
                     self.fps_label.update_text(f"fps: {v:.2f}")
-
+                # on s'occupe de la fightbar
                 elif k == "distance":
                     self.fight_bar.update_value(v)
+                # On s'occupe du battle count
                 elif k == "battle_count":
                     self.battle_count.update_text(f"Remaining battles : {v[0]}/{v[1]}")
+                # On s'occupe du level display
                 elif k == "level":
                     self.level_display.update_text(f"Level : {v}")
+                # On s'occupe de l'update de l'affichage des stats
+                elif k == "stats":
+                    self.hp_display.update_text(f"Health:{int_to_str(v._pv_max).rjust(6)}") # oui on a mis pv dans le code au lieu de hp
+                    self.atk_display.update_text(f"Attack:{int_to_str(v._atk).rjust(6)}")
+                    self.crit_multiplier_display.update_text(f"Crit multiplier:{int_to_str(v._crit_multiplier).rjust(6)}")
+                    self.crit_luck_display.update_text(f"Crit luck:{int_to_str(v._crit_luck).rjust(6)}")
+                    self.agility_display.update_text(f"Agility:{int_to_str(v.speed).rjust(6)}")
+                    self.stats_display_update_positions()
                 
+    def stats_display_update_positions(self):
+        """
+            On met a jour les positions des stats (car suivant leurs longueur ça peut changer)
+        """
+        stats_display_list = [
+            self.hp_display,
+            self.atk_display,
+            self.crit_multiplier_display,
+            self.crit_luck_display,
+            self.agility_display
+        ]
+
+        window_width, window_height = pygame.display.get_window_size()
+        for i, label in enumerate(reversed(stats_display_list)):
+            label.coords.x = window_width - label.box.width - 10
+            label.coords.y = window_height - (50 + i*(label.box.height + 10))
+
+
     def main_display(self): # affichage principal
         # on vide la fenêtre
         self.clear_widget()
@@ -85,19 +114,45 @@ class Ingame_menu(UI):
         progressbar_rect.height = 15
 
         self.fight_bar = Progressbar(progressbar_rect, 0, pygame.Color(85, 160, 39), pygame.Color(134, 221, 81))
-        self.battle_count = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-25),
-                                  "Remaining battles : 0/0", Default_font(15), pygame.Color(255, 255, 255))
-        self.level_display = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-50),
-                                  "Level : 0", Default_font(15), pygame.Color(255, 255, 255))
 
+        # on défini des par paramètres par défaut pour pas avoir à les réécrire
+        stats_display_params = {
+            "font": Default_font(15),
+            "text_color": pygame.Color(255, 255, 255),
+            "text": ""
+        }
+
+        self.battle_count = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-25), **stats_display_params)
+        self.level_display = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-50), **stats_display_params)
+
+        # on défini des par paramètres par défaut pour pas avoir à les réécrire
+        stats_display_params = {
+            "font": Default_font(15),
+            "text_color": pygame.Color(255, 255, 255, 127),
+            "text": ""
+        }
+
+        self.hp_display = Label(pygame.Vector2(), **stats_display_params)
+        self.atk_display = Label(pygame.Vector2(), **stats_display_params)
+        self.crit_multiplier_display = Label(pygame.Vector2(), **stats_display_params)
+        self.crit_luck_display = Label(pygame.Vector2(), **stats_display_params)
+        self.agility_display = Label(pygame.Vector2(), **stats_display_params)
 
         # on affiche tous les éléments
         self.bind_several_widget(
             self.fps_label,
             button_menu,
+
             self.fight_bar,
             self.battle_count,
-            self.level_display
+
+            self.level_display,
+
+            self.hp_display,
+            self.atk_display,
+            self.crit_multiplier_display,
+            self.crit_luck_display,
+            self.agility_display
         )
 
     def main_menu(self): # menu principal
@@ -321,7 +376,7 @@ class Battle_ui:
 
         for i in range(rows_nb-min(self.displayed_rows,rows_nb),rows_nb+1):
             window_width, window_height = pygame.display.get_window_size()
-            #the_round = reverse(self.rounds)[i]
+            
             if y > 50 and self.rounds != []:  # évite d'afficher des textes non visibles
                 if self.rounds[i]["is_player"] == True:
                     label = Label(pygame.Vector2(100, y), self.rounds[i]["message"], Default_font(20), pygame.Color(127,255,127))
@@ -366,6 +421,8 @@ class End_menu:
             credit_label
         )
 
+
+# des widgets custom souvent utilisé dans l'interface
 class Close_button(Button):
     def __init__(self, draw_surface: pygame.Surface, main_menu):
         self.rect = pygame.Rect(0, 20, 40, 40)

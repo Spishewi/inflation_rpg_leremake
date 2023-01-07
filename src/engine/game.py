@@ -68,7 +68,6 @@ class Game:
         self.clock = pygame.time.Clock()
         
     def run(self) -> None:
-        self.end_menu.start()
         # variable permettant de faire fonctionner la boucle de jeu.
         running = True
         self.restart = False
@@ -126,7 +125,8 @@ class Game:
             self.ui.update(battle_count=(self.battle_manager.remaining_battle, self.battle_manager.number_of_battles))
             # On met a jour l'affichage du niveau
             self.ui.update(level=self.stats.lvl)
-            self.ui.update(stats=self.stats)
+            self.ui.update(stats=self.stats.get_player_entity())
+            
             # On met à jour les widget en général
             self.ui.update()
             # Si l'affichage de combat est ouvert cette fonction va afficher une nouvelle ligne toutes les 400 ms
