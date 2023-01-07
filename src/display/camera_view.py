@@ -9,6 +9,7 @@ import math  # calculs divers
 # Import seulement pour les type-hint (opti)
 if TYPE_CHECKING:
     from engine.map_manager import MapManager  # La gestion de la map
+    from engine.player import Player
 
 
 class CameraView:
@@ -48,7 +49,7 @@ class CameraView:
             # on récupère un bon facteur
             self.factor = round(factor*16)/16
 
-    def draw(self, draw_surface: pygame.Surface, player) -> None:
+    def draw(self, draw_surface: pygame.Surface, player:Player) -> None:
         """
         permet d'afficher / de dessiner la map
         """

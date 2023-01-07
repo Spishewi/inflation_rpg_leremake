@@ -6,7 +6,7 @@ import pygame # affichage
 from engine.map_manager import MapManager # La gestion de la map
 from display.camera_view import CameraView # la gestion de la caméra
 from engine.player import Player # la gestion du joueur
-from display.ingame_menu import Ingame_menu,Battle_ui # la gestion du GUI
+from display.ingame_menu import Ingame_menu, Battle_ui, End_menu # la gestion du GUI
 from gameplay.battle import Battle_manager # la gestion des combats
 from gameplay.equipment import Equipment # la gestion de l'equipement
 from gameplay.stats import Stats # La gestion des stats + argent + level ect...
@@ -51,6 +51,7 @@ class Game:
         # On initialise le menu
         self.ui = Ingame_menu(self.window,self)
         self.battle_ui = Battle_ui(self.ui)
+        self.end_menu = End_menu(self.ui)
         self.ui_grab_state = False
 
         # On instancie et initialise le gestionnaire de combat (important)
@@ -67,6 +68,7 @@ class Game:
         self.clock = pygame.time.Clock()
         
     def run(self) -> None:
+        self.end_menu.start()
         # variable permettant de faire fonctionner la boucle de jeu.
         running = True
         self.restart = False
@@ -82,8 +84,9 @@ class Game:
                     running = False
                     restart = False
                 # On envoie les evenements au joueur.
-                # Seulement si auun menu n'est ouvert
+                # Seulement si aucun menu n'est ouvert
                 if self.ui.get_grab() != self.ui_grab_state:
+                    self.player.reset_events()
                     self.ui_grab_state = self.ui.get_grab()
                     
                 if not self.ui_grab_state:
@@ -95,8 +98,9 @@ class Game:
             
             # On récupère l'ancienne position du joueur.
             old_player_pos = self.player.pos.copy()
-            # On met a jour la poisition du joueur (suivant les evenements effectués plus haut)
-            self.player.move(self.map_manager, dt)
+            if not self.ui.get_grab():
+                # On met a jour la poisition du joueur (suivant les evenements effectués plus haut)
+                self.player.move(self.map_manager, dt)
             # On récupère sa nouvelle position après déplacement
             new_player_pos = self.player.pos.copy()
             # On calcul le déplacement relatif du joueur 
@@ -123,25 +127,29 @@ class Game:
             # On met a jour l'affichage du niveau
             self.ui.update(level=self.stats.lvl)
             self.ui.update(stats=self.stats)
-            
+            # On met à jour les widget en général
             self.ui.update()
+            # Si l'affichage de combat est ouvert cette fonction va afficher une nouvelle ligne toutes les 400 ms
             self.battle_ui.update()
+            # On affiche tous les widgets et toutes les modifications faites précédemment
             self.ui.draw()
 
-            # on regarde si on doit lancer le combat de boss
-            if self.exit_rect.overlap2(self.player.get_hitbox()) and not last_battle:
+            # On regarde si on doit lancer le combat de boss
+            if self.exit_rect.overlap2(self.player.get_hitbox()) and not last_battle: # si le joueur est proche de la porte de sortie 
                 self.battle_manager.must_trigger_battle = True
                 last_battle = True
 
             if last_battle:
-                if self.battle_manager.round_result == "win":
+                if self.battle_manager.round_result == "win" and not self.battle_ui.battle_ui_opened:
                     print("YOU WIN")
-                    restart = False
-                    running = False
+                    self.end_menu.start()
+                    if not self.end_menu.opened:
+                        restart = False
+                        running = True
                 elif self.battle_manager.round_result == "lost":
                     last_battle = False
+                    # On écarte le joueur de la porte pour éviter de relancer un combat
                     self.player.pos.y = self.player.pos.y +2
-
 
         
             # On récupère le dt de la frame (temps entre deux frames)

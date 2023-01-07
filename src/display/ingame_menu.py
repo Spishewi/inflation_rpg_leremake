@@ -280,16 +280,16 @@ class Battle_ui:
             self.last_time_row = pygame.time.get_ticks()
             self.draw_rounds()
         
-    def start_battle(self):
+    def start_battle(self, last_battle=False):
         self.rounds = []
         self.rounds_labels = []
         self.displayed_rows = -1
         self.printing = True
         self.battle_ui_opened = True
         self.last_time_row = pygame.time.get_ticks()
-        self.draw()
+        self.draw(last_battle)
         
-    def draw(self):
+    def draw(self, last_battle=False):
         self.ingame_menu.clear_widget()
         self.ingame_menu.set_background_color(pygame.Color(20, 20, 20, 150))
         self.ingame_menu.set_grab(True)
@@ -298,6 +298,9 @@ class Battle_ui:
             0, 0, 0, 0), color=pygame.Color(0, 0, 0, 0),  hover_color=pygame.Color(0, 0, 0, 0))
         battle_label = Label(pygame.Vector2(40, 40), "BATTLE", Default_font(30), pygame.Color(255, 255, 255))
         
+        if last_battle:
+            self.ingame_menu.set_background_color(pygame.Color(50,40,20))
+            battle_label.update_text("BOSS BATTLE")
         
         self.ingame_menu.bind_several_widget(
             close_or_skip_button,
@@ -343,6 +346,25 @@ class Battle_ui:
         else:
             self.battle_ui_opened = False
             self.ingame_menu.main_display()
+            
+class End_menu:
+    def __init__(self, ingame_menu:Ingame_menu):
+        self.ingame_menu = ingame_menu
+    
+    def start(self):
+        self.ingame_menu.clear_widget()
+        self.ingame_menu.set_background_color(pygame.Color(50, 40, 20))
+        self.ingame_menu.set_grab(True)
+        
+        win_label = Label(pygame.Vector2(80,100), "YOU WIN !", Default_font(30),pygame.Color(255,255,255))
+        thanks_label = Label(pygame.Vector2(40,200), "Thanks for playing our game !", Default_font(20),pygame.Color(255,255,255))
+        credit_label = Label(pygame.Vector2(40,250), "Created by Spishewi and Mouthanos", Default_font(20),pygame.Color(255,255,255))
+        
+        self.ingame_menu.bind_several_widget(
+            win_label,
+            thanks_label,
+            credit_label
+        )
 
 class Close_button(Button):
     def __init__(self, draw_surface: pygame.Surface, main_menu):
