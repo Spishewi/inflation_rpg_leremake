@@ -60,6 +60,10 @@ class Equipment():
         return "\n".join([f"{k}: {v}" for k, v in vars(self).items()])
 
     def get_price(self,object_type:str, nb:int):
+        """
+        est-ce que il faut vraiment expliquer cette fonction ?
+        elle utilise une formule permettant de calculer l'argent qu'il faut pour un objet de n niveaux
+        """
         return floor((20*(1+nb*(10/(Equipment.max_level[object_type]+1))))/1.1)**2/2
 
 

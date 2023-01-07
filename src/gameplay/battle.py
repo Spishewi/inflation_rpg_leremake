@@ -15,6 +15,9 @@ if TYPE_CHECKING:
     
 
 class Entity():
+    """
+    Classe générique représantant une entité (joueur ou ennemi)
+    """
     def __init__(self, pv_max: int, atk: float, crit_luck: float, crit_multiplier: float, speed: float) -> None:
         self._pv_max = int(pv_max)
         self._atk = float(atk)
@@ -83,6 +86,7 @@ class Battle():
         self.battle_ui = battle_ui
     
     def player_atk_first(self):
+        # on fait attaquer le joueur en premier
         player_damages = self.player.attack()
         self.battle_ui.add_round(True, f"You attack, the enemy loses {int_to_str(player_damages)} hp")
         self.enemy.get_attacked(player_damages)
@@ -159,6 +163,10 @@ class Battle_manager():
             self.must_trigger_battle = True
     
     def handle_battle(self, player_coords, map_manager: MapManager, player_stats: Stats):
+        """
+            s'occupe de la logique des combats
+        """
+
         if self.must_trigger_battle and self.current_battle == None:
             # mise a jour des variables
             self.must_trigger_battle = False

@@ -5,11 +5,17 @@ import math
 import typing
 
 class Default_font(pygame.font.Font):
+    """
+        Permet de facilement fournir une font au widgets
+    """
     def __init__(self,size):
         super().__init__("../graphics/Font/PublicPixel.ttf",size)
 
 
 class Widget():
+    """
+        classe de base étendable des widgets
+    """
     def __init__(self) -> None:
         pass
     def draw(self, display_surface: pygame.Surface) -> None:
@@ -20,6 +26,9 @@ class Widget():
         pass
     
 class Progressbar(Widget):
+    """
+        Widget qui represente une barre de progression
+    """
     def __init__(self, rect: pygame.Rect, value: int | float, color: pygame.Color, outline_color: pygame.Color) -> None:
 
         self.rect = rect
@@ -40,6 +49,9 @@ class Progressbar(Widget):
         self.value = min(value, 1)
 
 class Label(Widget):
+    """
+        Widget qui represente un label (du texte pur)
+    """
     def __init__(self, coords: pygame.Vector2, text: str, font: pygame.font.Font, text_color: pygame.Color) -> None:
         self.coords = coords
         self.text_color = text_color
@@ -66,6 +78,9 @@ class Label(Widget):
         draw_surface.blit(self._rendered_text, self.coords)
 
 class Button(Widget):
+    """
+        Un widget qui représente un bouton
+    """
     def __init__(self, rect: pygame.Rect, text: str, font: pygame.font.Font, callback: typing.Callable, text_color: pygame.Color, color: pygame.Color, hover_text_color: pygame.Color = None, hover_color: pygame.Color = None, image_background:pygame.Surface = None, multiclick: bool = False):
         self.text = text
         self.rect = rect
@@ -86,7 +101,7 @@ class Button(Widget):
         if callback != None:
             self.callback = callback
         else:
-            self.callback = lambda:... # ?
+            self.callback = lambda:... # ? je connaissais pas cette syntaxe
 
         self.rendered_text = None
         self.rendered_text_hovered = None
@@ -165,21 +180,25 @@ class Button(Widget):
                     self.callback()
                 
 class Image(Widget):
-    def __init__(self, image:pygame.Surface, pos:pygame.Vector2):
+    def __init__(self, image: pygame.Surface, pos: pygame.Vector2):
         super().__init__()
         self.image = image
         self.pos = pos
         
-    def update_image(self,image:pygame.Surface):
+    def update_image(self,image: pygame.Surface):
         self.image = image
     
-    def draw(self, draw_surface : pygame.Surface):
+    def draw(self, draw_surface: pygame.Surface):
         draw_surface.blit(self.image,self.pos)
         
 
 #Widget = typing.Union[Button, Progressbar, Label, Image]
 
 class UI():
+    """
+        Classe représantant une inteface utilisateur
+        elle sert a référencer des widgets
+    """
     def __init__(self, draw_surface: pygame.Surface) -> None:
         self.draw_surface = draw_surface
         self.widgets: list[Widget] = []

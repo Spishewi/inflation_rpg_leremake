@@ -39,6 +39,11 @@ class Stats:
         self.xp_needed_lvl_up = 1000 * self.lvl
 
     def get_player_entity(self):
+        """
+            Permet d'obtenir un objet entité,
+            utilisé pour les combats et/ou l'affichage
+        """
+        # on crée un objet entité
         player = Entity(
             pv_max = (self.stats["pv"] + Stats.default_value["pv"])*(1 + self.equipment.level["armor"]/5*10),
             atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"]/15*10),
@@ -49,14 +54,21 @@ class Stats:
         return player
 
     def handle_win(self, enemy_level: int):
+        """
+            s'occupe de tout ce qu'il faut faire après avoir battu un ennemi
+        """
+
+        # donne de l'xp
         self.xp += enemy_level * (enemy_level/self.lvl) *2000 # équation à vérifier
 
+        # augmente les niveaux en fonction de l'xp
         while self.xp >= self.xp_needed_lvl_up:
             self.lvl += 1
             self.xp -= self.xp_needed_lvl_up
             self.xp_needed_lvl_up = 1000 * self.lvl
             self.remaining_points += 15
-
+        # calcul combien actuellement on gagnerait d'argent si la partie se terminerait
+        # (affiché dans l'onglet "equipement" in-game)
         self.equipment.money = self.lvl**2
 
 
