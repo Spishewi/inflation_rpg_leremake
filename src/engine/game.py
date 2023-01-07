@@ -68,23 +68,32 @@ class Game:
         self.clock = pygame.time.Clock()
         
     def run(self) -> None:
-        # variable permettant de faire fonctionner la boucle de jeu.
-        running = True
-        self.restart = False
-        restart = False
-        last_battle = False
-        # Initialisation des variables...
+        # Initialisation des variables permettant de faire fonctionner la boucle de jeu.
+        running = True          # Si =True alors le jeu tourne
+        
+        self.restart = False    # Quand une des deux est égale à True alors le jeu
+        restart = False         # s'arrète et l'écran de titre est ouvert
+        
+        last_battle = False     # Indique si la bataille contre le boss final est en cours
+       
+        # On récupère le dt de la frame (temps entre deux frames)
+        # Cette variable permet de calculer tout déplacement et évènement suivant le temps et non suivant la vitesse du jeu
         dt = self.clock.tick(60) / 1000
+        
+        # Boucle de jeu :
         while running:
+            # On regarde les evenements pygame (entrées clavier et clicks souris)
+            # et on met à jour tous les éléments qui y sont liés
             for event in pygame.event.get():
-                # pour fermer avec la croix
+                # Pour fermer avec la croix
                 if event.type == pygame.QUIT:
-                    # on met la condition d'arrêt à "vrai"
+                    # On met la condition d'arrêt à "vrai"
                     running = False
                     restart = False
-                # On envoie les evenements au joueur.
-                # Seulement si aucun menu n'est ouvert
+                # On envoie les evenements au joueur
+                # seulement si aucun menu n'est ouvert
                 if self.ui.get_grab() != self.ui_grab_state:
+                    # On reset à l'ouverture et à la fermeture des menus pour éviter des bugs
                     self.player.reset_events()
                     self.ui_grab_state = self.ui.get_grab()
                     
@@ -92,13 +101,13 @@ class Game:
                     self.player.event_handler(event)
                 else :
                     self.player.reset_events()
-
+                # On envoie les events à l'interface
                 self.ui.event_handler(event)
             
             # On récupère l'ancienne position du joueur.
             old_player_pos = self.player.pos.copy()
             if not self.ui.get_grab():
-                # On met a jour la poisition du joueur (suivant les evenements effectués plus haut)
+                # On met a jour la poisition du joueur (suivant les évènements effectués plus haut)
                 self.player.move(self.map_manager, dt)
             # On récupère sa nouvelle position après déplacement
             new_player_pos = self.player.pos.copy()
@@ -107,6 +116,8 @@ class Game:
             # On met a jour le gestionnaire de combat
             self.battle_manager.handle_player_movement(player_relative_movement)
             restart = self.battle_manager.handle_battle(self.player.pos, self.map_manager, self.stats)
+            # Si la partie est finie et que le menu de combat n'est pas ouvert
+            # ou si le bouton title screen est cliqué (self.restart)
             if (restart and not self.battle_ui.battle_ui_opened) or self.restart:
                 running = False
 
@@ -129,36 +140,38 @@ class Game:
             
             # On met à jour les widget en général
             self.ui.update()
-            # Si l'affichage de combat est ouvert cette fonction va afficher une nouvelle ligne toutes les 400 ms
+            # Si l'affichage de combat est ouvert, on affiche une nouvelle ligne,
+            # la fonction se charge elle même de l'intervalle de temps entre ces affichages
             self.battle_ui.update()
             # On affiche tous les widgets et toutes les modifications faites précédemment
             self.ui.draw()
 
-            # On regarde si on doit lancer le combat de boss
-            if self.exit_rect.overlap2(self.player.get_hitbox()) and not last_battle: # si le joueur est proche de la porte de sortie 
+            # On lance le combat de boss/final si le joueur est situé près de la sortie
+            if self.exit_rect.overlap2(self.player.get_hitbox()) and not last_battle:
                 self.battle_manager.must_trigger_battle = True
                 last_battle = True
+                # On écarte le joueur de la porte pour éviter de relancer un combat instantanément si il perd
+                self.player.pos.y = self.player.pos.y +2
 
+            # Si le combat final à été lancé
             if last_battle:
+                # Si le joueur a gagné et qu'il a fermé l'interface de combat
                 if self.battle_manager.round_result == "win" and not self.battle_ui.battle_ui_opened:
                     print("YOU WIN")
+                    # On affiche la page de fin
                     self.end_menu.start()
-                    if not self.end_menu.opened:
-                        restart = False
-                        running = True
+                    
+                # Si le joueur a perdu
                 elif self.battle_manager.round_result == "lost":
-                    last_battle = False
-                    # On écarte le joueur de la porte pour éviter de relancer un combat
-                    self.player.pos.y = self.player.pos.y +2
+                    last_battle = False # combat n'est plus en cours et le jeu reprend
 
         
             # On récupère le dt de la frame (temps entre deux frames)
-            # Cet variable permet de calculer tout déplacement et evenement suivant le temps et non suivant la vitesse du jeu
             dt = self.clock.tick(60) / 1000
 
             # On affiche les FPS dans la console
             # (on utilise sys.stdout car le print de python est très mal optimisé et est trop gourmand pour tourner dans une boucle)
-            #sys.stdout.write(str(1/dt)+"\n")
+            # sys.stdout.write(str(1/dt)+"\n")
 
             # On met à jour l'image à l'écran suivant tout ce qu'on à calculé depuis la dernière frame.
             pygame.display.update()

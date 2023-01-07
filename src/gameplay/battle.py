@@ -5,7 +5,6 @@ import random
 import pygame
 from utils import int_to_str
 
-#from display.ingame_menu import Ingame_menu
 # Import seulement pour les type-hint (opti)
 if TYPE_CHECKING:
     from gameplay.equipment import Equipment
@@ -19,6 +18,7 @@ class Entity():
     Classe générique représantant une entité (joueur ou ennemi)
     """
     def __init__(self, pv_max: int, atk: float, crit_luck: float, crit_multiplier: float, speed: float) -> None:
+        # initialisation des variable
         self._pv_max = int(pv_max)
         self._atk = float(atk)
         self._pv = self._pv_max
@@ -26,16 +26,16 @@ class Entity():
         self._crit_multiplier = float(crit_multiplier)
         self.speed = float(speed)
 
-    def isalive(self) -> bool:
+    def isalive(self) -> bool: # True si le joueur est vivant
         return self._pv > 0
 
-    def attack(self) -> float:
+    def attack(self) -> float: # Retourne le nombre de dégats infligés par l'entité
         damage = self._atk
         if random.random() < self._crit_luck:
             damage *= self._crit_multiplier
         return damage
 
-    def get_attacked(self, damage: float) -> None:
+    def get_attacked(self, damage: float) -> None: # Enlève à l'entité les points de vie perdus
         self._pv -= damage
 
     def __str__(self) -> str:
@@ -48,7 +48,7 @@ class Entity():
         """
 
 class Round_result:
-    # status constants
+    # Status constants
     LOST = "lost"
     WIN = "win"
     NOT_COMPLETED = "not_completed"
@@ -56,24 +56,28 @@ class Round_result:
     def __init__(self, player: Entity, enemy: Entity) -> None:
         self.player = player
         self.enemy = enemy
+        
+        # Si le joueur est mort il perd le combat
         if not player.isalive():
             self.status = Round_result.LOST
+        # Si l'ennemi est mort le joueur gagne le combat
         elif not enemy.isalive():
             self.status = Round_result.WIN
+        # Si aucun des deux n'est mort le combat continu
         else:
             self.status = Round_result.NOT_COMPLETED
 
 class Battle():
     def __init__(self, player: Entity, level_range, battle_ui) -> None:
-        # on stock le joueur 
+        # On stock le joueur 
         self.player = player
-        # on choisi le niveau de l'ennemi
+        # On choisi le niveau de l'ennemi
         self.enemy_level = random.choice(level_range)
         print(self.enemy_level)
+        
         # On crée l'ennemi
-
-        enemy_points = self.enemy_level*15
-        enemy_points_repartitions = random.random()/2 + 0.25
+        enemy_points = self.enemy_level*15 # On definie son nombre de points à répartir
+        enemy_points_repartitions = random.random()/2 + 0.25 # On définie la repartition de ses points
 
         self.enemy = Entity(
             pv_max=100+(11/2000)*(enemy_points*enemy_points_repartitions)**2,
@@ -82,38 +86,39 @@ class Battle():
             crit_multiplier=1.2,
             speed=100+self.enemy_level * 2
             )
-        # on stock l'interface de bataille pour y afficher les informations
+        # On stock l'interface de bataille pour y afficher des informations
         self.battle_ui = battle_ui
     
     def player_atk_first(self):
-        # on fait attaquer le joueur en premier
+        # On fait attaquer le joueur en premier
         player_damages = self.player.attack()
         self.battle_ui.add_round(True, f"You attack, the enemy loses {int_to_str(player_damages)} hp")
         self.enemy.get_attacked(player_damages)
-        
+        # Puis l'ennemi
         if self.enemy.isalive():
             enemy_damages = self.enemy.attack()
             self.player.get_attacked(enemy_damages)
             self.battle_ui.add_round(False, f"The enemy attacks, you lose {int_to_str(enemy_damages)} hp")
 
     def enemy_atk_first(self):
-        # on fait attaquer l'ennemi en premier
+        # On fait attaquer l'ennemi en premier
         enemy_damages = self.enemy.attack()
         self.player.get_attacked(enemy_damages)
         self.battle_ui.add_round(False, f"The enemy attacks, you lose {int_to_str(enemy_damages)} hp")
-        
+        # Puis le joueur
         if self.player.isalive():
             player_damages = self.player.attack()
             self.enemy.get_attacked(player_damages)
             self.battle_ui.add_round(True, f"You attack, the enemy loses {int_to_str(player_damages)} hp")
 
     def process_round(self):
-        # on défini qui attaque en premier, et on fait attaquer.
+        # On défini qui attaque en premier, et on fait attaquer en fonction de la vitesse de chacun
         if self.player.speed > self.enemy.speed:
             self.player_atk_first()
         elif self.player.speed < self.enemy.speed:
             self.enemy_atk_first()
         else:
+            # Si ils ont la même vitesse on décide au hasard
             if random.random() > 0.5:
                 self.player_atk_first()
             else:
@@ -122,20 +127,20 @@ class Battle():
         return Round_result(self.player, self.enemy)
 
 class Battle_manager():
-    number_of_battles = 30
+    number_of_battles = 30 # Nombre de combats par manche
     def __init__(self, battle_ui:Battle_ui) -> None:
+        # On initialise les variables nécessaires aux combats
+        self.battle_chance = 0 # Probabilité de lancer un combat
+        self.max_battle_chance =  50 # Si self.battle_chance atteind ce nombre, un combat est lancé
+        self.must_trigger_battle = False # True si un combat doit être lancé
+        self.last_try_to_trigger_battle = pygame.time.get_ticks() # Pour éviter de lancer les combats à la suite
 
-        self.battle_chance = 0
-        self.max_battle_chance =  50
-        self.must_trigger_battle = False
-        self.last_try_to_trigger_battle = pygame.time.get_ticks()
+        self.remaining_battle = Battle_manager.number_of_battles # Nombre de combats restants
 
-        self.remaining_battle = Battle_manager.number_of_battles
-
-        self.current_battle = None
+        self.current_battle = None # Stock la bataille en cours
         self.round_result = None
         
-        self.battle_ui = battle_ui
+        self.battle_ui = battle_ui # Interface de bataille pour y afficher des informations
         
         self.game_end = False
 
@@ -167,7 +172,7 @@ class Battle_manager():
             s'occupe de la logique des combats
         """
 
-        if self.must_trigger_battle and self.current_battle == None:
+        if self.must_trigger_battle and self.current_battle == None: # Si un combat doit être lancé et que aucun n'est en cours
             # mise a jour des variables
             self.must_trigger_battle = False
             self.battle_chance = 0
@@ -176,8 +181,9 @@ class Battle_manager():
             self.current_battle = Battle(player_stats.get_player_entity(), map_manager.get_level_range("map", player_coords), self.battle_ui)
             self.battle_ui.start_battle()
 
-        elif self.current_battle != None:
+        elif self.current_battle != None: # Si un combat est en cours
             round_result = self.current_battle.process_round()
+            
             if round_result.status == Round_result.WIN:
                 self.remaining_battle -= 1
                 player_stats.handle_win(self.current_battle.enemy_level)
