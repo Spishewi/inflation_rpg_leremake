@@ -122,7 +122,7 @@ class Game:
             self.ui.update(battle_count=(self.battle_manager.remaining_battle, self.battle_manager.number_of_battles))
             # On met a jour l'affichage du niveau
             self.ui.update(level=self.stats.lvl)
-            self.ui.update(stats=self.stats)
+            self.ui.update(stats=self.stats.get_player_entity())
             
             self.ui.update()
             self.battle_ui.update()

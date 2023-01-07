@@ -55,6 +55,8 @@ class Label(Widget):
     def update_text(self, text):
         self.text = text
         self._rendered_text = self.font.render(self.text, False, self.text_color)
+        self._rendered_text.convert_alpha()
+        self._rendered_text.set_alpha(self.text_color.a)
         box = self._rendered_text.get_rect()
         self.box.width = box.width
         self.box.height = box.height
@@ -112,8 +114,8 @@ class Button(Widget):
         if self.multiclick and self.clicked and self.last_callback_trigger + self.multiclick_timer < pygame.time.get_ticks():
             self.last_callback_trigger = pygame.time.get_ticks()
             self.multiclick_timer /= 2
-            if self.multiclick_timer < 10:
-                self.multiclick_timer = 50
+            if self.multiclick_timer < 5:
+                self.multiclick_timer = 5
             self.callback()
         
         elif self.multiclick and not self.clicked:
