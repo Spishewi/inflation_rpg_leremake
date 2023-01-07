@@ -1,11 +1,11 @@
 from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
 
 import pygame
+pygame.init()
 
 from engine.game import Game
 from engine.title_screen import Title_screen
 
-pygame.init()
 
 if __name__ == '__main__':
     window = pygame.display.set_mode((1200, 650))

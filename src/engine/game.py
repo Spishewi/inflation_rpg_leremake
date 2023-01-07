@@ -169,10 +169,6 @@ class Game:
             # On récupère le dt de la frame (temps entre deux frames)
             dt = self.clock.tick(60) / 1000
 
-            # On affiche les FPS dans la console
-            # (on utilise sys.stdout car le print de python est très mal optimisé et est trop gourmand pour tourner dans une boucle)
-            # sys.stdout.write(str(1/dt)+"\n")
-
             # On met à jour l'image à l'écran suivant tout ce qu'on à calculé depuis la dernière frame.
             pygame.display.update()
         self.equipment.save()
