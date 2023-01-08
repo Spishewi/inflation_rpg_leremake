@@ -6,13 +6,28 @@ pygame.init()
 from engine.game import Game
 from engine.title_screen import Title_screen
 
+"""
+Comme vous l'avez demandé, on à rétréci ce fichier au maximum.
+Tout le reste à part ce fichier est exclusivement de la POO.
+"""
 
+
+# se lance quand on lance le fichier
 if __name__ == '__main__':
+
+    # on crée la fenêtre
     window = pygame.display.set_mode((1200, 650))
+
+    # on donne un titre à la fenêtre
+    pygame.display.set_caption("Inflation RPG Leremake")
+
+    # On crée la boucle principale
     running = True
     game_launch_title_screen = True
     first_game = True
+
     while running:
+        # On lance le titlescreen
         if game_launch_title_screen:
             title_screen = Title_screen(window,first_game)
             title_screen_launch_game = title_screen.run()
@@ -20,6 +35,7 @@ if __name__ == '__main__':
             running = False
         first_game = False
         
+        # On lance le jeu
         if title_screen_launch_game and running:
             game = Game(window)
             game_launch_title_screen = game.run()
