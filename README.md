@@ -67,10 +67,25 @@ python main.py
 ```
 
 Si vous rencontrez des difficultés à installer les dépendances où lancer le projet, n'hésitez pas à nous contacter sur discord. (vous nous aviez par exemple expliqué que vous aviez des difficultés avec vos versions de python)
+
 ## Première partie de jeu
 
-Une fois le jeu lancé pour la première fois et la partie lancé, vous atterissez dans une grotte. A partir de ce moment, tout mouvement augmente la chance de lancer un combat. Cette chance est visible grâce à la barre de progression en bas de l'écran.
-On peut également observer le nombre de combats restants avant la fin de la partie.
+Une fois le jeu lancé pour la première fois et la partie lancé, vous atterissez dans une grotte. 
+La première chose qui vous sera proposé est de définir vos stats de départ. En effet, pour ne pas mourir dans la première zone, vous commencez le jeu au niveau 10.
+
+![](screenshots/0.png)
+
+### explication des points de stats :
+- Health : représente la vie du personnage. Est ensuite multiplié suivant le niveau d'armure.
+- Attack : représente l'attaque du personnage. Est ensuite multiplié suivnt le niveau de l'épée.
+- Crit luck : votre chance d'effectuer un coup critique est relative à cette valeur. ( $1 - \frac{1}{log_{10}(10 + points)}$ )
+- Agility : représente votre vitesse. En combat, l'entité ayant le plus de vitesse attaquera en premier.
+
+
+Une fois tout vos points réparti, vous pouvez cliquer sur "done". Vous pourrez ensuite commencer à vous déplacer.
+
+A partir de ce moment, tout mouvement augmente la chance de lancer un combat. Cette chance est visible grâce à la barre de progression en bas de l'écran.
+On peut également voir à gauche le niveau du joueur ainsi que le nombre de combats restant avant la fin de la partie, et à droite, on peut voir toutes les stats du joueur avec l'équipement d'appliqué (contrairement au menu des points de stats).
 
 ![](screenshots/1.png)
 
@@ -79,27 +94,26 @@ Attention à la zone dans laquelle vous vous trouvez, aller dans une zone de tro
 Au bout d'un moment, un combat vas se lancer.
 Les combats se joue automatiquement, vous n'avez donc pas à vous en faire.
 
-![](https://dummyimage.com/1200x650/000000/fff.png&text=Screenshot+combats)
+![](screenshots/2.png)
 
-Une fois le combat terminé, proportionnellement à la différence de niveaux entre vous et l'ennemi, vous gagnerez des points, que vous pourrez répartir a partir du menu des stats. Il se trouve en haut à droite (*Menu* -> *Stats*)
+Une fois le combat terminé, proportionnellement à la différence de niveaux entre vous et l'ennemi, vous augmenterez de niveau, et gagnerez des points, que vous pourrez répartir à partir du menu des stats. Il se trouve en haut à droite (*Menu* -> *Stats*)
 
-![](screenshots/3.png)
+![](screenshots/0.png)
 
 Vous pourrez grâce à vous stats nouvellement acquisent aller dans des zones de plus hant niveau afin d'avancer dans le jeu. Votre but est donc de monter le plus rapidement possible dans de hautes zones afin de pouvoir en fin de partie gagner plus d'argent, et acheter de meilleur equipement pour la prochaine partie. (l'equipement permettant de multiplier différentes stats, et donc de pouvoir monter dans de plus hautes zones à la partie suivante et gagner plus d'argent, ect...).
 
-Une fois la partie terminé, il y a donc cet ecran qui s'ouvre. Vous pouvez ici acheter de l'equipement qui servira au prochaines parties.
+Une fois la partie terminé (les 30 combats écoulés), il y a donc cet ecran qui s'ouvre. Vous pouvez ici acheter de l'equipement qui servira au prochaines parties.
 
 ![](screenshots/5.png)
 
 Attention, essayez d'acheter un maximum, car une fois cet ecran quitté, votre argent restant sera perdu !
 
-## Fonctionnalités manquantes
 
-Irure labore qui irure mollit est sint dolor do velit enim adipisicing ea exercitation do. Qui ullamco reprehenderit ullamco excepteur est esse esse nisi. Lorem nulla exercitation dolor occaecat cupidatat voluptate adipisicing ut minim ut sunt occaecat reprehenderit proident. Lorem Lorem enim et non nulla labore elit nulla officia anim magna. Nisi enim est do consequat commodo fugiat veniam quis proident culpa quis exercitation fugiat duis. Proident commodo eu sunt labore id elit. Irure Lorem amet culpa pariatur cillum.
+### comment terminer le jeu :
 
-Tempor sit nulla consectetur minim dolore eu do duis do occaecat dolore non elit. Eiusmod cupidatat Lorem ex magna ut ad esse adipisicing aute proident. Sit laboris aliqua anim Lorem do. Tempor est labore mollit id id aliquip cillum nostrud cillum proident. Sunt fugiat ut commodo duis do labore adipisicing ex duis. Veniam aliquip anim dolore nostrud quis consectetur nisi aliqua id sunt occaecat.
+Le jeu à été equilibré et testé de façon à ce que avec tout l'équipement au max, on puisse faire le tour des salles et aller dans la  dernière salle (niveau 200-210). Vous trouverez là-bas la sortie de la grotte (une porte avec de la lumière). en traversant cette porte, vous lancerez un combat contre le boss, et si vous le battez, vous pourrez voir les crédits.
 
-Commodo sit occaecat qui consectetur ullamco labore. Ex reprehenderit dolore sint anim ut minim pariatur quis ad ullamco sunt enim aliqua irure. Qui dolor id do veniam ad proident consectetur tempor culpa ad magna elit. Sit quis amet magna aliquip exercitation labore culpa irure sint. Incididunt ut adipisicing id laboris minim. Eu ex eu dolore laboris nisi.
+![](screenshots/7.png)
 
 ## Structure du code
 
@@ -112,6 +126,16 @@ Dans le dossier `src`, on le fichier `main.py` qui permet de lancer le jeu, ains
 Celà permet d'à peut près séparer ce qui est noté du reste (principalement `display`)
 
 Nous avons essayé de commenter au mieux le code, en donnant la priorité au fichiers les plus importants.
+
+## Fonctionnalités manquantes
+
+Nous avons beaucoup travaillé pendant les vancances, donc nous avons à peut près fait tout ce que nous voulions pour ce projet.
+
+En terme de combats, nous aurions peu faire de plus belles animations pour les ennemis, et rendre les combats plus vivants.
+
+Nous aurions peu aussi augmenter la taille de la map et la détailler pour augmenter le temps de vie du jeu.
+
+Enfin, le jeu ne contient pas de cheats-codes. nous aurions peu en ajouter. Nous en avons pas eu besoin pour le développement car nous avons délibérément choisis d'utiliser du json pour les saves, afin de pouvoir les modifier à la main.
 ## Répartition du travail
 
 Nous avons essayé de nous répartir au mieux le travail, bien que travailler pendant les vacances de noël s'est révélé beaucoup plus dûr que prévu.
