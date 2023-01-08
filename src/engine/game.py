@@ -92,10 +92,7 @@ class Game:
                     restart = False
                 # On envoie les evenements au joueur
                 # seulement si aucun menu n'est ouvert
-                if self.ui.get_grab() != self.ui_grab_state:
-                    # On reset à l'ouverture et à la fermeture des menus pour éviter des bugs
-                    self.player.reset_events()
-                    self.ui_grab_state = self.ui.get_grab()
+                
                     
                 if not self.ui_grab_state:
                     self.player.event_handler(event)
@@ -103,12 +100,15 @@ class Game:
                     self.player.reset_events()
                 # On envoie les events à l'interface
                 self.ui.event_handler(event)
-            
+                
+            if self.ui.get_grab() != self.ui_grab_state:
+                # On reset à l'ouverture et à la fermeture des menus pour éviter des bugs
+                self.player.reset_events()
+                self.ui_grab_state = self.ui.get_grab()
             # On récupère l'ancienne position du joueur.
             old_player_pos = self.player.pos.copy()
-            if not self.ui.get_grab():
-                # On met a jour la poisition du joueur (suivant les évènements effectués plus haut)
-                self.player.move(self.map_manager, dt)
+            # On met a jour la poisition du joueur (suivant les évènements effectués plus haut)
+            self.player.move(self.map_manager, dt)
             # On récupère sa nouvelle position après déplacement
             new_player_pos = self.player.pos.copy()
             # On calcul le déplacement relatif du joueur 

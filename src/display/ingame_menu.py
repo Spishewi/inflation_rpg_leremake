@@ -115,7 +115,7 @@ class Ingame_menu(UI):
         button_rect = pygame.Rect((0, 20, 100, 40))
         button_rect.x = self.draw_surface.get_width() - button_rect.width - 20
 
-        button_menu = Button(button_rect, "Menu", callback=self.main_menu, )
+        button_menu = Button(button_rect, "Menu", callback=self.main_menu, **Ingame_menu.buttons_style)
 
         progressbar_rect = pygame.Rect((0, 0, 0, 0))
         progressbar_rect.x = 10
