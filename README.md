@@ -18,7 +18,7 @@ Les combats se lancent aléatoirement en fonction de la barre de combat (en bas 
 
 pour plus d'informations, voir [première partie de jeu](#première-partie-de-jeu).
 
-## dépendances
+## Dépendances
 
 - python 3.6+
   - [pygame](https://github.com/pygame/pygame) 2.1+
@@ -56,7 +56,7 @@ python -m pip install pygame --upgrade
 python -m install pytmx
 ```
 
-### lancement
+### Lancement
 Pour lancer le jeu depuis le terminal, il faut lancer le fichier `main.py`, situé dans le dossier `src/`. pour celà, effectuez les commandes suivantes :
 ```powershell
 # se déplacer dans le dossier "src/" du projet
@@ -75,7 +75,7 @@ La première chose qui vous sera proposé est de définir vos stats de départ. 
 
 ![](screenshots/0.png)
 
-### explication des points de stats :
+### Explication des points de stats :
 - Health : représente la vie du personnage. Est ensuite multiplié suivant le niveau d'armure.
 - Attack : représente l'attaque du personnage. Est ensuite multiplié suivnt le niveau de l'épée.
 - Crit luck : votre chance d'effectuer un coup critique est relative à cette valeur. ( $1 - \frac{1}{log_{10}(10 + points)}$ )
@@ -109,7 +109,7 @@ Une fois la partie terminé (les 30 combats écoulés), il y a donc cet ecran qu
 Attention, essayez d'acheter un maximum, car une fois cet ecran quitté, votre argent restant sera perdu !
 
 
-### comment terminer le jeu :
+### Comment terminer le jeu :
 
 Le jeu à été equilibré et testé de façon à ce que avec tout l'équipement au max, on puisse faire le tour des salles et aller dans la  dernière salle (niveau 200-210). Vous trouverez là-bas la sortie de la grotte (une porte avec de la lumière). en traversant cette porte, vous lancerez un combat contre le boss, et si vous le battez, vous pourrez voir les crédits.
 
