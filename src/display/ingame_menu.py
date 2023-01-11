@@ -103,7 +103,6 @@ class Ingame_menu(UI):
             label.coords.x = window_width - label.box.width - 10
             label.coords.y = window_height - (50 + i*(label.box.height + 10))
 
-
     def main_display(self): # affichage principal
         # on vide la fenêtre
         self.clear_widget()
@@ -111,6 +110,7 @@ class Ingame_menu(UI):
         self.set_background_color(None)
         # on permet au jeu et au joueur de capter les imput
         self.set_grab(False)
+        self.menu_opened = False
 
         # on créé tous les éléments
         self.fps_label = Label(pygame.Vector2(10, 10), "", Default_font(15), pygame.Color(255, 255, 255))
@@ -174,6 +174,8 @@ class Ingame_menu(UI):
         self.set_background_color(pygame.Color(20, 20, 20, 150))
         # on 'intercepte' les imputs pour que l'on ne puisse plus faire bouger le joueur
         self.set_grab(True)
+        
+        self.menu_opened = True
 
         # on créé et affiche tous les éléments
         previous_button = Previous_button(self.draw_surface, self.main_display)
@@ -361,6 +363,11 @@ class Ingame_menu(UI):
     def quit_and_restart(self):
         self.game.restart = True
         
+    def open_or_close_menu(self):
+        if not self.menu_opened :
+            self.main_menu()
+        else:
+            self.main_display()
         
 class Battle_ui:
     def __init__(self, ingame_menu:Ingame_menu):

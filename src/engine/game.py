@@ -88,6 +88,9 @@ class Game:
                 if event.type == pygame.QUIT:
                     # On met la condition d'arrêt à "vrai"
                     running = False
+                # Pour ouvrir ou fermer le menu avec échap
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.ui.open_or_close_menu()
                 # On envoie les evenements au joueur
                 # seulement si aucun menu n'est ouvert
                 
