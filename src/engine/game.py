@@ -153,6 +153,7 @@ class Game:
             if self.exit_rect.overlap2(self.player.get_hitbox()) and not last_battle:
                 self.battle_manager.must_trigger_battle = True
                 last_battle = True
+                self.battle_ui.boss_battle = True
                 # On écarte le joueur de la porte pour éviter de relancer un combat instantanément si il perd
                 self.player.pos.y = self.player.pos.y +2
 
@@ -167,7 +168,8 @@ class Game:
                     
                 # Si le joueur a perdu
                 elif self.battle_manager.round_result == "lost":
-                    last_battle = False # combat n'est plus en cours et le jeu reprend
+                    last_battle = False     # combat n'est plus en cours et le jeu reprend
+                    self.boss_battle = False    # Le prochain combat ne sera pas forcément un caombat de boss
 
         
             # On récupère le dt de la frame (temps entre deux frames)

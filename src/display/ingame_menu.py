@@ -64,10 +64,10 @@ class Ingame_menu(UI):
         else:
             # On regarde ce qu'il faut update
             for k, v in kwargs.items():
-                # on s'occupe des fps
+                # On s'occupe des fps
                 if k == "fps":
                     self.fps_label.update_text(f"fps: {v:.2f}")
-                # on s'occupe de la fightbar
+                # On s'occupe de la fightbar
                 elif k == "distance":
                     self.fight_bar.update_value(v)
                 # On s'occupe du battle count
@@ -104,15 +104,15 @@ class Ingame_menu(UI):
             label.coords.y = window_height - (50 + i*(label.box.height + 10))
 
     def main_display(self): # affichage principal
-        # on vide la fenêtre
+        # On vide la fenêtre
         self.clear_widget()
-        # on enlève la couleur d'arrière-plan
+        # On enlève la couleur d'arrière-plan
         self.set_background_color(None)
-        # on permet au jeu et au joueur de capter les imput
+        # On permet au jeu et au joueur de capter les imput
         self.set_grab(False)
         self.menu_opened = False
 
-        # on créé tous les éléments
+        # On créé tous les éléments
         self.fps_label = Label(pygame.Vector2(10, 10), "", Default_font(15), pygame.Color(255, 255, 255))
 
         button_rect = pygame.Rect((0, 20, 100, 40))
@@ -128,7 +128,7 @@ class Ingame_menu(UI):
 
         self.fight_bar = Progressbar(progressbar_rect, 0, pygame.Color(85, 160, 39), pygame.Color(134, 221, 81))
 
-        # on défini des par paramètres par défaut pour pas avoir à les réécrire
+        # On défini des par paramètres par défaut pour pas avoir à les réécrire
         stats_display_params = {
             "font": Default_font(15),
             "text_color": pygame.Color(255, 255, 255),
@@ -138,7 +138,7 @@ class Ingame_menu(UI):
         self.battle_count = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-25), **stats_display_params)
         self.level_display = Label(pygame.Vector2(progressbar_rect.x, progressbar_rect.y-50), **stats_display_params)
 
-        # on défini des par paramètres par défaut pour pas avoir à les réécrire
+        # On défini des par paramètres par défaut pour pas avoir à les réécrire
         stats_display_params = {
             "font": Default_font(15),
             "text_color": pygame.Color(255, 255, 255, 127),
@@ -151,7 +151,7 @@ class Ingame_menu(UI):
         self.crit_luck_display = Label(pygame.Vector2(), **stats_display_params)
         self.agility_display = Label(pygame.Vector2(), **stats_display_params)
 
-        # on affiche tous les éléments
+        # On affiche tous les éléments
         self.bind_several_widget(
             self.fps_label,
             button_menu,
@@ -170,14 +170,14 @@ class Ingame_menu(UI):
 
     def main_menu(self): # menu principal
         self.clear_widget()
-        # on définie la couleur d'arrière avec un degré de transparence
+        # On définie la couleur d'arrière avec un degré de transparence
         self.set_background_color(pygame.Color(20, 20, 20, 150))
-        # on 'intercepte' les imputs pour que l'on ne puisse plus faire bouger le joueur
+        # On 'intercepte' les imputs pour que l'on ne puisse plus faire bouger le joueur
         self.set_grab(True)
         
         self.menu_opened = True
 
-        # on créé et affiche tous les éléments
+        # On créé et affiche tous les éléments
         previous_button = Previous_button(self.draw_surface, self.main_display)
         close_button = Close_button(self.draw_surface, self.main_display)
 
@@ -207,10 +207,10 @@ class Ingame_menu(UI):
     def stats_menu(self): # menu stats, permet de voir ses stats et d'attribuer ses points
         self.clear_widget()
 
-        # on récupère les informations à afficher
+        # On récupère les informations à afficher
         self.points, self.stats = self.get_stats_and_points()
 
-        # on créé et affiche des éléments
+        # On créé et affiche des éléments
         previous_button = Previous_button(self.draw_surface, self.main_menu)
         close_button = Close_button(self.draw_surface, self.main_display)
 
@@ -238,7 +238,7 @@ class Ingame_menu(UI):
         self.to_add_value = {}
         self.stats_labels = {}
         y = 140
-        # affiche autant de lignes que de stats
+        # affiche autant de lignes que de stats, avec les bonnes valeurs
         for stat, value in self.stats.items():
             self.value[stat] = value
             self.to_add_value[stat] = 0
@@ -266,7 +266,7 @@ class Ingame_menu(UI):
                 plus_button,
                 minus_button
             )
-            y += 70
+            y += 70 # décalage entre chaque ligne
 
     def add_point(self, stat):
         # ajoute un point si c'est possible à la stat choisie
@@ -290,7 +290,7 @@ class Ingame_menu(UI):
             self.stats_labels[stat][1].update_text(str(self.to_add_value[stat])) # to add label
             self.point_value_label.update_text(str(self.points))
 
-    def equipment_menu(self):
+    def equipment_menu(self): # menu équipement, lecture seule
         self.clear_widget()
 
         previous_button = Previous_button(self.draw_surface, self.main_menu)
@@ -304,6 +304,7 @@ class Ingame_menu(UI):
             previous_button
         )
         
+        # Pour chaque type d'objet, on affiche le niveau de cet objet ainsi que l'image correspondante
         y=150
         for k,v in self.player_equipment.level.items():
             image = Image(self.objects_images.get_object_picture(k,v,7),pygame.Vector2(100,y))
@@ -316,14 +317,14 @@ class Ingame_menu(UI):
 
     def round_end_menu(self, battle:Battle_manager):
         self.clear_widget()
-        # on définie la couleur d'arrière avec un degré de transparence
+        # On définie la couleur d'arrière avec un degré de transparence
         self.set_background_color(pygame.Color(20, 20, 20, 150))
-        # on 'intercepte' les imputs pour que l'on ne puisse plus faire bouger le joueur
+        # On 'intercepte' les imputs pour que l'on ne puisse plus faire bouger le joueur
         self.set_grab(True)
+        # On précise que ce menu est ouvert pour que le jeu ne l'ouvre pas à chaque frame
         self.round_end_menu_opened = True
         
-        self.points, self.stats = self.get_stats_and_points()
-        
+        # On créé et affiche tous les éléments
         end_round_label = Label(pygame.Vector2(40,40), f"YOU FINISHED YOUR {Battle_manager.number_of_battles - max(battle.remaining_battle,0)} BATTLES", Default_font(30), pygame.Color(255,255,255))
         ok_button = Button(pygame.Rect(self.draw_surface.get_width()-80-100, self.draw_surface.get_height()-80-50, 100, 50), "OK", callback=self.quit_and_restart, **Ingame_menu.buttons_style)
         money_label = Label(pygame.Vector2(80,250), f"You get {number_to_str(self.player_equipment.money)} $", Default_font(20), pygame.Color(255,255,255))
@@ -352,48 +353,65 @@ class Ingame_menu(UI):
             speed_label
         )
 
-    def get_stats_and_points(self): # renvoie un int et un dict {"nom_stat":valeur,...}
+    def get_stats_and_points(self):
+        """
+        renvoie le nombre de points du joueur (un entier) et les stats du joueur (un dictionnaire {"nom_stat":valeur,...})
+        """
         return self.player_stats.remaining_points,self.player_stats.stats.copy()
 
     def set_stats_and_points(self,points:int,stats:dict) -> None:
+        """
+        définit les stats du joueur en y appliquant les points rajoutés par l'utilisateur,
+        cette fonction est appelée quand l'utilisateur appuie sur DONE
+        (tant qu'il n'a pas appuyé sur ce bouton les points rajoutés sont ignorés et redonnés au joueur) 
+        """
+        # Et ferme le menu
         self.main_display()
         self.player_stats.remaining_points = points
         self.player_stats.stats = stats
         
     def quit_and_restart(self):
+        # Termine le round en cours en renvoie au menu de titre
         self.game.restart = True
         
     def open_or_close_menu(self):
+        # ouvre ou ferme le menu en fonction de si il est déja ouvert
         if not self.menu_opened :
             self.main_menu()
         else:
             self.main_display()
         
 class Battle_ui:
+    """
+    classe qui gère l'affichage des combats
+    """
     def __init__(self, ingame_menu:Ingame_menu):
+        # On créé et initialise toutes les variables disponibles
         self.ingame_menu = ingame_menu
         self.x_max = self.ingame_menu.draw_surface.get_width()
         self.y_max = self.ingame_menu.draw_surface.get_height()
 
-        self.last_time_row = 0
-        self.printing = False 
-        self.battle_ui_opened = False
+        self.last_time_row = 0          # permet de créé un décalage de temps entre l'affichage des différentes lignes
+        self.printing = False           # True si il est en train d'afficher les lignes
+        self.battle_ui_opened = False   # True si il est ouvert
+        self.boss_battle = False        # True si c'est un combat de boss est lancé
 
     def update(self):
         if self.last_time_row + 400 < pygame.time.get_ticks() and self.printing:
+            # affiche une nouvelle ligne si ça fait plus de 400 ms que la précédente a été affichée
+            # et si toutes n'ont pas encore été affichées
             self.last_time_row = pygame.time.get_ticks()
             self.draw_rounds()
         
-    def start_battle(self, last_battle=False):
+    def start_and_draw_battle_ui(self):
+        # Appelée quand un combat commence
         self.rounds = []
         self.rounds_labels = []
         self.displayed_rows = -1
         self.printing = True
         self.battle_ui_opened = True
         self.last_time_row = pygame.time.get_ticks()
-        self.draw(last_battle)
-        
-    def draw(self, last_battle=False):
+
         self.ingame_menu.clear_widget()
         self.ingame_menu.set_background_color(pygame.Color(20, 20, 20, 150))
         self.ingame_menu.set_grab(True)
@@ -402,7 +420,7 @@ class Battle_ui:
             0, 0, 0, 0), color=pygame.Color(0, 0, 0, 100),  hover_color=pygame.Color(0, 0, 0, 0))
         battle_label = Label(pygame.Vector2(40, 40), "BATTLE", Default_font(30), pygame.Color(255, 255, 255))
         
-        if last_battle:
+        if self.boss_battle:
             self.ingame_menu.set_background_color(pygame.Color(50,40,20))
             battle_label.update_text("BOSS BATTLE")
         
@@ -471,7 +489,7 @@ class End_menu:
         )
 
 
-# des widgets custom souvent utilisé dans l'interface
+# Des widgets custom souvent utilisé dans l'interface
 class Close_button(Button):
     def __init__(self, draw_surface: pygame.Surface, main_menu):
         self.rect = pygame.Rect(0, 20, 40, 40)
