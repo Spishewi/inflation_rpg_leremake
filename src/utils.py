@@ -87,21 +87,28 @@ class DynamicImage:
             #tile_surface = tile_surface.convert_alpha()
             return DynamicImage(tile_surface, smooth=False)
         return extract_image
-    
-    
-def int_to_str(nb:int)->str:
+
+
+def number_to_str(nb:int|float)->str:
+    """
+    Permet de transformer un entier en string en rajoutant du formatage
+    par exemple : 1000 -> 1k
+    """
     def only_three_digits(number):
+        """
+        retourne en nombre contenant trois chiffres au maximum
+        """
         if number >= 100:
-            return int(number)
+            return round(number)
         if number >= 10:
             return int(number*10)/10
         return int(number*100)/100
-    
-    
-    unities = ["","k","m","b","t","q","Q","s","S","o","n"]
+
+    # On définit les unités
+    unities = ["","k","m","b","t","q"]
     for unity in unities:
         if nb < 1000:
             return str(only_three_digits(nb))+unity
         nb = nb/1000
     
-    return str(only_three_digits(nb))+"d"
+    return str(only_three_digits(nb))+"Q"

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 import random
 import pygame
-from utils import int_to_str
+from utils import number_to_str
 
 # Import seulement pour les type-hint (opti)
 if TYPE_CHECKING:
@@ -92,24 +92,24 @@ class Battle():
     def player_atk_first(self):
         # On fait attaquer le joueur en premier
         player_damages = self.player.attack()
-        self.battle_ui.add_round(True, f"You attack, the enemy loses {int_to_str(player_damages)} hp")
+        self.battle_ui.add_round(True, f"You attack, the enemy loses {number_to_str(player_damages)} hp")
         self.enemy.get_attacked(player_damages)
         # Puis l'ennemi
         if self.enemy.isalive():
             enemy_damages = self.enemy.attack()
             self.player.get_attacked(enemy_damages)
-            self.battle_ui.add_round(False, f"The enemy attacks, you lose {int_to_str(enemy_damages)} hp")
+            self.battle_ui.add_round(False, f"The enemy attacks, you lose {number_to_str(enemy_damages)} hp")
 
     def enemy_atk_first(self):
         # On fait attaquer l'ennemi en premier
         enemy_damages = self.enemy.attack()
         self.player.get_attacked(enemy_damages)
-        self.battle_ui.add_round(False, f"The enemy attacks, you lose {int_to_str(enemy_damages)} hp")
+        self.battle_ui.add_round(False, f"The enemy attacks, you lose {number_to_str(enemy_damages)} hp")
         # Puis le joueur
         if self.player.isalive():
             player_damages = self.player.attack()
             self.enemy.get_attacked(player_damages)
-            self.battle_ui.add_round(True, f"You attack, the enemy loses {int_to_str(player_damages)} hp")
+            self.battle_ui.add_round(True, f"You attack, the enemy loses {number_to_str(player_damages)} hp")
 
     def process_round(self):
         # On défini qui attaque en premier, et on fait attaquer en fonction de la vitesse de chacun
@@ -136,6 +136,7 @@ class Battle_manager():
         self.last_try_to_trigger_battle = pygame.time.get_ticks() # Pour éviter de lancer les combats à la suite
 
         self.remaining_battle = Battle_manager.number_of_battles # Nombre de combats restants
+        self.battles_won = 0
 
         self.current_battle = None # Stock la bataille en cours
         self.round_result = None
@@ -187,6 +188,7 @@ class Battle_manager():
             if round_result.status == Round_result.WIN:
                 self.remaining_battle -= 1
                 player_stats.handle_win(self.current_battle.enemy_level)
+                self.battles_won += 1
                 self.battle_ui.add_round(True, "YOU WIN")
             elif round_result.status == Round_result.LOST:
                 self.remaining_battle -= 3

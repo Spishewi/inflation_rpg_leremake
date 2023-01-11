@@ -5,8 +5,9 @@ from typing import TYPE_CHECKING
 from display.ui import UI, Label, Button, Progressbar, Default_font, Image
 import pygame
 from display.graphics import Objects_picture
-from utils import int_to_str
+from utils import number_to_str
 from gameplay.stats import Stats
+from gameplay.battle import Battle_manager
 
 # Import seulement pour les type-hint (opti)
 if TYPE_CHECKING:
@@ -54,6 +55,8 @@ class Ingame_menu(UI):
         self.main_menu()        # pour le set grab et le background
         self.stats_menu()
 
+        self.round_end_menu_opened = False
+
     def update(self, **kwargs):
         # s'il n'y a pas d'args, on update en général
         if len(kwargs) == 0:
@@ -75,11 +78,11 @@ class Ingame_menu(UI):
                     self.level_display.update_text(f"Level : {v}")
                 # On s'occupe de l'update de l'affichage des stats
                 elif k == "stats":
-                    self.hp_display.update_text(f"Health:{int_to_str(v._pv_max).rjust(6)}") # oui on a mis pv dans le code au lieu de hp
-                    self.atk_display.update_text(f"Attack:{int_to_str(v._atk).rjust(6)}")
-                    self.crit_multiplier_display.update_text(f"Crit multiplier:{int_to_str(v._crit_multiplier).rjust(6)}")
-                    self.crit_luck_display.update_text(f"Crit luck:{int_to_str(v._crit_luck).rjust(6)}")
-                    self.agility_display.update_text(f"Agility:{int_to_str(v.speed).rjust(6)}")
+                    self.hp_display.update_text(f"Health:{number_to_str(v._pv_max).rjust(6)}") # oui on a mis pv dans le code au lieu de hp
+                    self.atk_display.update_text(f"Attack:{number_to_str(v._atk).rjust(6)}")
+                    self.crit_multiplier_display.update_text(f"Crit multiplier:{number_to_str(v._crit_multiplier).rjust(6)}")
+                    self.crit_luck_display.update_text(f"Crit luck:{number_to_str(v._crit_luck).rjust(6)}")
+                    self.agility_display.update_text(f"Agility:{number_to_str(v.speed).rjust(6)}")
                     self.stats_display_update_positions()
                 
     def stats_display_update_positions(self):
@@ -186,7 +189,7 @@ class Ingame_menu(UI):
         
         play_menu_button_rect = pygame.Rect(0, 470, 100, 40)
         play_menu_button_rect.x = self.draw_surface.get_width()/2 - play_menu_button_rect.width/2
-        play_menu_button = Button(play_menu_button_rect, "Quit", callback=self.quit, **Ingame_menu.buttons_style)
+        play_menu_button = Button(play_menu_button_rect, "Quit", callback=self.quit_and_restart, **Ingame_menu.buttons_style)
 
         menu_label = Label(pygame.Vector2(40, 40), "MENU", Default_font(30), pygame.Color(255, 255, 255))
 
@@ -292,12 +295,9 @@ class Ingame_menu(UI):
         close_button = Close_button(self.draw_surface, self.main_display)
 
         equipment_label = Label(pygame.Vector2(40,40),"EQUIPMENT",Default_font(30),pygame.Color(255,255,255))
-        
-        money_label = Label(pygame.Vector2(400,40),f"You have : {int_to_str(self.player_equipment.money)} $",Default_font(20),pygame.Color(255,255,255))
             
         self.bind_several_widget(
             equipment_label,
-            money_label,
             close_button,
             previous_button
         )
@@ -312,6 +312,44 @@ class Ingame_menu(UI):
             )
             y += 150
 
+    def round_end_menu(self, battle:Battle_manager):
+        self.clear_widget()
+        # on définie la couleur d'arrière avec un degré de transparence
+        self.set_background_color(pygame.Color(20, 20, 20, 150))
+        # on 'intercepte' les imputs pour que l'on ne puisse plus faire bouger le joueur
+        self.set_grab(True)
+        self.round_end_menu_opened = True
+        
+        self.points, self.stats = self.get_stats_and_points()
+        
+        end_round_label = Label(pygame.Vector2(40,40), f"YOU FINISHED YOUR {Battle_manager.number_of_battles - max(battle.remaining_battle,0)} BATTLES", Default_font(30), pygame.Color(255,255,255))
+        ok_button = Button(pygame.Rect(self.draw_surface.get_width()-80-100, self.draw_surface.get_height()-80-50, 100, 50), "OK", callback=self.quit_and_restart, **Ingame_menu.buttons_style)
+        money_label = Label(pygame.Vector2(80,250), f"You get {number_to_str(self.player_equipment.money)} $", Default_font(20), pygame.Color(255,255,255))
+        battles_won_label = Label(pygame.Vector2(80,200), f"You won {battle.battles_won}/{Battle_manager.number_of_battles - max(battle.remaining_battle,0)} battles", Default_font(20), pygame.Color(255,255,255))
+        your_stats_label = Label(pygame.Vector2(80,350), "Your stats :", Default_font(20), pygame.Color(255,255,255))
+
+        player_stats = self.game.stats.get_player_entity()
+
+        pv_label = Label(pygame.Vector2(120, 400), f"Health : {number_to_str(player_stats._pv_max)}", Default_font(15), pygame.Color(255,255,255))
+        atk_label = Label(pygame.Vector2(120, 450), f"Attack : {number_to_str(player_stats._atk)}", Default_font(15), pygame.Color(255,255,255))
+        crit_mul_label = Label(pygame.Vector2(120, 500), f"Crit multiplier : {number_to_str(player_stats._crit_multiplier)}", Default_font(15), pygame.Color(255,255,255))
+        crit_luk_label = Label(pygame.Vector2(120, 550), f"Crit luck : {number_to_str(player_stats._crit_luck)}", Default_font(15), pygame.Color(255,255,255))
+        speed_label = Label(pygame.Vector2(120, 600), f"Agility : {number_to_str(player_stats.speed)}", Default_font(15), pygame.Color(255,255,255))
+        
+        self.bind_several_widget(
+            end_round_label,
+            ok_button,
+            money_label,
+            battles_won_label,
+            your_stats_label,
+
+            pv_label,
+            atk_label,
+            crit_mul_label,
+            crit_luk_label,
+            speed_label
+        )
+
     def get_stats_and_points(self): # renvoie un int et un dict {"nom_stat":valeur,...}
         return self.player_stats.remaining_points,self.player_stats.stats.copy()
 
@@ -320,9 +358,9 @@ class Ingame_menu(UI):
         self.player_stats.remaining_points = points
         self.player_stats.stats = stats
         
-    def quit(self):
+    def quit_and_restart(self):
         self.game.restart = True
-        self.game.running = False
+        
         
 class Battle_ui:
     def __init__(self, ingame_menu:Ingame_menu):
@@ -353,8 +391,8 @@ class Battle_ui:
         self.ingame_menu.set_background_color(pygame.Color(20, 20, 20, 150))
         self.ingame_menu.set_grab(True)
         
-        close_or_skip_button = Button(pygame.Rect(0, 0, self.x_max, self.y_max), "", Default_font(20), self.close_or_skip_battle_ui, text_color=pygame.Color(
-            0, 0, 0, 0), color=pygame.Color(0, 0, 0, 0),  hover_color=pygame.Color(0, 0, 0, 0))
+        close_or_skip_button = Button(pygame.Rect(0, 0, self.x_max, self.y_max), "", font=Default_font(20), callback=self.close_or_skip_battle_ui, text_color=pygame.Color(
+            0, 0, 0, 0), color=pygame.Color(0, 0, 0, 100),  hover_color=pygame.Color(0, 0, 0, 0))
         battle_label = Label(pygame.Vector2(40, 40), "BATTLE", Default_font(30), pygame.Color(255, 255, 255))
         
         if last_battle:
