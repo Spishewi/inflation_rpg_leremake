@@ -127,7 +127,8 @@ En terme de combats, nous aurions pu faire de plus belles animations pour les en
 
 Nous aurions pu aussi augmenter la taille de la map et la détailler pour augmenter le temps de vie du jeu.
 
-Enfin, le jeu ne contient pas de cheats-codes. Nous aurions pu en ajouter. Nous en avons pas eu besoin pour le développement car nous avons délibérément choisi d'utiliser du `json` pour les saves, afin de pouvoir les modifier à la main.S## Répartition du travail
+Enfin, le jeu ne contient pas de cheats-codes. Nous aurions pu en ajouter. Nous en avons pas eu besoin pour le développement car nous avons délibérément choisi d'utiliser du `json` pour les saves, afin de pouvoir les modifier à la main.
+
 
 ## Répartition du travail
 
