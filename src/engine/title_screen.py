@@ -26,6 +26,8 @@ class Title_screen():
                 if event.type == pygame.QUIT or self.ui.must_quit:
                     # on ferme sans lancer le jeu
                     return False
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.ui.play_menu()
                 self.ui.event_handler(event)
             
             

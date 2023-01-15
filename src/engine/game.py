@@ -71,8 +71,7 @@ class Game:
         # Initialisation des variables permettant de faire fonctionner la boucle de jeu.
         running = True          # Si =True alors le jeu tourne
         
-        self.restart = False    # Quand une des deux est égale à True alors le jeu
-        restart = False         # s'arrète et l'écran de titre est ouvert
+        self.restart = False    # Quand égal à True alors le jeu s'arrète et l'écran de titre est ouvert
         
         last_battle = False     # Indique si la bataille contre le boss final est en cours
        
@@ -89,7 +88,9 @@ class Game:
                 if event.type == pygame.QUIT:
                     # On met la condition d'arrêt à "vrai"
                     running = False
-                    restart = False
+                # Pour ouvrir ou fermer le menu avec échap
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.ui.open_or_close_menu()
                 # On envoie les evenements au joueur
                 # seulement si aucun menu n'est ouvert
                 
@@ -115,10 +116,12 @@ class Game:
             player_relative_movement = (new_player_pos - old_player_pos).magnitude()
             # On met a jour le gestionnaire de combat
             self.battle_manager.handle_player_movement(player_relative_movement)
-            restart = self.battle_manager.handle_battle(self.player.pos, self.map_manager, self.stats)
-            # Si la partie est finie et que le menu de combat n'est pas ouvert
+            round_end = self.battle_manager.handle_battle(self.player.pos, self.map_manager, self.stats)
+            # Si le menu de fin de parti est fermé
             # ou si le bouton title screen est cliqué (self.restart)
-            if (restart and not self.battle_ui.battle_ui_opened) or self.restart:
+            if round_end and not self.battle_ui.battle_ui_opened and not self.ui.round_end_menu_opened:
+                self.ui.round_end_menu(self.battle_manager)
+            if self.restart:
                 running = False
 
             # On déplace la caméra sur le joueur
@@ -150,6 +153,7 @@ class Game:
             if self.exit_rect.overlap2(self.player.get_hitbox()) and not last_battle:
                 self.battle_manager.must_trigger_battle = True
                 last_battle = True
+                self.battle_ui.boss_battle = True
                 # On écarte le joueur de la porte pour éviter de relancer un combat instantanément si il perd
                 self.player.pos.y = self.player.pos.y +2
 
@@ -159,11 +163,13 @@ class Game:
                 if self.battle_manager.round_result == "win" and not self.battle_ui.battle_ui_opened:
                     print("YOU WIN")
                     # On affiche la page de fin
+                    last_battle = False
                     self.end_menu.start()
                     
                 # Si le joueur a perdu
                 elif self.battle_manager.round_result == "lost":
-                    last_battle = False # combat n'est plus en cours et le jeu reprend
+                    last_battle = False     # combat n'est plus en cours et le jeu reprend
+                    self.boss_battle = False    # Le prochain combat ne sera pas forcément un caombat de boss
 
         
             # On récupère le dt de la frame (temps entre deux frames)
@@ -171,5 +177,6 @@ class Game:
 
             # On met à jour l'image à l'écran suivant tout ce qu'on à calculé depuis la dernière frame.
             pygame.display.update()
+            
         self.equipment.save()
-        return self.restart or restart
+        return self.restart

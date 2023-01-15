@@ -3,7 +3,7 @@ from __future__ import annotations # permet d'ajouter certaines choses non dispo
 from display.ui import UI, Button, Label, Default_font, Image
 from gameplay.equipment import Equipment
 from display.graphics import Objects_picture
-from utils import int_to_str
+from utils import number_to_str
 
 import pygame
 class Title_screen_menu(UI):
@@ -50,12 +50,12 @@ class Title_screen_menu(UI):
         for image,k in self.images:
             image.update_image(self.objects_images.get_object_picture(k, self.equipment.level[k], 7))
         for label,k in self.prices_labels:
-            label.update_text(f"Price : {int_to_str(self.equipment.get_price(k,self.equipment.level[k]))} $")
+            label.update_text(f"Price : {number_to_str(self.equipment.get_price(k,self.equipment.level[k]))} $")
             if self.equipment.level[k] == Equipment.max_level[k]:
                 self.unbind_widget(self.upgrade_buttons[k])
                 max_button = Button(self.upgrade_buttons[k].rect,"max",Default_font(20),callback=None,text_color=pygame.Color(255,255,255),color=pygame.Color(90,90,90))
                 self.bind_widget(max_button)
-        self.money_label.update_text(f"You have : {int_to_str(self.equipment.money)} $")
+        self.money_label.update_text(f"You have : {number_to_str(self.equipment.money)} $")
     
     def equipment_menu(self) -> None:
         self.clear_widget()
@@ -66,7 +66,7 @@ class Title_screen_menu(UI):
         close_button = Button(self.rect,"X",Default_font(20),callback=self.play_menu, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
         
         equipment_label = Label(pygame.Vector2(40, 40), "EQUIPMENT",Default_font(30), pygame.Color(255, 255, 255))
-        self.money_label = Label(pygame.Vector2(400, 40), f"You have : {int_to_str(self.equipment.money)} $", Default_font(20), pygame.Color(255, 255, 255))
+        self.money_label = Label(pygame.Vector2(400, 40), f"You have : {number_to_str(self.equipment.money)} $", Default_font(20), pygame.Color(255, 255, 255))
             
         self.bind_several_widget(
             equipment_label,
@@ -83,7 +83,7 @@ class Title_screen_menu(UI):
             object_image = Image(self.objects_images.get_object_picture(k, v, 7), pygame.Vector2(x+60, 200))
             self.images.append((object_image,k))
             
-            price_label = Label(pygame.Vector2(x, 350), f"Price : {int_to_str(self.equipment.get_price(k,v))} $", Default_font(20), pygame.Color(255,255,255))
+            price_label = Label(pygame.Vector2(x, 350), f"Price : {number_to_str(self.equipment.get_price(k,v))} $", Default_font(20), pygame.Color(255,255,255))
             self.prices_labels.append((price_label,k))
             
             upgrade_button = Button(pygame.Rect(x, 400, 250, 100), "Upgrade", Default_font(20), callback=None, text_color=pygame.Color(255, 255, 255), color=pygame.Color(120, 120, 120),  hover_color= pygame.Color(70, 70, 70))
