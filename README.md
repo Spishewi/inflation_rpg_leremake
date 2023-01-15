@@ -5,7 +5,7 @@
 ## Avant propos
 Ayant déjà de l'experience dans les jeux graphiques avec pygame,
 nous avons décidé, bien que celà ne rentre que très peut dans la note,
-de créer un jeu graphique. Nous avons bien sûr tout de même essayé de coller au mieux aux contraintes. Sachant que nous savons que vous connaissez déjà le vocabulaire, nous ne nous attarderons pas sur tout les mots lié au jeu vidéo, et nous autorisons les anglissismes connu. (equipement, stats, level-up...)
+de créer un jeu graphique. Nous avons bien sûr tout de même essayé de coller au mieux aux contraintes. Sachant que nous savons que vous connaissez déjà le vocabulaire, nous ne nous attarderons pas sur tout les mots lié au jeu vidéo, et nous nous autoriserons les anglissismes les plus connu. (equipement, [stats](https://fr.wikipedia.org/wiki/Caract%C3%A9ristique_(jeu_de_r%C3%B4le)), [level-up](https://fr.wikipedia.org/wiki/Exp%C3%A9rience_(jeu_de_r%C3%B4le)#:~:text=Le%20levelling%20ou%20level%2Dup,de%20faire%20progresser%20un%20personnage.)...)
 
 ## Description du projet
 Notre jeu s'inspire fortement du jeu [inflation RPG](https://play.google.com/store/apps/details?id=air.infurerpgkuesuto&hl=fr).
@@ -24,14 +24,6 @@ pour plus d'informations, voir [première partie de jeu](#première-partie-de-je
   - [pygame](https://github.com/pygame/pygame) 2.1+
   - [pytmx](https://github.com/bitcraft/pytmx) 3.31
   
-### Python
-
-**ATTENTION** : Nous utilisons des fonctionnalités récente de python, comme les [*type-hint*](https://realpython.com/lessons/type-hinting/). Ces fonctionnalités ne fonctionne que sur les versions de python ultérieurs à python 3.9+.
-Une méthode très simple pour permettre d'utiliser ces annotations dans de plus anciennes version de python (comme celles du lycée) est d'ajouter cette ligne en haut de chaques fichiers
-```py
-from __future__ import annotations
-```
-Normalement nous avons fait attention à mettre celà partout, mais nous prévenons quand même, car nous ne savons pas si nous aurons le temps de tester le jeu sur les ordinateurs du lycée.
 
 ### Pygame
 Ce module permet l'affichage graphique du jeu. Il est donc indispensable.
@@ -78,7 +70,7 @@ La première chose qui vous sera proposé est de définir vos stats de départ. 
 ### explication des points de stats :
 - Health : représente la vie du personnage. Est ensuite multiplié suivant le niveau d'armure.
 - Attack : représente l'attaque du personnage. Est ensuite multiplié suivnt le niveau de l'épée.
-- Crit luck : votre chance d'effectuer un coup critique est relative à cette valeur. ( $1 - \frac{1}{log_{10}(10 + points)}$ )
+- Crit luck : Les points affecté ici augmente la chance de coup critique suivant cette formule. ( $1 - \frac{1}{log_{10}(10 + points)}$ )
 - Agility : représente votre vitesse. En combat, l'entité ayant le plus de vitesse attaquera en premier.
 
 
@@ -146,6 +138,12 @@ Moi (c'est **Aurèle** qui écrit), je me suis occupé de tout ce qui est moteur
 
 Enfin **nous** avons travaillé ensemble sur le système d'équipement (car très lié à l'interface), ainsi que au système de stats en général. Afin d'équilibrer au mieux.
 
-On peut regarder sur le github les participations de chacun pour plus de précision. (Si ce n'est pas public, je peut fournir les graphiques).
+Voici le graphique des participations disponible sur github.
+
+![](screenshots/graph.png)
+- *Mouthanos -> Thomas*
+- *Spishewi -> Aurèle*
+
+(Thomas à 1000 additions de plus, mais elle se situe au début, il s'agit en grande partie de la carte).
 
 les fichiers `map_manager.py` et `camera_view.py` sont hérité de notre projet perso, mais très fortement modifiés. Tout les autres sont originaire directement du projet. (je ne sais en ce moment pas encore si nous utilisons votre fichier `filable.py`)
