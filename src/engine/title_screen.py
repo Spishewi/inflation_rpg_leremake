@@ -1,4 +1,4 @@
-from __future__ import annotations # permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
+from __future__ import annotations # Permet d'ajouter certaines choses non disponibles sur les vielles versions du lycée de python
 
 from display.title_screen_menu import Title_screen_menu
 import pygame
@@ -16,15 +16,15 @@ class Title_screen():
         self.clock = pygame.time.Clock()
     
     def run(self) -> bool:
-        # variable permettant de faire fonctionner la boucle de jeu.
+        # Variable permettant de faire fonctionner la boucle de jeu.
         # Initialisation des variables...
         dt = self.clock.tick(0) / 1000
         running = True
         while running:
             for event in pygame.event.get():
-                # pour fermer avec la croix
+                # Pour fermer avec la croix
                 if event.type == pygame.QUIT or self.ui.must_quit:
-                    # on ferme sans lancer le jeu
+                    # On ferme sans lancer le jeu
                     return False
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.ui.play_menu()
@@ -35,6 +35,7 @@ class Title_screen():
             if self.ui.must_start:
                 running = False
             
+            # Met à jour l'affichage
             self.ui.update()
             self.ui.draw()
 
