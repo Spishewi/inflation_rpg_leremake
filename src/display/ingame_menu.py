@@ -404,7 +404,10 @@ class Battle_ui:
             self.draw_rounds()
         
     def start_and_draw_battle_ui(self):
-        # Appelée quand un combat commence
+        """
+        Appelée quand un combat commence
+        """
+        # Définition d'attributs
         self.rounds = []
         self.rounds_labels = []
         self.displayed_rows = -1
@@ -412,14 +415,17 @@ class Battle_ui:
         self.battle_ui_opened = True
         self.last_time_row = pygame.time.get_ticks()
 
+        # Vide la fenêtre et change la couleur d'arrière plan
         self.ingame_menu.clear_widget()
         self.ingame_menu.set_background_color(pygame.Color(20, 20, 20, 150))
         self.ingame_menu.set_grab(True)
         
+        # Création d'un bouton qui permet de passer l'animation des combats ou de quitter
         close_or_skip_button = Button(pygame.Rect(0, 0, self.x_max, self.y_max), "", font=Default_font(20), callback=self.close_or_skip_battle_ui, text_color=pygame.Color(
             0, 0, 0, 0), color=pygame.Color(0, 0, 0, 100),  hover_color=pygame.Color(0, 0, 0, 0))
         battle_label = Label(pygame.Vector2(40, 40), "BATTLE", Default_font(30), pygame.Color(255, 255, 255))
         
+        # Si le combat est un combat de boss, le texte et la couleur de fond d'écran sont différents
         if self.boss_battle:
             self.ingame_menu.set_background_color(pygame.Color(50,40,20))
             battle_label.update_text("BOSS BATTLE")
@@ -430,6 +436,9 @@ class Battle_ui:
         )
         
     def draw_rounds(self):
+        """
+        écrit à l'écran les actions du combat
+        """
         for label in self.rounds_labels:
             self.ingame_menu.unbind_widget(label)
         self.rounds_labels = []
@@ -438,13 +447,16 @@ class Battle_ui:
         y = self.y_max - 100
         rows_nb = len(self.rounds)-1
 
+        # Si il a affiché toutes les lignes :
         if rows_nb-self.displayed_rows == 0:
             self.printing = False
 
+        # Pour toutes les lignes à afficher
         for i in range(rows_nb-min(self.displayed_rows,rows_nb),rows_nb+1):
             window_width, window_height = pygame.display.get_window_size()
             
             if y > 50 and self.rounds != []:  # évite d'afficher des textes non visibles
+                # Met le texte en vert ou en rouge en fonction de si c'est le joueur ou l'ennemi qui attaque
                 if self.rounds[i]["is_player"] == True:
                     label = Label(pygame.Vector2(100, y), self.rounds[i]["message"], Default_font(20), pygame.Color(127,255,127))
                 else:
@@ -460,6 +472,9 @@ class Battle_ui:
         self.rounds.insert(0, {"is_player": is_player, "message": message})
 
     def close_or_skip_battle_ui(self):
+        """
+            passe l'animation du combat si en cours, le ferme sinon.
+        """
         self.printing = False
 
         if self.displayed_rows < len(self.rounds)-1:
@@ -470,6 +485,9 @@ class Battle_ui:
             self.ingame_menu.main_display()
             
 class End_menu:
+    """
+    Le menu de fin.
+    """
     def __init__(self, ingame_menu:Ingame_menu):
         self.ingame_menu = ingame_menu
     

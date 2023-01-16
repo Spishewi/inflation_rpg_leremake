@@ -70,7 +70,8 @@ La première chose qui vous sera proposée est de définir vos stats de départ.
 ### Explication des points de stats :
 - Health : représente la vie du personnage. Est ensuite multipliée suivant le niveau d'armure.
 - Attack : représente l'attaque du personnage. Est ensuite multiplié suivant le niveau de l'épée.
-- Crit luck : Les points affectés ici augmentent la chance de coup critique suivant cette formule. ( $1 - \frac{1}{log_{10}(10 + points)}$ )
+- Crit luck : Les points affectés ici augmentent la chance de coup critique suivant cette formule.
+![](screenshots/equation_math.png)
 - Agility : représente votre vitesse. En combat, l'entité ayant le plus de vitesse attaquera en premier.
 
 

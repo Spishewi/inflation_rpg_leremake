@@ -108,9 +108,3 @@ class CameraView:
 
         # On dessine toutes les tiles
         draw_surface.blits(tiles, doreturn=False)
-
-        # du debug en plus
-
-        #player_rect = player.get_rect()
-        #print((player_pos.x, player_pos.y, player_rect.width * tile_size_factor, player_rect.height * tile_size_factor))
-        #pygame.draw.rect(draw_surface,"red",pygame.Rect(player_pos.x, player_pos.y,1*tile_size_factor,1*tile_size_factor))

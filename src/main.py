@@ -12,13 +12,13 @@ Tout le reste à part ce fichier est exclusivement de la POO.
 """
 
 
-# se lance quand on lance le fichier
+# Se lance quand on lance le fichier
 if __name__ == '__main__':
 
-    # on crée la fenêtre
+    # On crée la fenêtre
     window = pygame.display.set_mode((1200, 650))
 
-    # on donne un titre à la fenêtre
+    # On donne un titre à la fenêtre
     pygame.display.set_caption("Inflation RPG Leremake")
 
     # On crée la boucle principale
@@ -30,6 +30,9 @@ if __name__ == '__main__':
         # On lance le titlescreen
         if game_launch_title_screen:
             title_screen = Title_screen(window,first_game)
+            """
+            Cette fonction retourne Vrai ou Faux suivant si l'utilisateur veux lancer le jeu.
+            """
             title_screen_launch_game = title_screen.run()
         else:
             running = False

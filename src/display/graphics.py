@@ -4,25 +4,28 @@ import pygame
 import json
 
 
-class Spritesheet:
-    def __init__(self, path:str):
+
+class Animation():
+    def __init__(self, path: str):
+
+        # On charge la feuille de sprite
         spritesheet = pygame.image.load(f"{path}/image.png")
         self.spritesheet = spritesheet.convert_alpha()
         with open(f"{path}/keyframes.json") as animation_settings:
             self.SETTINGS = json.load(animation_settings)
-            
-    
 
-class Animation(Spritesheet):
-    def __init__(self, path: str):
-        super().__init__(path)
+        # On definit le reste des attributs
         self.previousDirection = [0,0]
         self.sprites = self.load_sprites(self.spritesheet)
         
-    def load_sprites(self, spritesheet): # charge les annimations dans un dict en fonction de 'keyframes.json'
+    def load_sprites(self, spritesheet):
+        """
+        Charge les annimations dans un dict en fonction de 'keyframes.json'
+        et les tris de manière à ce que l'on puisse y accéder facilement.
+        """
         sprites = {}
+
         for k,v in self.SETTINGS["keyframes"].items():
-            
             sprites[k] = {}
             sprites[k]["frames"] = []
             for x in range(v["frames"][0][0], v["frames"][1][0]+1):
@@ -43,7 +46,10 @@ class Animation(Spritesheet):
             
         return sprites
     
-    def get_curentAnimation(self, direction: pygame.Vector2, factor) -> DynamicImage:  # renvoie l'annimation en fonction de la direction
+    def get_curentAnimation(self, direction: pygame.Vector2, factor) -> DynamicImage:
+        """
+        renvoie la frame (une DynamicImage) correspondante à l'instant T pour l'animation en fonction de la direction du joueur
+        """
         direction = direction.xy
         speed = 150
         ticks = int(pygame.time.get_ticks()/speed)%2 # nombre entre 1 et 2 pour le numero de l'annimation à selectionner (ici il n'y en a que deux de possibles)
@@ -100,12 +106,23 @@ class Animation(Spritesheet):
             return self.sprites["up-right"]["frames"][ticks].get_image(factor)
 
 
-class Objects_picture(Spritesheet):
+class Objects_picture():
     def __init__(self, path:str) -> None:
-        super().__init__(path)
+        """
+        Permet de charger plusieurs images à partir d'une feuille de sprite unique.
+        """
+
+        spritesheet = pygame.image.load(f"{path}/image.png")
+        self.spritesheet = spritesheet.convert_alpha()
+        with open(f"{path}/keyframes.json") as animation_settings:
+            self.SETTINGS = json.load(animation_settings)
+            
         self.sprites = self.load_sprites(self.spritesheet)
         
-    def load_sprites(self, spritesheet): # charge les annimations dans un dict en fonction de 'keyframes.json'
+    def load_sprites(self, spritesheet):
+        """
+        charge les annimations dans un dict en fonction de 'keyframes.json', et les tris de façon à faciliter l'accès.
+        """
         sprites = {}
         for k,v in self.SETTINGS["keyframes"].items():
             
@@ -120,4 +137,7 @@ class Objects_picture(Spritesheet):
         return sprites
     
     def get_object_picture(self, object_type:str,number:int,zoom_factor:int):
+        """
+            Permet d'obtenir une image pour un objet donné
+        """
         return self.sprites[object_type][number].get_image(zoom_factor)

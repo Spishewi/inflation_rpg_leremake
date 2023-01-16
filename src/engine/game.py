@@ -150,7 +150,7 @@ class Game:
             self.ui.draw()
 
             # On lance le combat de boss/final si le joueur est situé près de la sortie
-            if self.exit_rect.overlap2(self.player.get_hitbox()) and not last_battle:
+            if self.exit_rect.collide(self.player.get_hitbox()) and not last_battle:
                 self.battle_manager.must_trigger_battle = True
                 last_battle = True
                 self.battle_ui.boss_battle = True

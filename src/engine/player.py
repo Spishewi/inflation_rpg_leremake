@@ -48,7 +48,7 @@ class Player:
             # On récupère la hitbox de la tuile
             tile_hitbox = Hitbox(tile_pos[0], tile_pos[1], 1, 1)
             
-            if tile_hitbox.overlap2(player_hitbox): # Si il y a une collision
+            if tile_hitbox.collide(player_hitbox): # Si il y a une collision
                 
                 if direction == "y":
                     if velocity.y > 0: # Moving down

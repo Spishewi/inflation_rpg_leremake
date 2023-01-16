@@ -10,6 +10,7 @@ class Hitbox:
         classe pour permettre de faire des collisions comme avec les rect de pygame, mais avec des virgules.
         """
 
+        # déffinition des attributs
         self.x = float(x)
         self.y = float(y)
         self.width = float(width)
@@ -21,7 +22,7 @@ class Hitbox:
         """
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
-    def overlap2(self, hitbox: Hitbox) -> bool:
+    def collide(self, hitbox: Hitbox) -> bool:
         if self.x + self.width <= hitbox.x or hitbox.x + hitbox.width <= self.x :
             return False
         if self.y + self.height <= hitbox.y  or hitbox.y + hitbox.height <= self.y :
@@ -36,6 +37,9 @@ class Hitbox:
 
     @staticmethod
     def from_pygame_rect(rect: pygame.Rect) -> Hitbox:
+        """
+        Permet de convertir un objet pygame.Rect en objet Hitbox
+        """
         return Hitbox(rect.x, rect.y, rect.width, rect.height)
 
 class DynamicImage:
