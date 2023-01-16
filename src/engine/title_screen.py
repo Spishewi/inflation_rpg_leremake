@@ -31,7 +31,7 @@ class Title_screen():
                 self.ui.event_handler(event)
             
             
-
+            # Si le menu l'indique la partie se termine et le menu de titre est ouvert
             if self.ui.must_start:
                 running = False
             

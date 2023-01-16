@@ -50,6 +50,9 @@ class Equipment():
                     self.level = v
             
     def upgrade_object(self, object_type:str):
+        """
+        Améliore l'objet si le joueur a assez d'argent
+        """
         price = self.get_price(object_type,self.level[object_type])
         if  price <= self.money :
             self.level[object_type] += 1
@@ -61,20 +64,7 @@ class Equipment():
 
     def get_price(self,object_type:str, nb:int):
         """
-        est-ce que il faut vraiment expliquer cette fonction ?
-        elle utilise une formule permettant de calculer l'argent qu'il faut pour un objet de n niveaux
+        Est-ce que il faut vraiment expliquer cette fonction ?
+        Elle utilise une formule permettant de calculer l'argent qu'il faut pour un objet de n niveaux
         """
         return floor((20*(1+nb*(10/(Equipment.max_level[object_type]+1))))/1.1)**2/2
-
-
-
-
-if __name__ == "__main__":
-    e = Equipment()
-    e.armor_level = 5
-    e.save()
-    del e
-
-    e = Equipment()
-    e.load()
-    print(e)

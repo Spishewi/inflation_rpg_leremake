@@ -170,21 +170,22 @@ class Battle_manager():
     
     def handle_battle(self, player_coords, map_manager: MapManager, player_stats: Stats):
         """
-            s'occupe de la logique des combats
+            S'occupe de la logique des combats
         """
 
         if self.must_trigger_battle and self.current_battle == None: # Si un combat doit être lancé et que aucun n'est en cours
-            # mise a jour des variables
+            # Mise a jour des variables
             self.must_trigger_battle = False
             self.battle_chance = 0
 
-            # demarrage d'un combat
+            # Démarrage d'un combat
             self.current_battle = Battle(player_stats.get_player_entity(), map_manager.get_level_range("map", player_coords), self.battle_ui)
-            self.battle_ui.start_battle()
+            self.battle_ui.start_and_draw_battle_ui()
 
         elif self.current_battle != None: # Si un combat est en cours
             round_result = self.current_battle.process_round()
             
+            # Si le joueur gagne ou non :
             if round_result.status == Round_result.WIN:
                 self.remaining_battle -= 1
                 player_stats.handle_win(self.current_battle.enemy_level)
@@ -193,12 +194,14 @@ class Battle_manager():
             elif round_result.status == Round_result.LOST:
                 self.remaining_battle -= 3
                 self.battle_ui.add_round(False, "YOU LOOSE")
-                
+            
+            # Si le combat n'est pas encore terminé  
             if round_result.status != Round_result.NOT_COMPLETED:
                 print(round_result.status)
                 self.round_result = round_result.status
                 self.current_battle = None
-                
+        
+        # Si il ne reste plus de combats au joueur :
         if self.remaining_battle <= 0:
             return True
                 

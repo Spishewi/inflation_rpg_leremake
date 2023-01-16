@@ -20,10 +20,10 @@ class Stats:
 
     def __init__(self, equipment: Equipment) -> None:
         
-        # l'équipement
+        # L'équipement
         self.equipment = equipment
 
-        # les points
+        # Les points
         self.stats = {
             "pv":0,
             "atk":0,
@@ -32,7 +32,7 @@ class Stats:
         }
         
 
-        # l'experience
+        # L'experience
         self.lvl = 10
         self.remaining_points = 15 * self.lvl
         self.xp = 1
@@ -43,7 +43,7 @@ class Stats:
             Permet d'obtenir un objet entité,
             utilisé pour les combats et/ou l'affichage
         """
-        # on crée un objet entité
+        # On crée un objet entité
         player = Entity(
             pv_max = (self.stats["pv"] + Stats.default_value["pv"])*(1 + self.equipment.level["armor"]/5*10),
             atk = (self.stats["atk"] + Stats.default_value["atk"])*(1 + self.equipment.level["sword"]/15*10),
@@ -58,16 +58,16 @@ class Stats:
             s'occupe de tout ce qu'il faut faire après avoir battu un ennemi
         """
 
-        # donne de l'xp
+        # Donne de l'xp
         self.xp += enemy_level * (enemy_level/self.lvl) *2000 # équation à vérifier
 
-        # augmente les niveaux en fonction de l'xp
+        # Augmente les niveaux en fonction de l'xp
         while self.xp >= self.xp_needed_lvl_up:
             self.lvl += 1
             self.xp -= self.xp_needed_lvl_up
             self.xp_needed_lvl_up = 1000 * self.lvl
             self.remaining_points += 15
-        # calcul combien actuellement on gagnerait d'argent si la partie se terminerait
+        # Calcul combien actuellement on gagnerait d'argent si la partie se terminerait
         # (affiché dans l'onglet "equipement" in-game)
         self.equipment.money = self.lvl**2
 
